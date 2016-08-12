@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#7C4DFF"
+    android:fillViewport="true"
+    android:gravity="center"
+    tools:context="app.com.thetechnocafe.eventos.SigninActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/fragment_signin_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@drawable/calendar"/>
+
+            <TextView
+                android:id="@+id/fragment_signin_app_name_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textColor="@android:color/white"
+                android:textSize="40sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.4"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp"
+                android:gravity="left"
+                android:text="@string/username"
+                android:textColor="@android:color/holo_blue_bright"
+                android:textSize="16sp"/>
+
+            <EditText
+                android:id="@+id/fragment_signin_username_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp"
+                android:backgroundTint="@android:color/white"
+                android:inputType="number"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:textColorLink="@android:color/white"
+                android:textCursorDrawable="@null"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp"
+                android:layout_marginTop="24dp"
+                android:gravity="left"
+                android:text="@string/password"
+                android:textColor="@android:color/holo_blue_bright"
+                android:textSize="16dp"/>
+
+            <EditText
+                android:id="@+id/fragment_signin_password_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp"
+                android:backgroundTint="@android:color/white"
+                android:inputType="textPassword"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:textColorLink="@android:color/white"
+                android:textCursorDrawable="@null"/>
+
+            <Button
+                android:id="@+id/fragment_signin_singin_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/singin_button"
+                android:elevation="32dp"
+                android:paddingLeft="32dp"
+                android:paddingRight="32dp"
+                android:shadowColor="@android:color/white"
+                android:text="@string/signin"
+                android:textColor="@drawable/singin_button"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/fragment_signin_problem_text"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="24dp"
+            android:background="#651FFF"
+            android:gravity="center"
+            android:text="@string/problem_text"
+            android:textColor="@android:color/white"
+            android:padding="24dp"
+            />
+
+    </LinearLayout>
+
+</ScrollView>
