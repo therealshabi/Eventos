@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Eventos</string>
+    <string name="username">ENROLLMENT NO</string>
+    <string name="password">PASSWORD</string>
+    <string name="signin">SIGN IN</string>
+    <string name="problem_text">PROBLEM LOGGIN IN?</string>
+    <string name="problem_email">your@email.com</string>
+    <string name="problem_enrollment">Your enrollment no.</string>
+    <string name="problem_comment">Additional Comments</string>
+    <string name="problem_submit">SEND</string>
+    <string name="problem_cancel">CANCEL</string>
+</resources>
