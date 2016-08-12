@@ -1,5 +1,6 @@
 package app.com.thetechnocafe.eventos;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -7,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 /**
@@ -14,6 +16,7 @@ import android.widget.TextView;
  */
 public class SinginFragment extends Fragment {
     private TextView mProblemTextView;
+    private Button mSignInButton;
 
     public static SinginFragment getInstance() {
         return new SinginFragment();
@@ -25,6 +28,7 @@ public class SinginFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_signin, container, false);
 
         mProblemTextView = (TextView) view.findViewById(R.id.fragment_signin_problem_text);
+        mSignInButton = (Button) view.findViewById(R.id.fragment_signin_singin_button);
 
 
         //Problem Dialog Box
@@ -36,6 +40,15 @@ public class SinginFragment extends Fragment {
                 builder.setView(dialogView);
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
+            }
+        });
+
+        //TODO:Implement proper authentication from server here
+        mSignInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), HomeStreamActivity.class);
+                startActivity(intent);
             }
         });
 
