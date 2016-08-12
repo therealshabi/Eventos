@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#7C4DFF"
     android:fillViewport="true"
     android:gravity="center"
@@ -19,7 +20,8 @@
             android:layout_height="0dp"
             android:layout_weight="0.5"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="24dp">
 
             <ImageView
                 android:id="@+id/fragment_signin_image_view"
@@ -33,7 +35,9 @@
                 android:layout_height="wrap_content"
                 android:text="@string/app_name"
                 android:textColor="@android:color/white"
-                android:textSize="40sp"/>
+                android:textSize="40sp"
+                android:textAllCaps="true"
+                android:fontFamily="sans-serif-light"/>
 
         </LinearLayout>
 
@@ -41,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.4"
-            android:gravity="center"
+            android:gravity="center|top"
             android:orientation="vertical"
             android:focusable="true"
             android:focusableInTouchMode="true">
@@ -98,13 +102,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:background="@drawable/singin_button"
-                android:elevation="32dp"
+                android:background="@drawable/ripple"
                 android:paddingLeft="32dp"
                 android:paddingRight="32dp"
                 android:shadowColor="@android:color/white"
                 android:text="@string/signin"
-                android:textColor="@drawable/singin_button"/>
+                android:textColor="@android:color/white"/>
 
         </LinearLayout>
 
@@ -120,6 +123,7 @@
             android:text="@string/problem_text"
             android:textColor="@android:color/white"
             android:padding="24dp"
+            android:textSize="12sp"
             />
 
     </LinearLayout>
