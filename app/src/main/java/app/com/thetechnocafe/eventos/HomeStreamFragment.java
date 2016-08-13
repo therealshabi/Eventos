@@ -1,9 +1,13 @@
 package app.com.thetechnocafe.eventos;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -90,18 +94,32 @@ public class HomeStreamFragment extends Fragment {
         return data;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        CardView cv;
-        TextView title;
-        TextView date;
-        ImageView image;
+        private CardView mCardView;
+        private TextView mTitleText;
+        private TextView mDateText;
+        private ImageView mImageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            cv = (CardView) itemView.findViewById(R.id.home_stream_recycler_view_item_card);
-            title = (TextView) itemView.findViewById(R.id.title);
+            itemView.setOnClickListener(this);
+            mCardView = (CardView) itemView.findViewById(R.id.home_stream_recycler_view_item_card);
+            mTitleText = (TextView) itemView.findViewById(R.id.home_stream_recycler_view_item_title_text);
+            mDateText = (TextView) itemView.findViewById(R.id.home_stream_recycler_view_item_date_text);
+        }
 
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(getContext(), DetailActivity.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Pair<View, String> p1 = Pair.create((View)mTitleText, getString(R.string.shared_title));
+                Pair<View, String> p2 = Pair.create((View)mDateText, getString(R.string.shared_date));
+                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), p1, p2);
+                startActivity(intent, optionsCompat.toBundle());
+            } else {
+                startActivity(intent);
+            }
         }
     }
 

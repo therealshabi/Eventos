@@ -3,7 +3,7 @@
     <string name="username">ENROLLMENT NO</string>
     <string name="password">PASSWORD</string>
     <string name="signin">SIGN IN</string>
-    <string name="problem_text">PROBLEM LOGGIN IN?</string>
+    <string name="problem_text">PROBLEM LOGGING IN?</string>
     <string name="problem_email">your@email.com</string>
     <string name="problem_enrollment">Your enrollment no.</string>
     <string name="problem_comment">Additional Comments</string>
@@ -17,4 +17,6 @@
         <item>About</item>
         <item>Sign Out</item>
     </string-array>
+    <string name="shared_title">sharedTitle</string>
+    <string name="shared_date">sharedDate</string>
 </resources>

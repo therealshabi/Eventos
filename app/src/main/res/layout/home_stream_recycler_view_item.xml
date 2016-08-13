@@ -7,7 +7,9 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardBackgroundColor="@color/cardview_light_background"
-    app:cardElevation="6dp">
+    app:cardElevation="6dp"
+    android:clickable="true"
+    android:foreground="@drawable/ripple">
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -38,7 +40,7 @@
                     android:padding="8dp">
 
                     <TextView
-                        android:id="@+id/home_stream_recycler_view_title_text"
+                        android:id="@+id/home_stream_recycler_view_item_title_text"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.8"
@@ -47,6 +49,7 @@
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
+                        android:transitionName="@string/shared_title"
                         />
 
                     <View
@@ -82,7 +85,8 @@
                     android:text="31 August 2016"
                     android:textAllCaps="true"
                     android:textColor="@android:color/holo_blue_light"
-                    android:textSize="12sp"/>
+                    android:textSize="12sp"
+                    android:transitionName="@string/shared_date"/>
 
             </RelativeLayout>
 
