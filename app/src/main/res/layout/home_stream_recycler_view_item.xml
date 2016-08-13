@@ -42,19 +42,26 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.8"
-                        android:text="GDG hub orientation 2016"
+                        android:text="Google Developers Group Orientation Program"
                         android:textColor="@android:color/black"
                         android:textSize="16sp"
                         android:fontFamily="sans-serif-light"
                         android:textStyle="bold"
                         />
 
+                    <View
+                        android:layout_width="0.1dp"
+                        android:layout_height="match_parent"
+                        android:minHeight="72dp"
+                        android:background="@android:color/black"
+                        android:alpha="0.5"/>
+
                     <ImageView
                         android:layout_width="0dp"
                         android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_weight="0.2"
-                        android:gravity="right"
+                        android:gravity="center"
                         android:src="@drawable/ic_heart_unselected"
                         />
 
