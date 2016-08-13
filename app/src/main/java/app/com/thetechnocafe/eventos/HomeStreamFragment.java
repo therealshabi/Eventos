@@ -65,10 +65,11 @@ public class HomeStreamFragment extends Fragment {
         TextView title;
         TextView date;
         ImageView image;
+
         public ViewHolder(View itemView) {
             super(itemView);
-            cv=(CardView)itemView.findViewById(R.id.home_stream_recycler_view_item_card);
-            title=(TextView)itemView.findViewById(R.id.title);
+            cv = (CardView) itemView.findViewById(R.id.home_stream_recycler_view_item_card);
+            title = (TextView) itemView.findViewById(R.id.title);
 
         }
     }
@@ -79,14 +80,14 @@ public class HomeStreamFragment extends Fragment {
         Context context;
 
         public RecyclerAdapter(List<Data> list, Context context) {
-            this.list=list;
-            this.context=context;
+            this.list = list;
+            this.context = context;
         }
 
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_stream_recycler_view_item,parent,false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_stream_recycler_view_item, parent, false);
             ViewHolder holder = new ViewHolder(v);
             return holder;
         }
@@ -101,19 +102,16 @@ public class HomeStreamFragment extends Fragment {
             return list.size();
         }
 
-        public void onAttachedToRecyclerView(RecyclerView recycerView)
-        {
+        public void onAttachedToRecyclerView(RecyclerView recycerView) {
             super.onAttachedToRecyclerView(recycerView);
         }
 
-        public void insert(int position, Data data)
-        {
-            list.add(position,data);
+        public void insert(int position, Data data) {
+            list.add(position, data);
             notifyItemInserted(position);
         }
 
-        public void remove(Data data)
-        {
+        public void remove(Data data) {
             int position = list.indexOf(data);
             list.remove(position);
             notifyItemInserted(position);
