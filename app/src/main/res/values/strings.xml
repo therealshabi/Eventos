@@ -9,4 +9,12 @@
     <string name="problem_comment">Additional Comments</string>
     <string name="problem_submit">SEND</string>
     <string name="problem_cancel">CANCEL</string>
+    <string-array name="drawer_list_1">
+        <item>Favorites</item>
+        <item>Add your event</item>
+    </string-array>
+    <string-array name="drawer_list_2">
+        <item>About</item>
+        <item>Sign Out</item>
+    </string-array>
 </resources>
