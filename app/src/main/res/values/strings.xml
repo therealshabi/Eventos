@@ -19,4 +19,12 @@
     </string-array>
     <string name="shared_title">sharedTitle</string>
     <string name="shared_date">sharedDate</string>
+    <string name="about">Eventos brings all the events happening in your organisation in one place, so that you don\'t miss out on any of your
+    favorite events</string>
+    <string name="version">Version V.1</string>
+    <string name="copyright">Copyright © 2016</string>
+    <string name="menu_favorites">Favorites</string>
+    <string name="menu_add_your_event">Add your event</string>
+    <string name="menu_about">About</string>
+    <string name="menu_sign_out">Sign Out</string>
 </resources>
