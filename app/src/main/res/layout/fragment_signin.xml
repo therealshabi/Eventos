@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    android:fillViewport="true"
     android:fitsSystemWindows="true"
     android:focusableInTouchMode="true"
     android:gravity="center"
@@ -25,8 +24,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginBottom="15dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
                 android:layout_weight="0.5"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -41,9 +40,9 @@
                     android:id="@+id/fragment_signin_app_name_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:fontFamily="sans-serif-light"
                     android:text="@string/app_name"
-                    android:layout_marginTop="10dp"
                     android:textAllCaps="true"
                     android:textColor="@android:color/white"
                     android:textSize="40sp"/>
@@ -53,57 +52,62 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.48"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="16dp"
+                android:layout_weight="0.5"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:gravity="center|top"
                 android:orientation="vertical">
 
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/fragment_signin_username_text_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="10dp"
-                    android:theme="@style/TextLabel">
-
-                <EditText
-                    android:id="@+id/fragment_signin_username_edit_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:layout_marginLeft="32dp"
                     android:layout_marginRight="32dp"
-                    android:backgroundTint="@android:color/white"
-                    android:hint="ENROLLMENT NO"
-                    android:inputType="number"
-                    android:textColor="@android:color/white"
-                    android:textColorHint="@android:color/white"
-                    android:textColorLink="@android:color/white"
-                    android:textCursorDrawable="@null"/>
+                    android:layout_marginTop="4dp"
+                    android:theme="@style/TextLabel"
+                    app:errorTextAppearance="@style/TextLayoutErrorText">
+
+                    <EditText
+                        android:id="@+id/fragment_signin_username_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@android:color/white"
+                        android:hint="@string/username"
+                        android:inputType="number"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@android:color/white"
+                        android:textColorLink="@android:color/white"
+                        android:textCursorDrawable="@null"
+                        android:textSize="20sp"/>
 
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/fragment_signin_password_text_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:theme="@style/TextLabel">
-
-
-                <EditText
-                    android:id="@+id/fragment_signin_password_edit_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
                     android:layout_marginLeft="32dp"
                     android:layout_marginRight="32dp"
-                    android:backgroundTint="@android:color/white"
-                    android:inputType="textPassword"
-                    android:hint="PASSWORD"
-                    android:textColor="@android:color/white"
-                    android:textColorHint="@android:color/white"
-                    android:textColorLink="@android:color/white"
-                    android:textCursorDrawable="@null"/>
+                    android:layout_marginTop="8dp"
+                    android:theme="@style/TextLabel"
+                    app:errorTextAppearance="@style/TextLayoutErrorText">
+
+                    <EditText
+                        android:id="@+id/fragment_signin_password_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@android:color/white"
+                        android:hint="@string/password"
+                        android:inputType="textPassword"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@android:color/white"
+                        android:textColorLink="@android:color/white"
+                        android:textCursorDrawable="@null"
+                        android:textSize="20sp"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -111,7 +115,7 @@
                     android:id="@+id/fragment_signin_singin_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
+                    android:layout_marginTop="24dp"
                     android:background="@drawable/button_ripple"
                     android:paddingLeft="32dp"
                     android:paddingRight="32dp"
@@ -129,7 +133,6 @@
                 android:background="#651FFF"
                 android:gravity="center"
                 android:padding="24dp"
-                android:textAlignment="center"
                 android:text="@string/problem_text"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"

@@ -3,12 +3,14 @@ package app.com.thetechnocafe.eventos;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 /**
@@ -17,6 +19,10 @@ import android.widget.TextView;
 public class SinginFragment extends Fragment {
     private TextView mProblemTextView;
     private Button mSignInButton;
+    private EditText mUsernameEditText;
+    private EditText mPasswordEditText;
+    private TextInputLayout mUsernameTextLayout;
+    private TextInputLayout mPasswordTextLayout;
 
     public static SinginFragment getInstance() {
         return new SinginFragment();
@@ -29,6 +35,10 @@ public class SinginFragment extends Fragment {
 
         mProblemTextView = (TextView) view.findViewById(R.id.fragment_signin_problem_text);
         mSignInButton = (Button) view.findViewById(R.id.fragment_signin_singin_button);
+        mUsernameEditText = (EditText) view.findViewById(R.id.fragment_signin_username_edit_text);
+        mPasswordEditText = (EditText) view.findViewById(R.id.fragment_signin_password_edit_text);
+        mUsernameTextLayout = (TextInputLayout) view.findViewById(R.id.fragment_signin_username_text_layout);
+        mPasswordTextLayout = (TextInputLayout) view.findViewById(R.id.fragment_signin_password_text_layout);
 
 
         //Problem Dialog Box
@@ -48,10 +58,28 @@ public class SinginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), HomeStreamActivity.class);
-                startActivity(intent);
+                if (validateInputs()) {
+                    startActivity(intent);
+                }
             }
         });
 
         return view;
+    }
+
+    private boolean validateInputs() {
+        boolean isValid = true;
+
+        if (mUsernameEditText.getText().toString().equals("")) {
+            mUsernameTextLayout.setError(getString(R.string.username_error));
+            isValid = false;
+        }
+
+        if (mPasswordEditText.getText().toString().equals("")) {
+            mPasswordTextLayout.setError(getString(R.string.password_error));
+            isValid = false;
+        }
+
+        return isValid;
     }
 }

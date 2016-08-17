@@ -28,4 +28,6 @@
     <string name="menu_about">About</string>
     <string name="menu_sign_out">Sign Out</string>
     <string name="menu_calendar">Calendar View</string>
+    <string name="username_error">Enter valid enrollment no</string>
+    <string name="password_error">Enter valid password</string>
 </resources>
