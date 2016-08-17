@@ -27,4 +27,5 @@
     <string name="menu_add_your_event">Add your event</string>
     <string name="menu_about">About</string>
     <string name="menu_sign_out">Sign Out</string>
+    <string name="menu_calendar">Calendar View</string>
 </resources>

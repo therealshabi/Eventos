@@ -8,9 +8,14 @@
             android:title="@string/menu_favorites"
             android:icon="@drawable/navigation_drawer_favorite"/>
         <item
+            android:id="@+id/menu_calendar_view"
+            android:title="@string/menu_calendar"
+            android:icon="@drawable/navigation_drawer_calendar_view"/>
+        <item
             android:id="@+id/menu_add_your_event"
             android:title="@string/menu_add_your_event"
-            android:icon="@drawable/navigation_drawer_new_event"/>
+            android:icon="@drawable/navigation_drawer_new_event"
+            />
     </group>
 
     <group

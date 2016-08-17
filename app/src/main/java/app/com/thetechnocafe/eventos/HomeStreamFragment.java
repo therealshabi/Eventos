@@ -129,6 +129,7 @@ public class HomeStreamFragment extends Fragment {
         }
     }
 
+    //Adapter
     public class RecyclerAdapter extends RecyclerView.Adapter<ViewHolder> {
 
         List<Data> list = Collections.emptyList();
@@ -155,21 +156,6 @@ public class HomeStreamFragment extends Fragment {
         @Override
         public int getItemCount() {
             return list.size();
-        }
-
-        public void onAttachedToRecyclerView(RecyclerView recycerView) {
-            super.onAttachedToRecyclerView(recycerView);
-        }
-
-        public void insert(int position, Data data) {
-            list.add(position, data);
-            notifyItemInserted(position);
-        }
-
-        public void remove(Data data) {
-            int position = list.indexOf(data);
-            list.remove(position);
-            notifyItemInserted(position);
         }
     }
 
