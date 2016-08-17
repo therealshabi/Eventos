@@ -8,6 +8,7 @@
     android:background="@color/colorPrimary"
     android:fillViewport="true"
     android:fitsSystemWindows="true"
+    android:focusableInTouchMode="true"
     android:gravity="center"
     tools:context="app.com.thetechnocafe.eventos.SigninActivity">
 
@@ -24,7 +25,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
                 android:layout_weight="0.5"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -32,7 +34,7 @@
                 <ImageView
                     android:id="@+id/fragment_signin_image_view"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="180dp"
                     android:src="@drawable/calendar"/>
 
                 <TextView
@@ -41,6 +43,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
                     android:text="@string/app_name"
+                    android:layout_marginTop="10dp"
                     android:textAllCaps="true"
                     android:textColor="@android:color/white"
                     android:textSize="40sp"/>
@@ -50,21 +53,19 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.4"
+                android:layout_weight="0.48"
+                android:layout_marginBottom="15dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:gravity="center|top"
                 android:orientation="vertical">
 
-                <TextView
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="32dp"
-                    android:layout_marginRight="32dp"
-                    android:gravity="left"
-                    android:text="@string/username"
-                    android:textColor="@android:color/holo_blue_bright"
-                    android:textSize="16sp"/>
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:theme="@style/TextLabel">
 
                 <EditText
                     android:id="@+id/fragment_signin_username_edit_text"
@@ -73,22 +74,22 @@
                     android:layout_marginLeft="32dp"
                     android:layout_marginRight="32dp"
                     android:backgroundTint="@android:color/white"
+                    android:hint="ENROLLMENT NO"
                     android:inputType="number"
                     android:textColor="@android:color/white"
                     android:textColorHint="@android:color/white"
                     android:textColorLink="@android:color/white"
                     android:textCursorDrawable="@null"/>
 
-                <TextView
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="32dp"
-                    android:layout_marginRight="32dp"
-                    android:layout_marginTop="24dp"
-                    android:gravity="left"
-                    android:text="@string/password"
-                    android:textColor="@android:color/holo_blue_bright"
-                    android:textSize="16dp"/>
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:theme="@style/TextLabel">
+
 
                 <EditText
                     android:id="@+id/fragment_signin_password_edit_text"
@@ -98,16 +99,19 @@
                     android:layout_marginRight="32dp"
                     android:backgroundTint="@android:color/white"
                     android:inputType="textPassword"
+                    android:hint="PASSWORD"
                     android:textColor="@android:color/white"
                     android:textColorHint="@android:color/white"
                     android:textColorLink="@android:color/white"
                     android:textCursorDrawable="@null"/>
 
+                </android.support.design.widget.TextInputLayout>
+
                 <Button
                     android:id="@+id/fragment_signin_singin_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="18dp"
                     android:background="@drawable/button_ripple"
                     android:paddingLeft="32dp"
                     android:paddingRight="32dp"
@@ -120,13 +124,12 @@
             <TextView
                 android:id="@+id/fragment_signin_problem_text"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_marginTop="24dp"
-                android:layout_weight="0.1"
                 android:background="#651FFF"
                 android:gravity="center"
                 android:padding="24dp"
+                android:textAlignment="center"
                 android:text="@string/problem_text"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"
