@@ -8,4 +8,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="TextLabel" parent="TextAppearance.AppCompat">
+        <!-- Hint color and label color in FALSE state -->
+        <item name="android:textColorHint">@android:color/holo_blue_bright</item>
+        <item name="android:textSize">19sp</item>
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorAccent">@android:color/holo_blue_bright</item>
+        <item name="android:textColorHighlight">@android:color/holo_blue_bright</item>
+    </style>
+
 </resources>
