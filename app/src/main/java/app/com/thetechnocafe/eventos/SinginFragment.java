@@ -58,9 +58,9 @@ public class SinginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), HomeStreamActivity.class);
-                if (validateInputs()) {
+                //if (validateInputs()) {
                     startActivity(intent);
-                }
+                //}
             }
         });
 

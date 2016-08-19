@@ -5,7 +5,8 @@
     android:id="@+id/activity_detail_coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:focusableInTouchMode="true">
 
 
     <android.support.design.widget.AppBarLayout
@@ -65,17 +66,17 @@
                     android:transitionName="@string/shared_title"/>
 
                 <TextView
-                    android:id="@+id/ragment_detail_text_view_date"
+                    android:id="@+id/fragment_detail_text_view_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="31 August 2016"
-                    android:textColor="@android:color/holo_blue_bright"
                     android:textAllCaps="true"
+                    android:textColor="@android:color/holo_blue_bright"
                     android:transitionName="@string/shared_date"/>
 
                 <TextView
-                    android:id="@+id/ragment_detail_text_view_time"
+                    android:id="@+id/fragment_detail_text_view_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -99,44 +100,112 @@
 
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/activity_detail_linear_layout_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginLeft="32dp"
-                android:layout_marginTop="16dp"
-                android:text="DESCRIPTION"
-                android:textColor="@color/colorAccent"
-                android:textSize="16sp"/>
-
-            <TextView
-                android:id="@+id/ragment_detail_text_view_description"
+            <LinearLayout
+                android:id="@+id/activity_detail_linear_layout_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="32dp"
                 android:layout_marginRight="32dp"
-                android:text="Eventos allow students to have a systematic and ordered view of events taking place in different hubs in diffrent colleges."
-                />
-        </LinearLayout>
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/description"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/fragment_detail_text_view_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Eventos allow students to have a systematic and ordered view of events taking place in different hubs in diffrent colleges."
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/requirements"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/fragment_detail_requirement_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No Requirements for this event"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/forums"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/fragment_detail_forums_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No submission forums for this event"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/rating"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="16sp"/>
+
+                <RatingBar
+                    android:id="@+id/fragment_detail_rating_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:numStars="5"
+                    android:rating="0.0"
+                    android:stepSize="1"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/comments"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="16sp"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
 
     </LinearLayout>
+
 
     <ImageButton
         android:id="@+id/fragment_detail_image_share"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:layout_marginRight="32dp"
         android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
         android:background="@drawable/share_circle_background"
         android:elevation="8dp"
-        android:scaleType="fitXY"
         android:padding="16dp"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_detail_share"
         app:layout_anchor="@id/fragment_detail_relative_layout"
         app:layout_anchorGravity="bottom|right|end"/>
