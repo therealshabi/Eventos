@@ -35,4 +35,6 @@
     <string name="description">Description</string>
     <string name="requirements">Requirements</string>
     <string name="forums">Submission forums</string>
+    <string name="comment_hint">Add your comment</string>
+    <string name="recent_comments">Recent comments</string>
 </resources>

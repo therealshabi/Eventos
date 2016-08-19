@@ -182,14 +182,53 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="16sp"
                     android:text="@string/comments"
                     android:textColor="@color/colorAccent"
                     android:textSize="16sp"/>
 
-                <EditText
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/fragment_detail_comment_edit_text"
+                        android:layout_width="0dp"
+                        android:layout_weight="0.9"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/comment_hint"
+                        android:inputType="textShortMessage|textMultiLine"/>
+
+                    <ImageButton
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_submit_comment"
+                        android:background="@android:color/transparent"
+                        android:scaleType="fitXY"
+                        android:foreground="@drawable/ripple"
+                        android:layout_gravity="bottom"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="12sp"
+                    android:text="@string/recent_comments"
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
+
+                <LinearLayout
+                    android:id="@+id/fragment_detail_comment_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="16dp">
+
+                </LinearLayout>
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
