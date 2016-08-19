@@ -24,7 +24,7 @@
         android:id="@+id/comment_recent_item_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="This long long long long long long long long long long long long long long long long long long long"
+        android:text="Very bad event, maybe work hard next time!"
         />
 
 </LinearLayout>

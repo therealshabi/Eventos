@@ -9,4 +9,5 @@
     <color name="home_background">#f5f0ec</color>
     <color name="error_red">@android:color/white</color>
     <color name="rating_bar">#FFF176</color>
+    <color name="pink_600">#D81B60</color>
 </resources>

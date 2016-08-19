@@ -125,7 +125,7 @@
                     android:id="@+id/fragment_detail_text_view_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Eventos allow students to have a systematic and ordered view of events taking place in different hubs in diffrent colleges."
+                    android:text="Eventos allow students to have a systematic and ordered view of events taking place in different hubs in diffrent colleges. The minimum amount of words for description should be between 150-300"
                     />
 
                 <TextView
@@ -168,6 +168,7 @@
                     android:textColor="@color/colorAccent"
                     android:textSize="16sp"/>
 
+
                 <RatingBar
                     android:id="@+id/fragment_detail_rating_bar"
                     android:layout_width="wrap_content"
@@ -195,19 +196,19 @@
                     <EditText
                         android:id="@+id/fragment_detail_comment_edit_text"
                         android:layout_width="0dp"
-                        android:layout_weight="0.9"
                         android:layout_height="wrap_content"
+                        android:layout_weight="0.9"
                         android:hint="@string/comment_hint"
                         android:inputType="textShortMessage|textMultiLine"/>
 
                     <ImageButton
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:src="@drawable/ic_submit_comment"
+                        android:layout_gravity="bottom"
                         android:background="@android:color/transparent"
-                        android:scaleType="fitXY"
                         android:foreground="@drawable/ripple"
-                        android:layout_gravity="bottom"/>
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_submit_comment"/>
 
                 </LinearLayout>
 
@@ -225,10 +226,41 @@
                     android:id="@+id/fragment_detail_comment_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginBottom="16dp">
-
+                    android:orientation="vertical">
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/fragment_detail_show_more_comments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/show_more_comments"
+                    android:textColor="@android:color/holo_blue_light"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"
+                    android:foreground="@drawable/ripple"
+                    android:clickable="true"
+                    android:textAllCaps="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="16sp"
+                    android:text="@string/attending"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="16sp"/>
+
+                <ToggleButton
+                    android:id="@+id/interested_radio_group_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_interested"
+                    android:gravity="center"
+                    android:textOff="@string/interested_event_off"
+                    android:textOn="@string/interested_event_on"
+                    android:textColor="@android:color/white"
+                    android:foreground="@drawable/ripple"
+                    android:layout_marginBottom="16dp"/>
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>

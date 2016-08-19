@@ -37,4 +37,11 @@
     <string name="forums">Submission forums</string>
     <string name="comment_hint">Add your comment</string>
     <string name="recent_comments">Recent comments</string>
+    <string name="interested_event_off">No, I am not interested in this event</string>
+    <string name="interested_event_on">Yes, I will attend this event</string>
+    <string name="attending">Will you be attending this event?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="maybe">Maybe</string>
+    <string name="show_more_comments">Show more comments</string>
 </resources>
