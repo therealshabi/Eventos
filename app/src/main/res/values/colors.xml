@@ -8,4 +8,5 @@
     <color name="pink_300">#F06292</color>
     <color name="home_background">#f5f0ec</color>
     <color name="error_red">@android:color/white</color>
+    <color name="rating_bar">#FFF176</color>
 </resources>
