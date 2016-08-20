@@ -234,21 +234,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/show_more_comments"
-                    android:textColor="@android:color/holo_blue_light"
+                    android:textColor="@android:color/holo_blue_dark"
                     android:textSize="12sp"
                     android:layout_gravity="center"
                     android:foreground="@drawable/ripple"
                     android:clickable="true"
                     android:textAllCaps="true"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginTop="16sp"
-                    android:text="@string/attending"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="16sp"/>
 
                 <ToggleButton
                     android:id="@+id/interested_radio_group_no"
@@ -260,7 +251,8 @@
                     android:textOn="@string/interested_event_on"
                     android:textColor="@android:color/white"
                     android:foreground="@drawable/ripple"
-                    android:layout_marginBottom="16dp"/>
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="24dp"/>
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>

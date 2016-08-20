@@ -1,6 +1,7 @@
 package app.com.thetechnocafe.eventos;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 
 /**
@@ -19,6 +21,7 @@ import android.widget.LinearLayout;
 public class DetailFragment extends Fragment {
 
     private LinearLayout mRecentComments;
+    private TextView mShowMoreCommentsText;
 
     public static DetailFragment getInstance() {
         return new DetailFragment();
@@ -35,6 +38,7 @@ public class DetailFragment extends Fragment {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_detail, container, false);
 
         mRecentComments = (LinearLayout) view.findViewById(R.id.fragment_detail_comment_container);
+        mShowMoreCommentsText = (TextView) view.findViewById(R.id.fragment_detail_show_more_comments);
 
         //Add comments
         addRecentComments();
@@ -49,6 +53,15 @@ public class DetailFragment extends Fragment {
             activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
             activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back);
         }
+
+        //Set up show more comments
+        mShowMoreCommentsText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), CommentsActivity.class);
+                startActivity(intent);
+            }
+        });
 
         return view;
     }
@@ -67,6 +80,12 @@ public class DetailFragment extends Fragment {
     private void addRecentComments() {
         for (int i = 0; i < 3; i++) {
             View view = LayoutInflater.from(getContext()).inflate(R.layout.comment_recent_item, null);
+            TextView textView = (TextView) view.findViewById(R.id.comment_recent_item_comment);
+            if(i == 0) {
+                textView.setText("Nice event, maybe next time do your research and not waste time on just installing softwares");
+            } else if(i == 1) {
+                textView.setText("Very poor event");
+            }
             mRecentComments.addView(view);
         }
     }
