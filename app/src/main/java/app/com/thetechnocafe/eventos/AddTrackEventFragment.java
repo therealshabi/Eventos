@@ -14,12 +14,12 @@ import android.view.ViewGroup;
 /**
  * Created by gurleensethi on 20/08/16.
  */
-public class AddEventFragment extends Fragment {
+public class AddTrackEventFragment extends Fragment {
 
     private FloatingActionButton mAddNewEventActionButton;
 
-    public static AddEventFragment getInstance() {
-        return new AddEventFragment();
+    public static AddTrackEventFragment getInstance() {
+        return new AddTrackEventFragment();
     }
 
     @Override

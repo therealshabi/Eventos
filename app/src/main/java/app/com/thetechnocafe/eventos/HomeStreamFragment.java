@@ -84,7 +84,7 @@ public class HomeStreamFragment extends Fragment {
                         return true;
                     }
                     case R.id.menu_add_your_event: {
-                        Intent intent = new Intent(getContext(), AddEventActivity.class);
+                        Intent intent = new Intent(getContext(), AddTrackEventActivity.class);
                         startActivity(intent);
                     }
                 }
