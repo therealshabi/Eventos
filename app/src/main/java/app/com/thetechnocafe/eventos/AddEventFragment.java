@@ -1,9 +1,7 @@
 package app.com.thetechnocafe.eventos;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,12 +13,9 @@ import android.view.ViewGroup;
 /**
  * Created by gurleensethi on 20/08/16.
  */
-public class AddTrackEventFragment extends Fragment {
-
-    private FloatingActionButton mAddNewEventActionButton;
-
-    public static AddTrackEventFragment getInstance() {
-        return new AddTrackEventFragment();
+public class AddEventFragment extends Fragment {
+    public static AddEventFragment getInstance() {
+        return new AddEventFragment();
     }
 
     @Override
@@ -32,21 +27,10 @@ public class AddTrackEventFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_track_event, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_event, container, false);
 
-        mAddNewEventActionButton = (FloatingActionButton) view.findViewById(R.id.fragment_add_track_event_fab);
-
-        //Set up FAB
-        mAddNewEventActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), AddEventActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        //Set up toolbar
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_add_track_event_toolbar);
+        //Set up the toolbar
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_add_event_toolbar);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(toolbar);
         if (activity.getSupportActionBar() != null) {

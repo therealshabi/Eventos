@@ -13,11 +13,11 @@ public class AddTrackEventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_track_event);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = fragmentManager.findFragmentById(R.id.add_event_fragment_container);
+        Fragment fragment = fragmentManager.findFragmentById(R.id.add_track_event_fragment_container);
 
         if(fragment == null) {
             fragment = AddTrackEventFragment.getInstance();
-            fragmentManager.beginTransaction().add(R.id.add_event_fragment_container, fragment).commit();
+            fragmentManager.beginTransaction().add(R.id.add_track_event_fragment_container, fragment).commit();
         }
     }
 }
