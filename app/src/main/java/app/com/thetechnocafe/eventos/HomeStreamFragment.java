@@ -81,10 +81,14 @@ public class HomeStreamFragment extends Fragment {
                     case R.id.menu_about: {
                         Intent intent = new Intent(getContext(), AboutActivity.class);
                         startActivity(intent);
-                        mDrawerLayout.closeDrawer(GravityCompat.START);
                         return true;
                     }
+                    case R.id.menu_add_your_event: {
+                        Intent intent = new Intent(getContext(), AddTrackEventActivity.class);
+                        startActivity(intent);
+                    }
                 }
+                mDrawerLayout.closeDrawer(GravityCompat.START);
 
                 return false;
             }
@@ -119,8 +123,8 @@ public class HomeStreamFragment extends Fragment {
         public void onClick(View v) {
             Intent intent = new Intent(getContext(), DetailActivity.class);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                Pair<View, String> p1 = Pair.create((View)mTitleText, getString(R.string.shared_title));
-                Pair<View, String> p2 = Pair.create((View)mDateText, getString(R.string.shared_date));
+                Pair<View, String> p1 = Pair.create((View) mTitleText, getString(R.string.shared_title));
+                Pair<View, String> p2 = Pair.create((View) mDateText, getString(R.string.shared_date));
                 ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), p1, p2);
                 startActivity(intent, optionsCompat.toBundle());
             } else {

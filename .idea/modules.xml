@@ -6,7 +6,6 @@
       <module fileurl="file://$PROJECT_DIR$/eventos.iml" filepath="$PROJECT_DIR$/eventos.iml" />
       <module fileurl="file://$PROJECT_DIR$/indicatorlib/indicatorlib.iml" filepath="$PROJECT_DIR$/indicatorlib/indicatorlib.iml" />
       <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
-      <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
     </modules>
   </component>
 </project>

@@ -44,4 +44,7 @@
     <string name="no">No</string>
     <string name="maybe">Maybe</string>
     <string name="show_more_comments">Show more comments</string>
+    <string name="no_events">You don\'t have any events</string>
+    <string name="add_new_event">Add new event</string>
+    <string name="your_events">Your events</string>
 </resources>

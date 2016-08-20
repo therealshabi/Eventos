@@ -24,6 +24,10 @@
         </activity>
         <activity android:name=".WalkthroughActivity">
         </activity>
+        <activity android:name=".AddTrackEventActivity">
+        </activity>
+        <activity android:name=".AddEventActivity">
+        </activity>
     </application>
 
 </manifest>
