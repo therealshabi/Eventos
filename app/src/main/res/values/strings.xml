@@ -56,10 +56,10 @@
     <string name="walkthrough_text_feature_part_three">Add Events to your favourite list, so that you don\'t miss out your favourite event. Your Favourite List will be our Priority</string>
     <string name="prefs_previously_started">false</string>
     <string name="new_event_warning">(If you submit false information, false events or try to spam, you will be blocked from using Eventos)</string>
-    <string name="new_event_info">Have a new event planned? use the following forum to submit your event. To see the proper guidelines to fill the form click on</string>
+    <string name="new_event_info">Have a new event planned? Use the following forum to submit your event. To see the proper guidelines to fill the form click on</string>
     <string name="menu_event_guidelines">Guidelines</string>
     <string name="title">Title</string>
-    <string name="date">Date</string>
+    <string name="date">Date:</string>
     <string name="venue">Venue</string>
     <string name="contacts">Contacts</string>
     <string name="name">Name</string>

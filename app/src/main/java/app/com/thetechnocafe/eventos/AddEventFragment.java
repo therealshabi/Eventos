@@ -14,6 +14,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
@@ -22,6 +24,8 @@ import android.widget.TextView;
 public class AddEventFragment extends Fragment {
     private static final String TAG = "AddEventFragment";
     private TextView mInfoText;
+    private ImageButton mAddContactImageButton;
+    private LinearLayout mContactsContainer;
     public static AddEventFragment getInstance() {
         return new AddEventFragment();
     }
@@ -38,6 +42,17 @@ public class AddEventFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_event, container, false);
 
         mInfoText = (TextView) view.findViewById(R.id.fragment_add_event_info);
+        mAddContactImageButton = (ImageButton) view.findViewById(R.id.fragment_add_event_add_contact);
+        mContactsContainer = (LinearLayout) view.findViewById(R.id.fragment_add_event_contacts_container);
+
+        //Set up the toolbar
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_add_event_toolbar);
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.setSupportActionBar(toolbar);
+        if (activity.getSupportActionBar() != null) {
+            activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
 
         //Set up info text with image view in it
         SpannableStringBuilder builder = new SpannableStringBuilder();
@@ -50,15 +65,13 @@ public class AddEventFragment extends Fragment {
                 .setSpan(new ImageSpan(textImage), builder.length() - 1, builder.length(), 0);
         mInfoText.setText(builder);
 
-        //Set up the toolbar
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_add_event_toolbar);
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.setSupportActionBar(toolbar);
-        if (activity.getSupportActionBar() != null) {
-            activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            //activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back);
-            activity.getSupportActionBar().setDisplayShowTitleEnabled(true);
-        }
+        //Set up on click for add contact image button (add new view to linear layout contacts container)
+        mAddContactImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addContactToContainer();
+            }
+        });
 
         return view;
     }
@@ -78,5 +91,19 @@ public class AddEventFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.add_new_event_menu, menu);
+    }
+
+    private void addContactToContainer() {
+        final View view = LayoutInflater.from(getContext()).inflate(R.layout.contact_email_phone, null);
+        ImageButton imageButton = (ImageButton) view.findViewById(R.id.contact_email_phone_remove);
+        imageButton.setVisibility(View.VISIBLE);
+        //Set up remove function for remove image button
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mContactsContainer.removeView(view);
+            }
+        });
+        mContactsContainer.addView(view);
     }
 }

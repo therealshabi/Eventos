@@ -9,7 +9,7 @@ import android.view.View;
 
 public class AddEventActivity extends AppCompatActivity {
 
-    View decorView;
+    private View decorView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
