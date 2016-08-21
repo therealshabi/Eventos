@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,6 @@ public class WalkthroughActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_walkthrough);
-
 
         mViewPager=(ViewPager)findViewById(R.id.viewPager);
         mViewPagerAdapter=new ViewPagerAdapter(getSupportFragmentManager());
@@ -122,15 +122,15 @@ public class WalkthroughActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(WalkthroughActivity.this, SigninActivity.class);
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     boolean previouslyStarted = prefs.getBoolean(getString(R.string.prefs_previously_started), false);
+                    Log.d("Walkthroughactivity","Hello there " + previouslyStarted);
                     if (!previouslyStarted) {
                         SharedPreferences.Editor edit = prefs.edit();
-                        edit.putBoolean(getString(R.string.prefs_previously_started), Boolean.TRUE);
+                        edit.putBoolean(getString(R.string.prefs_previously_started), true);
                         edit.commit();
                     } else {
                         startActivity(intent);
-                        finish();
                     }
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -145,6 +145,11 @@ public class WalkthroughActivity extends AppCompatActivity {
             });
             return view;
         }
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
     }
 }
