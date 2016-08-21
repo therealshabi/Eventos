@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Eventos.iml" filepath="$PROJECT_DIR$/Eventos.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/eventos.iml" filepath="$PROJECT_DIR$/eventos.iml" />
       <module fileurl="file://$PROJECT_DIR$/indicatorlib/indicatorlib.iml" filepath="$PROJECT_DIR$/indicatorlib/indicatorlib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/indicatorlib/indicatorlib.iml" filepath="$PROJECT_DIR$/indicatorlib/indicatorlib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/indicatorlib/indicatorlib.iml" filepath="$PROJECT_DIR$/indicatorlib/indicatorlib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
       <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
     </modules>
   </component>
