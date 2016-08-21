@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/walkthrough_background"
+                android:fitsSystemWindows="true">
+
+    <ImageView
+        android:id="@+id/employee"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/employee"/>
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="150dp"
+        android:layout_height="140dp"
+        android:layout_below="@id/employee"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="42dp"
+        android:src="@drawable/calendar"
+        android:transitionName="@string/imgTrans"/>
+
+    <ImageView
+        android:id="@+id/concert"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/employee"
+        android:layout_toLeftOf="@+id/logo"
+        android:layout_toStartOf="@id/logo"
+        android:src="@drawable/concert"/>
+
+    <ImageView
+        android:id="@+id/dj"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignBottom="@id/logo"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
+        android:src="@drawable/dj"/>
+
+
+    <ImageView
+        android:id="@+id/sports"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignBottom="@+id/logo"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="15dp"
+        android:src="@drawable/sports"/>
+
+    <ImageView
+        android:id="@+id/student"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_below="@+id/employee"
+        android:layout_toEndOf="@+id/logo"
+        android:layout_toRightOf="@+id/logo"
+        android:src="@drawable/student"/>
+
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/app_name"
+        android:textAllCaps="true"
+        android:textColor="@android:color/white"
+        android:textSize="40sp"
+        android:transitionName="@string/textTrans"/>
+
+
+    <TextView
+        android:id="@+id/tagline"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/app_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="44dp"
+        android:text="ENJOY THE MARVEL!"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"/>
+
+    <Button
+        android:id="@+id/get_started_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tagline"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/getting_started_button"
+        android:elevation="8dp"
+        android:fontFamily="sans-serif-condensed"
+        android:padding="16dp"
+        android:text="@string/walkthrough_start"
+        android:textColor="@android:color/white"/>
+
+
+</RelativeLayout>

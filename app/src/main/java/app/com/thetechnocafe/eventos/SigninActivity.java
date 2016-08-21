@@ -20,4 +20,9 @@ public class SigninActivity extends AppCompatActivity {
             fragmentManager.beginTransaction().add(R.id.singin_fragment_container, fragment).commit();
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
 }

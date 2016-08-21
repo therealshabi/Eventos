@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
+    android:id="@+id/activity_detail_coordinator_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_detail_coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -15,8 +15,8 @@
         app:elevation="0dp">
 
         <android.support.v7.widget.Toolbar
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/toolbar"
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
@@ -175,7 +175,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:numStars="5"
-                    android:rating="2.0"
+                    android:rating="0.0"
                     android:stepSize="1"
                     android:theme="@style/RatingBar"/>
 
@@ -233,26 +233,26 @@
                     android:id="@+id/fragment_detail_show_more_comments"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/show_more_comments"
-                    android:textColor="@android:color/holo_blue_dark"
-                    android:textSize="12sp"
                     android:layout_gravity="center"
-                    android:foreground="@drawable/ripple"
                     android:clickable="true"
-                    android:textAllCaps="true"/>
+                    android:foreground="@drawable/ripple"
+                    android:text="@string/show_more_comments"
+                    android:textAllCaps="true"
+                    android:textColor="@android:color/holo_blue_dark"
+                    android:textSize="12sp"/>
 
                 <ToggleButton
                     android:id="@+id/interested_radio_group_no"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/button_interested"
-                    android:gravity="center"
-                    android:textOff="@string/interested_event_off"
-                    android:textOn="@string/interested_event_on"
-                    android:textColor="@android:color/white"
-                    android:foreground="@drawable/ripple"
                     android:layout_marginBottom="16dp"
-                    android:layout_marginTop="24dp"/>
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/button_interested"
+                    android:foreground="@drawable/ripple"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    android:textOff="@string/interested_event_off"
+                    android:textOn="@string/interested_event_on"/>
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>

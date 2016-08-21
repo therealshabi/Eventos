@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#7C4DFF</color>
-    <color name="colorPrimaryDark">#512DA8</color>
+    <color name="colorPrimaryDark">#4527A0</color>
     <color name="colorAccent">#FF4081</color>
     <color name="deep_purple">#7E57C2</color>
     <color name="background_purple">#7C4DFF</color>
     <color name="pink_300">#F06292</color>
+    <color name="walkthrough_background">#5E35B1</color>
     <color name="home_background">#f5f0ec</color>
     <color name="error_red">@android:color/white</color>
     <color name="rating_bar">#FFF176</color>
