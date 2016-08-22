@@ -38,6 +38,7 @@ public class WalkthroughActivity extends AppCompatActivity {
             finish();
         }
 
+
         mViewPager=(ViewPager)findViewById(R.id.viewPager);
         mViewPagerAdapter=new ViewPagerAdapter(getSupportFragmentManager());
         mViewPagerAdapter.addFragment(new WalkthroughPageOne());
