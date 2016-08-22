@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_person"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_weight="0.8"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/contact_email_phone_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/name"
+            android:inputType="phone"
+            android:theme="@style/AddEventEditTextStyle"/>
+
+        <EditText
+            android:id="@+id/contact_email_phone_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/contact_email"
+            android:inputType="textEmailAddress"
+            android:theme="@style/AddEventEditTextStyle"/>
+
+        <EditText
+            android:id="@+id/contact_email_phone_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/contact_no"
+            android:inputType="phone"
+            android:theme="@style/AddEventEditTextStyle"/>
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/contact_email_phone_remove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:foreground="@drawable/ripple"
+        android:src="@drawable/ic_remove"
+        android:visibility="gone"/>
+
+</LinearLayout>

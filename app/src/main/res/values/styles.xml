@@ -12,7 +12,7 @@
         <!-- Hint color and label color in FALSE state -->
         <item name="android:textColorHint">@android:color/holo_blue_bright</item>
         <item name="android:textSize">16sp</item>
-        <!-- Label color in TRUE state and bar  color FALSE and TRUE State -->
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
         <item name="colorAccent">@android:color/holo_blue_bright</item>
         <item name="android:textColorHighlight">@android:color/holo_blue_bright</item>
     </style>
@@ -33,6 +33,9 @@
         <item name="colorControlActivated">@color/colorAccent</item>
     </style>
 
-
-    
+    <style name="AddEventEditTextStyle">
+        <item name="android:colorControlActivated">@color/colorAccent</item>
+        <item name="android:colorControlHighlight">@color/colorAccent</item>
+        <item name="android:colorControlNormal">@android:color/secondary_text_dark</item>
+    </style>
 </resources>
