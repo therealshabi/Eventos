@@ -176,19 +176,56 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
                     android:layout_marginTop="8dp"
+                    android:layout_weight="0.5"
+                    android:text="@string/forums"
+                    android:textSize="16sp"/>
+
+                <ImageButton
+                    android:id="@+id/fragment_add_event_add_forum_link"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_gravity="right"
+                    android:background="@android:color/transparent"
+                    android:clickable="true"
+                    android:foreground="@drawable/ripple"
+                    android:src="@drawable/ic_add"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/fragment_add_event_forum_link_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:orientation="vertical">
+
+                <include layout="@layout/submission_forum"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="0.5"
                     android:text="@string/contacts"
-                    android:textSize="16sp"
-                    android:layout_weight="0.5"/>
+                    android:textSize="16sp"/>
 
                 <ImageButton
                     android:id="@+id/fragment_add_event_add_contact"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_add"
                     android:layout_gravity="right"
+                    android:background="@android:color/transparent"
                     android:clickable="true"
                     android:foreground="@drawable/ripple"
-                    android:background="@android:color/transparent"/>
+                    android:src="@drawable/ic_add"/>
 
             </LinearLayout>
 
@@ -203,6 +240,42 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:textColor="@color/colorAccent"
+                    android:theme="@style/AddEventEditTextStyle"
+                    android:layout_weight="0.8">
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="@string/photo_text"
+                        android:inputType="textWebEditText"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <ImageButton
+                    android:id="@+id/fragment_add_event_add_image_button"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circle_image"
+                    android:clickable="true"
+                    android:elevation="6dp"
+                    android:foreground="@drawable/ripple"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_camera"
+                    android:layout_marginLeft="8dp"
+                    android:tint="@android:color/white"/>
+            </LinearLayout>
 
             <Button
                 android:id="@+id/fragment_add_event_submit"

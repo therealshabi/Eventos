@@ -26,6 +26,8 @@ public class AddEventFragment extends Fragment {
     private TextView mInfoText;
     private ImageButton mAddContactImageButton;
     private LinearLayout mContactsContainer;
+    private ImageButton mAddForumLinkImageButton;
+    private LinearLayout mLinkContainer;
     public static AddEventFragment getInstance() {
         return new AddEventFragment();
     }
@@ -44,6 +46,8 @@ public class AddEventFragment extends Fragment {
         mInfoText = (TextView) view.findViewById(R.id.fragment_add_event_info);
         mAddContactImageButton = (ImageButton) view.findViewById(R.id.fragment_add_event_add_contact);
         mContactsContainer = (LinearLayout) view.findViewById(R.id.fragment_add_event_contacts_container);
+        mAddForumLinkImageButton = (ImageButton) view.findViewById(R.id.fragment_add_event_add_forum_link);
+        mLinkContainer = (LinearLayout) view.findViewById(R.id.fragment_add_event_forum_link_container);
 
         //Set up the toolbar
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_add_event_toolbar);
@@ -73,6 +77,14 @@ public class AddEventFragment extends Fragment {
             }
         });
 
+        //Set up on click for add forum link image button (add new view to linear layout link container)
+        mAddForumLinkImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addForumLinkToContainer();
+            }
+        });
+
         return view;
     }
 
@@ -97,7 +109,7 @@ public class AddEventFragment extends Fragment {
         final View view = LayoutInflater.from(getContext()).inflate(R.layout.contact_email_phone, null);
         ImageButton imageButton = (ImageButton) view.findViewById(R.id.contact_email_phone_remove);
         imageButton.setVisibility(View.VISIBLE);
-        //Set up remove function for remove image button
+        //Set up remove function for remove view
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,5 +117,19 @@ public class AddEventFragment extends Fragment {
             }
         });
         mContactsContainer.addView(view);
+    }
+
+    private void addForumLinkToContainer() {
+        final View view = LayoutInflater.from(getContext()).inflate(R.layout.submission_forum, null);
+        ImageButton imageButton = (ImageButton) view.findViewById(R.id.submission_forum_remove_button);
+        imageButton.setVisibility(View.VISIBLE);
+        //Set up remove function to remove view
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLinkContainer.removeView(view);
+            }
+        });
+        mLinkContainer.addView(view);
     }
 }

@@ -10,7 +10,7 @@
         android:layout_width="40dp"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:src="@drawable/ic_person"/>
+        android:src="@drawable/ic_link"/>
 
     <LinearLayout
         android:layout_width="0dp"
@@ -20,33 +20,25 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/contact_email_phone_name"
+            android:id="@+id/submission_forum_link_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/name"
-            android:inputType="phone"
+            android:hint="@string/link_name"
+            android:inputType="textShortMessage|textCapWords"
             android:theme="@style/AddEventEditTextStyle"/>
 
         <EditText
-            android:id="@+id/contact_email_phone_email"
+            android:id="@+id/submission_forum_link_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/contact_email"
-            android:inputType="textEmailAddress"
-            android:theme="@style/AddEventEditTextStyle"/>
-
-        <EditText
-            android:id="@+id/contact_email_phone_number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/contact_no"
-            android:inputType="phone"
+            android:hint="@string/valid_link"
+            android:inputType="textWebEditText"
             android:theme="@style/AddEventEditTextStyle"/>
 
     </LinearLayout>
 
     <ImageButton
-        android:id="@+id/contact_email_phone_remove"
+        android:id="@+id/submission_forum_remove_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

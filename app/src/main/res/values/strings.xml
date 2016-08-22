@@ -67,4 +67,7 @@
     <string name="contact_email">Contact email</string>
     <string name="image">Image</string>
     <string name="submit">Submit</string>
+    <string name="valid_link">Link to your forum</string>
+    <string name="link_name">Name</string>
+    <string name="photo_text">Upload photo or provide a link</string>
 </resources>
