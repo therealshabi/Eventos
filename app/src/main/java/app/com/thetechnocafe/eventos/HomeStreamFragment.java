@@ -32,12 +32,11 @@ import java.util.List;
  */
 public class HomeStreamFragment extends Fragment {
 
-    private DrawerLayout mDrawerLayout;
-    private NavigationView mNavigationView;
-
     RecyclerView recyclerView;
     List<Data> data = new ArrayList<>();
     RecyclerAdapter adapter;
+    private DrawerLayout mDrawerLayout;
+    private NavigationView mNavigationView;
 
     public static HomeStreamFragment getInstance() {
         return new HomeStreamFragment();
@@ -98,10 +97,21 @@ public class HomeStreamFragment extends Fragment {
     }
 
     public List<Data> fill_with_data(List<Data> data) {
-        data.add(new Data("GDG Event", "23-08-2016", R.drawable.img));
-        data.add(new Data("Knuth Programming", "23-08-2016", R.drawable.img));
-        data.add(new Data("JYC Event", "23-08-2016", R.drawable.img));
+        data.add(new Data("GDG Event", "23-08-2016", R.drawable.calendar));
+        data.add(new Data("Knuth Programming", "23-08-2016", R.drawable.calendar));
+        data.add(new Data("JYC Event", "23-08-2016", R.drawable.calendar));
         return data;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                mDrawerLayout.openDrawer(GravityCompat.START);
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -161,16 +171,5 @@ public class HomeStreamFragment extends Fragment {
         public int getItemCount() {
             return list.size();
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home: {
-                mDrawerLayout.openDrawer(GravityCompat.START);
-            }
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

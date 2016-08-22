@@ -35,9 +35,7 @@ public class WalkthroughActivity extends AppCompatActivity {
         previouslyStarted = prefs.getBoolean(getString(R.string.prefs_previously_started), false);
         if (previouslyStarted) {
             startActivity(intent);
-            finish();
         }
-
 
         mViewPager=(ViewPager)findViewById(R.id.viewPager);
         mViewPagerAdapter=new ViewPagerAdapter(getSupportFragmentManager());
@@ -138,9 +136,6 @@ public class WalkthroughActivity extends AppCompatActivity {
                         SharedPreferences.Editor edit = prefs.edit();
                         edit.putBoolean(getString(R.string.prefs_previously_started), Boolean.TRUE);
                         edit.commit();
-                    } else {
-                        startActivity(intent);
-                        finish();
                     }
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
