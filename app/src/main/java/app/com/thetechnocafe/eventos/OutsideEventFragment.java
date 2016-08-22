@@ -5,19 +5,15 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -27,19 +23,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by gurleensethi on 13/08/16.
- */
-public class HomeStreamFragment extends Fragment {
+public class OutsideEventFragment extends Fragment {
 
     RecyclerView recyclerView;
     List<Data> data = new ArrayList<>();
     RecyclerAdapter adapter;
-    private DrawerLayout mDrawerLayout;
-    private NavigationView mNavigationView;
 
-    public static HomeStreamFragment getInstance() {
-        return new HomeStreamFragment();
+    public static OutsideEventFragment getInstance() {
+        return new OutsideEventFragment();
     }
 
     @Override
@@ -51,55 +42,19 @@ public class HomeStreamFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home_stream, container, false);
+        View view = inflater.inflate(R.layout.fragment_outside_event, container, false);
 
         data = fill_with_data(data);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.home_stream_recycler_view);
+        recyclerView = (RecyclerView) view.findViewById(R.id.outside_event_recycler_view);
         adapter = new RecyclerAdapter(data, getContext());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mDrawerLayout = (DrawerLayout) view.findViewById(R.id.fragment_home_stream_drawer);
-        mNavigationView = (NavigationView) view.findViewById(R.id.fragment_home_stream_navigation_view);
 
         //Set up the toolbar
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_home_stream_toolbar);
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_outside_event_toolbar);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(toolbar);
-
-        if (activity.getSupportActionBar() != null) {
-            activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_drawer_icon);
-        }
-
-        //Set up the navigation view (drawer)
-        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.menu_about: {
-                        Intent intent = new Intent(getContext(), AboutActivity.class);
-                        startActivity(intent);
-                        return true;
-                    }
-                    case R.id.menu_add_your_event: {
-                        Intent intent = new Intent(getContext(), AddTrackEventActivity.class);
-                        startActivity(intent);
-                        return true;
-                    }
-
-                    case R.id.menu_outside_event: {
-                        Intent intent = new Intent(getContext(), OutsideEventActivity.class);
-                        startActivity(intent);
-                        return true;
-                    }
-
-                }
-                mDrawerLayout.closeDrawer(GravityCompat.START);
-
-                return false;
-            }
-        });
 
         return view;
     }
@@ -111,16 +66,6 @@ public class HomeStreamFragment extends Fragment {
         return data;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home: {
-                mDrawerLayout.openDrawer(GravityCompat.START);
-            }
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -132,9 +77,9 @@ public class HomeStreamFragment extends Fragment {
         public ViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
-            mCardView = (CardView) itemView.findViewById(R.id.home_stream_recycler_view_item_card);
-            mTitleText = (TextView) itemView.findViewById(R.id.home_stream_recycler_view_item_title_text);
-            mDateText = (TextView) itemView.findViewById(R.id.home_stream_recycler_view_item_date_text);
+            mCardView = (CardView) itemView.findViewById(R.id.outside_event_recycler_view_item_card);
+            mTitleText = (TextView) itemView.findViewById(R.id.outside_event_recycler_view_item_title_text);
+            mDateText = (TextView) itemView.findViewById(R.id.outside_event_recycler_view_item_date_text);
         }
 
         @Override
@@ -165,7 +110,7 @@ public class HomeStreamFragment extends Fragment {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_stream_recycler_view_item, parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.outside_event_recycler_view_item, parent, false);
             ViewHolder holder = new ViewHolder(v);
             return holder;
         }

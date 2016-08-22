@@ -28,6 +28,8 @@
         </activity>
         <activity android:name=".AddEventActivity">
         </activity>
+        <activity android:name=".OutsideEventActivity">
+        </activity>
     </application>
 
 </manifest>
