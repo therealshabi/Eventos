@@ -135,6 +135,31 @@
                     android:textColor="@android:color/secondary_text_light"
                     android:textSize="16sp"/>
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/time"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="32dp"/>
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="16dp"
+                    android:src="@drawable/ic_time"
+                    android:tint="@android:color/black"/>
+
+                <TextView
+                    android:id="@+id/fragment_add_event_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:clickable="true"
+                    android:foreground="@drawable/ripple"
+                    android:text="06:00"
+                    android:textColor="@android:color/secondary_text_light"
+                    android:textSize="16sp"/>
+
             </LinearLayout>
 
             <android.support.design.widget.TextInputLayout
