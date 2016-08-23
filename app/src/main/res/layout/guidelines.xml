@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:minWidth="320dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/menu_event_guidelines"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-light"
+        android:layout_gravity="center"
+        android:textColor="@android:color/secondary_text_light"/>
+
+    <ListView
+        android:id="@+id/guidelines_list"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:divider="@null"
+        android:layout_weight="0.8"
+        android:scrollbars="none">
+    </ListView>
+
+    <Button
+        android:id="@+id/guidelines_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/close"
+        android:layout_gravity="right"
+        android:background="@android:color/transparent"
+        android:textColor="@color/colorAccent"
+        android:clickable="true"
+        android:foreground="@drawable/ripple"/>
+
+</LinearLayout>

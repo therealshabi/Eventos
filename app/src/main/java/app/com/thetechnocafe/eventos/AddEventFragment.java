@@ -31,6 +31,7 @@ public class AddEventFragment extends Fragment {
     private static final String TAG = "AddEventFragment";
     private static final String DATE_PICKER_TAG = "datepicker";
     private static final String TIME_PICKER_TAG = "timepicker";
+    private static final String GUIDELINES_TAG = "guidlines";
     private static final int DATE_PICKER_CODE = 1;
     private static final int TIME_PICKER_CODE = 2;
 
@@ -140,6 +141,10 @@ public class AddEventFragment extends Fragment {
             case android.R.id.home: {
                 getActivity().finish();
                 return true;
+            }
+            case R.id.add_new_event_menu_guidelines: {
+                GuidelinesDialog guidelinesDialog = GuidelinesDialog.getInstance();
+                guidelinesDialog.show(getFragmentManager(), GUIDELINES_TAG);
             }
         }
         return super.onOptionsItemSelected(item);
