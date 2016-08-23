@@ -2,6 +2,7 @@ package app.com.thetechnocafe.eventos;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,6 +36,7 @@ public class HomeStreamFragment extends Fragment {
 
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     RecyclerView recyclerView;
     List<Data> data = new ArrayList<>();
@@ -62,6 +65,7 @@ public class HomeStreamFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mDrawerLayout = (DrawerLayout) view.findViewById(R.id.fragment_home_stream_drawer);
         mNavigationView = (NavigationView) view.findViewById(R.id.fragment_home_stream_navigation_view);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fragment_home_stream_swipe_refresh);
 
         //Set up the toolbar
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_home_stream_toolbar);
@@ -91,6 +95,14 @@ public class HomeStreamFragment extends Fragment {
                 mDrawerLayout.closeDrawer(GravityCompat.START);
 
                 return false;
+            }
+        });
+
+        //Set up on swipe refresh layout
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new DataFetcher().execute();
             }
         });
 
@@ -172,5 +184,36 @@ public class HomeStreamFragment extends Fragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    class DataFetcher extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            Thread thread = new Thread() {
+                @Override
+                public void run() {
+                    super.run();
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            thread.run();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 }

@@ -34,7 +34,7 @@
     <string name="comments">Comments</string>
     <string name="description">Description</string>
     <string name="requirements">Requirements</string>
-    <string name="forums">Submission forums</string>
+    <string name="forums">Submission forums or Links</string>
     <string name="comment_hint">Add your comment</string>
     <string name="recent_comments">Recent comments</string>
     <string name="interested_event_off">No, I am not interested in this event</string>
@@ -77,8 +77,9 @@
         <item>Requirements should me mentioned clearly to the point. If you don\'t have any requirements you can provide your own message, if left empty \'No requirements for this event\' will be shown.</item>
         <item>Venue should contain just the label of the venue. You can add multiple venues by separating them by commas.</item>
         <item>If you add a link to your submission forum, give a proper name. Adding malicious/unrelated links will lead to deletion of the event and the submitter might get blocked. If no link is added \'No submission forum for this event\' will be shown.</item>
-        <item>Provide proper name and contact number in contacts. Email is option but recommended.</item>
-        <item>Provide a proper image related to the event/hub. Make sure the size of image is not to high. Default photo will be used if you don\'t provide any image. Link to the image can also be provided.</item>
+        <item>Provide proper name and contact number in contacts. Email is optional but recommended.</item>
+        <item>Provide a proper image related to the event/hub. Make sure the size of image is not to high. Default image will be used if you don\'t provide one. Link to the image can also be provided.</item>
     </string-array>
     <string name="close">Close</string>
+    <string name="select_avatar">Select an avatar for your event</string>
 </resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/contacts_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Random Person"
+        android:textSize="16sp"
+        android:textColor="@android:color/holo_blue_dark"/>
+
+    <TextView
+        android:id="@+id/contacts_item_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:text="randon.email@fakemail.com"/>
+
+    <TextView
+        android:id="@+id/contacts_item_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+917365884738"
+        android:layout_marginLeft="16dp"/>
+
+</LinearLayout>
