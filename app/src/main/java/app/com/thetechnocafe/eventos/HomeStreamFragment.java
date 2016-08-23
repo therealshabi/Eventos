@@ -80,22 +80,31 @@ public class HomeStreamFragment extends Fragment {
                     case R.id.menu_about: {
                         Intent intent = new Intent(getContext(), AboutActivity.class);
                         startActivity(intent);
+                        mDrawerLayout.closeDrawer(GravityCompat.START);
                         return true;
                     }
                     case R.id.menu_add_your_event: {
                         Intent intent = new Intent(getContext(), AddTrackEventActivity.class);
                         startActivity(intent);
+                        mDrawerLayout.closeDrawer(GravityCompat.START);
                         return true;
                     }
 
                     case R.id.menu_outside_event: {
                         Intent intent = new Intent(getContext(), OutsideEventActivity.class);
                         startActivity(intent);
+                        mDrawerLayout.closeDrawer(GravityCompat.START);
+                        return true;
+                    }
+
+                    case R.id.menu_favorites: {
+                        Intent intent = new Intent(getContext(), FavouriteActivity.class);
+                        startActivity(intent);
+                        mDrawerLayout.closeDrawer(GravityCompat.START);
                         return true;
                     }
 
                 }
-                mDrawerLayout.closeDrawer(GravityCompat.START);
 
                 return false;
             }

@@ -30,6 +30,8 @@
         </activity>
         <activity android:name=".OutsideEventActivity">
         </activity>
+        <activity android:name=".FavouriteActivity">
+        </activity>
     </application>
 
 </manifest>
