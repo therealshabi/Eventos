@@ -2,11 +2,13 @@ package app.com.thetechnocafe.eventos;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class FavouriteActivity extends AppCompatActivity {
@@ -37,6 +40,10 @@ public class FavouriteActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(recyclerView);
 
         //set up toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.favourite_toolbar);
@@ -88,9 +95,25 @@ public class FavouriteActivity extends AppCompatActivity {
         Favourite d = new Favourite("Hackathon By GDG", "8 Days to go", "CL4", covers[3], "18:00 hrs");
         favouriteList.add(d);
 
+
     }
 
-    public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.MyViewHolder> {
+    public interface ItemTouchHelperAdapter {
+
+        // Called when an item has been dragged far enough to trigger a move. This is called every time
+
+        void onItemMove(int fromPosition, int toPosition);
+
+
+        //Called when an item has been dismissed by a swipe
+        void onItemDismiss(int position);
+
+
+    }
+
+    public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.MyViewHolder> implements ItemTouchHelperAdapter {
+        Favourite temp;
+        int pos;
         private Context mContext;
         private List<Favourite> favouriteList;
 
@@ -104,6 +127,42 @@ public class FavouriteActivity extends AppCompatActivity {
             View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.favourite_cardview, parent, false);
             return new MyViewHolder(itemView);
         }
+
+        @Override
+        public void onItemDismiss(int position) {
+            temp = favouriteList.get(position);
+            pos = position;
+            favouriteList.remove(position);
+            notifyItemRemoved(position);
+            Snackbar snackbar = Snackbar
+                    .make(getCurrentFocus(), "Message is deleted", Snackbar.LENGTH_LONG)
+                    .setAction("UNDO", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            favouriteList.add(pos, temp);
+                            notifyItemInserted(pos);
+                            Snackbar snackbar1 = Snackbar.make(getCurrentFocus(), "Message is restored!", Snackbar.LENGTH_SHORT);
+                            snackbar1.show();
+                        }
+                    });
+
+            snackbar.show();
+        }
+
+        @Override
+        public void onItemMove(int fromPosition, int toPosition) {
+            if (fromPosition < toPosition) {
+                for (int i = fromPosition; i < toPosition; i++) {
+                    Collections.swap(favouriteList, i, i + 1);
+                }
+            } else {
+                for (int i = fromPosition; i > toPosition; i--) {
+                    Collections.swap(favouriteList, i, i - 1);
+                }
+            }
+            notifyItemMoved(fromPosition, toPosition);
+        }
+
 
         public void onBindViewHolder(final MyViewHolder holder, int position) {
             Favourite favourite = favouriteList.get(position);
@@ -134,6 +193,8 @@ public class FavouriteActivity extends AppCompatActivity {
 
 
     }
+
+    //ItemCallBack
 
     public class Favourite {
         public String name;
@@ -191,6 +252,45 @@ public class FavouriteActivity extends AppCompatActivity {
         {
             this.thumbnail = thumbnail;
         }
+    }
+
+    public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
+
+        private final ItemTouchHelperAdapter mAdapter;
+
+        public SimpleItemTouchHelperCallback(ItemTouchHelperAdapter adapter) {
+            mAdapter = adapter;
+        }
+
+        @Override
+        public boolean isLongPressDragEnabled() {
+            return true;
+        }
+
+        @Override
+        public boolean isItemViewSwipeEnabled() {
+            return true;
+        }
+
+        @Override
+        public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+            int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+            int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+            return makeMovementFlags(dragFlags, swipeFlags);
+        }
+
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                              RecyclerView.ViewHolder target) {
+            mAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            return true;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
+        }
+
     }
 
 
