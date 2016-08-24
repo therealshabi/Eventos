@@ -15,6 +15,7 @@
         android:src="@drawable/tracking"/>
 
     <TextView
+        android:id="@+id/text_walkthrough_page_two"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -27,5 +28,26 @@
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="20sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="536dp"
+        android:background="@color/colorPrimaryDark">
+
+        <TextView
+            android:id="@+id/skip2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:clickable="true"
+            android:foreground="@drawable/ripple"
+            android:padding="8dp"
+            android:text="SKIP"
+            android:textColor="@android:color/white"
+            />
+
+    </LinearLayout>
 
 </RelativeLayout>

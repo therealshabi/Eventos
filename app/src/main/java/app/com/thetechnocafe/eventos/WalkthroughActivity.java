@@ -39,23 +39,6 @@ public class WalkthroughActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-        skip = (TextView) findViewById(R.id.skip);
-        skip.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(WalkthroughActivity.this, SigninActivity.class);
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                previouslyStarted = prefs.getBoolean(getString(R.string.prefs_previously_started), false);
-                if (!previouslyStarted) {
-                    SharedPreferences.Editor edit = prefs.edit();
-                    edit.putBoolean(getString(R.string.prefs_previously_started), Boolean.TRUE);
-                    edit.commit();
-                }
-                startActivity(intent);
-            }
-        });
-
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mViewPagerAdapter.addFragment(new WalkthroughPageOne());
@@ -78,9 +61,27 @@ public class WalkthroughActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             // Inflate the layout for this fragment
             View view = inflater.inflate(R.layout.fragment_walkthrough_page_one, container, false);
+            TextView skip;
+            skip = (TextView) view.findViewById(R.id.skip1);
+            skip.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(WalkthroughActivity.this, SigninActivity.class);
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    previouslyStarted = prefs.getBoolean(getString(R.string.prefs_previously_started), false);
+                    if (!previouslyStarted) {
+                        SharedPreferences.Editor edit = prefs.edit();
+                        edit.putBoolean(getString(R.string.prefs_previously_started), Boolean.TRUE);
+                        edit.commit();
+                    }
+                    startActivity(intent);
+                }
+            });
 
             return view;
         }
+
     }
 
     public class WalkthroughPageTwo extends Fragment {
@@ -92,6 +93,23 @@ public class WalkthroughActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             // Inflate the layout for this fragment
             View view = inflater.inflate(R.layout.fragment_walkthrough_page_two, container, false);
+
+            skip = (TextView) view.findViewById(R.id.skip2);
+            skip.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(WalkthroughActivity.this, SigninActivity.class);
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    previouslyStarted = prefs.getBoolean(getString(R.string.prefs_previously_started), false);
+                    if (!previouslyStarted) {
+                        SharedPreferences.Editor edit = prefs.edit();
+                        edit.putBoolean(getString(R.string.prefs_previously_started), Boolean.TRUE);
+                        edit.commit();
+                    }
+                    startActivity(intent);
+                }
+            });
 
             return view;
         }
@@ -109,6 +127,24 @@ public class WalkthroughActivity extends AppCompatActivity {
             View view = inflater.inflate(R.layout.fragment_walkthrough_page_three, container, false);
             ImageView mImageViewFilling = (ImageView) view.findViewById(R.id.heart);
             ((AnimationDrawable) mImageViewFilling.getBackground()).start();
+
+            skip = (TextView) view.findViewById(R.id.skip3);
+            skip.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(WalkthroughActivity.this, SigninActivity.class);
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    previouslyStarted = prefs.getBoolean(getString(R.string.prefs_previously_started), false);
+                    if (!previouslyStarted) {
+                        SharedPreferences.Editor edit = prefs.edit();
+                        edit.putBoolean(getString(R.string.prefs_previously_started), Boolean.TRUE);
+                        edit.commit();
+                    }
+                    startActivity(intent);
+                }
+            });
+
             return view;
         }
 
@@ -124,6 +160,24 @@ public class WalkthroughActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             // Inflate the layout for this fragment
             View view = inflater.inflate(R.layout.fragment_walkthrough_page_four, container, false);
+
+            skip = (TextView) view.findViewById(R.id.skip4);
+            skip.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(WalkthroughActivity.this, SigninActivity.class);
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    previouslyStarted = prefs.getBoolean(getString(R.string.prefs_previously_started), false);
+                    if (!previouslyStarted) {
+                        SharedPreferences.Editor edit = prefs.edit();
+                        edit.putBoolean(getString(R.string.prefs_previously_started), Boolean.TRUE);
+                        edit.commit();
+                    }
+                    startActivity(intent);
+                }
+            });
+
             return view;
         }
 
@@ -142,6 +196,7 @@ public class WalkthroughActivity extends AppCompatActivity {
             Button btn = (Button) view.findViewById(R.id.get_started_btn);
             final TextView mTitleText = (TextView) view.findViewById(R.id.app_name);
             final ImageView mImageLogo = (ImageView) view.findViewById(R.id.logo);
+
 
             btn.setOnClickListener(new View.OnClickListener() {
 

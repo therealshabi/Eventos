@@ -104,5 +104,14 @@
         android:text="@string/walkthrough_start"
         android:textColor="@android:color/white"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="536dp"
+        android:background="@color/colorPrimaryDark">
+
+    </LinearLayout>
+
 
 </RelativeLayout>
