@@ -18,12 +18,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.viewpagerindicator.CirclePageIndicator;
+
 public class WalkthroughActivity extends AppCompatActivity {
 
     ViewPager mViewPager;
     ViewPagerAdapter mViewPagerAdapter;
     boolean previouslyStarted;
-
+    TextView skip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,18 +39,36 @@ public class WalkthroughActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-        mViewPager=(ViewPager)findViewById(R.id.viewPager);
-        mViewPagerAdapter=new ViewPagerAdapter(getSupportFragmentManager());
+        skip = (TextView) findViewById(R.id.skip);
+        skip.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(WalkthroughActivity.this, SigninActivity.class);
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                previouslyStarted = prefs.getBoolean(getString(R.string.prefs_previously_started), false);
+                if (!previouslyStarted) {
+                    SharedPreferences.Editor edit = prefs.edit();
+                    edit.putBoolean(getString(R.string.prefs_previously_started), Boolean.TRUE);
+                    edit.commit();
+                }
+                startActivity(intent);
+            }
+        });
+
+        mViewPager = (ViewPager) findViewById(R.id.viewPager);
+        mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mViewPagerAdapter.addFragment(new WalkthroughPageOne());
         mViewPagerAdapter.addFragment(new WalkthroughPageTwo());
         mViewPagerAdapter.addFragment(new WalkthroughPageThree());
         mViewPagerAdapter.addFragment(new WalkthroughPageFour());
         mViewPagerAdapter.addFragment(new WalkthroughPageFive());
         mViewPager.setAdapter(mViewPagerAdapter);
-     }
+        CirclePageIndicator viewIndicator = (CirclePageIndicator) findViewById(R.id.titles);
+        viewIndicator.setViewPager(mViewPager);
+    }
 
-    public class WalkthroughPageOne extends Fragment
-    {
+    public class WalkthroughPageOne extends Fragment {
 
         public WalkthroughPageOne() {
             // Required empty public constructor
@@ -57,14 +77,13 @@ public class WalkthroughActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             // Inflate the layout for this fragment
-            View view=  inflater.inflate(R.layout.fragment_walkthrough_page_one, container, false);
+            View view = inflater.inflate(R.layout.fragment_walkthrough_page_one, container, false);
 
             return view;
         }
     }
 
-    public class WalkthroughPageTwo extends Fragment
-    {
+    public class WalkthroughPageTwo extends Fragment {
         public WalkthroughPageTwo() {
             // Required empty public constructor
         }
@@ -72,14 +91,13 @@ public class WalkthroughActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             // Inflate the layout for this fragment
-            View view=  inflater.inflate(R.layout.fragment_walkthrough_page_two, container, false);
+            View view = inflater.inflate(R.layout.fragment_walkthrough_page_two, container, false);
 
             return view;
         }
     }
 
-    public class WalkthroughPageThree extends Fragment
-    {
+    public class WalkthroughPageThree extends Fragment {
 
         public WalkthroughPageThree() {
             // Required empty public constructor
@@ -88,7 +106,7 @@ public class WalkthroughActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             // Inflate the layout for this fragment
-            View view=  inflater.inflate(R.layout.fragment_walkthrough_page_three, container, false);
+            View view = inflater.inflate(R.layout.fragment_walkthrough_page_three, container, false);
             ImageView mImageViewFilling = (ImageView) view.findViewById(R.id.heart);
             ((AnimationDrawable) mImageViewFilling.getBackground()).start();
             return view;

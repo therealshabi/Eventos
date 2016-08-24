@@ -27,6 +27,6 @@
         android:text="@string/walkthrough_text_feature_part_three"
         android:textAlignment="center"
         android:textColor="@android:color/white"
-        android:textSize="24sp"/>
+        android:textSize="20sp"/>
 
 </RelativeLayout>
