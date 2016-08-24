@@ -15,8 +15,8 @@
             android:id="@+id/fragment_add_track_event_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:titleTextColor="@android:color/white"
-            app:title="@string/your_events">
+            app:title="@string/your_events"
+            app:titleTextColor="@android:color/white">
 
         </android.support.v7.widget.Toolbar>
 
@@ -25,9 +25,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center"
         android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:gravity="center">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <TextView
             android:id="@+id/fragment_add_track_event_no_event_text"
@@ -35,15 +35,21 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/no_events"
+            android:visibility="gone"
             />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/fragment_add_track_event_recycler_view"
+        <android.support.v4.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone">
+            android:id="@+id/fragment_add_track_event_swipe_refresh">
 
-        </android.support.v7.widget.RecyclerView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/fragment_add_track_event_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </android.support.v7.widget.RecyclerView>
+        </android.support.v4.widget.SwipeRefreshLayout>
 
     </LinearLayout>
 

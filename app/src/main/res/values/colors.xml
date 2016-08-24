@@ -11,4 +11,5 @@
     <color name="error_red">@android:color/white</color>
     <color name="rating_bar">#FFF176</color>
     <color name="pink_600">#D81B60</color>
+    <color name="green_a700">#00C853</color>
 </resources>

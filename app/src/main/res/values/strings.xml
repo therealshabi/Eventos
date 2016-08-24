@@ -82,4 +82,7 @@
     </string-array>
     <string name="close">Close</string>
     <string name="select_avatar">Select an avatar for your event</string>
+    <string name="submitted_on">Submitted on</string>
+    <string name="verified">Verified</string>
+    <string name="num_of_attending">Number of people attending</string>
 </resources>
