@@ -59,7 +59,7 @@ public class OutsideEventFragment extends Fragment {
 
         if (activity.getSupportActionBar() != null) {
             activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
+            activity.getSupportActionBar().setDisplayShowTitleEnabled(true);
             activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back);
         }
 

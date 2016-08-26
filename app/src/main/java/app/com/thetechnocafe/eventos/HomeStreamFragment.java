@@ -99,6 +99,10 @@ public class HomeStreamFragment extends Fragment {
                         startActivity(intent);
                         break;
                     }
+                    case R.id.menu_outside_event: {
+                        Intent intent = new Intent(getContext(), OutsideEventActivity.class);
+                        startActivity(intent);
+                    }
                 }
                 mDrawerLayout.closeDrawer(GravityCompat.START);
 

@@ -102,7 +102,7 @@ public class DetailFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getContext(), WebViewActivity.class);
-                    intent.putExtra(WebViewActivity.EXTRA_MESSAGE, "www.google.com");
+                    intent.putExtra(WebViewActivity.EXTRA_MESSAGE, "http://www.google.com");
                     startActivity(intent);
                 }
             });

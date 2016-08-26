@@ -20,7 +20,7 @@
         <item
             android:id="@+id/menu_outside_event"
             android:icon="@drawable/navigation_drawer_outside_event"
-            android:title="Outside Events"/>
+            android:title="@string/menu_outside_events"/>
     </group>
 
     <group
