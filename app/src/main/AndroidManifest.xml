@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="app.com.thetechnocafe.eventos"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="app.com.thetechnocafe.eventos">
 
     <application
         android:allowBackup="true"
@@ -27,6 +27,8 @@
         <activity android:name=".AddTrackEventActivity">
         </activity>
         <activity android:name=".AddEventActivity">
+        </activity>
+        <activity android:name=".TrackEventActivity">
         </activity>
     </application>
 

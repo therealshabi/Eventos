@@ -85,4 +85,8 @@
     <string name="submitted_on">Submitted on</string>
     <string name="verified">Verified</string>
     <string name="num_of_attending">Number of people attending</string>
+    <string name="more_details">More Details</string>
+    <string name="attending_people">people attending your event</string>
+    <string name="totla_rating">Total Ratings</string>
+    <string name="average_rating">Avg. Rating</string>
 </resources>

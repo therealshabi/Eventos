@@ -1,6 +1,7 @@
 package app.com.thetechnocafe.eventos;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -25,6 +27,7 @@ public class AddTrackEventFragment extends Fragment {
     private FloatingActionButton mAddNewEventActionButton;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private static final int GRID_SIZE = 2;
 
     public static AddTrackEventFragment getInstance() {
         return new AddTrackEventFragment();
@@ -65,7 +68,11 @@ public class AddTrackEventFragment extends Fragment {
 
         //Set up recycler view
         EventAdapter adapter = new EventAdapter();
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), GRID_SIZE));
+        } else {
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        }
         mRecyclerView.setAdapter(adapter);
 
         //Set up swipe refresh layout
@@ -91,11 +98,12 @@ public class AddTrackEventFragment extends Fragment {
     }
 
     //Recycler view holder
-    class EventViewHolder extends RecyclerView.ViewHolder {
+    class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private ImageView mVerifiedImage;
 
         EventViewHolder(View view) {
             super(view);
+            view.setOnClickListener(this);
             mVerifiedImage = (ImageView) view.findViewById(R.id.track_event_item_submitted_verified);
         }
 
@@ -103,6 +111,13 @@ public class AddTrackEventFragment extends Fragment {
             if (position % 2 == 0) {
                 mVerifiedImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_dot_verified));
             }
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(getContext(), TrackEventActivity.class);
+            startActivity(intent);
+            getActivity().overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
         }
     }
 

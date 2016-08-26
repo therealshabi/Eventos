@@ -4,10 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/deep_purple"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true"
-    tools:context="app.com.thetechnocafe.eventos.SigninActivity"
-    android:id="@+id/singin_fragment_container">
+    tools:context="app.com.thetechnocafe.eventos.TrackEventActivity"
+    android:id="@+id/track_event_fragment_container"
+    android:fitsSystemWindows="true">
 
 </android.support.design.widget.CoordinatorLayout>

@@ -117,10 +117,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:background="@drawable/button_ripple"
-                    android:paddingLeft="32dp"
-                    android:paddingRight="32dp"
+                    android:paddingLeft="64dp"
+                    android:paddingRight="64dp"
                     android:shadowColor="@android:color/white"
                     android:text="@string/signin"
+                    android:textSize="16sp"
                     android:textColor="@android:color/white"/>
 
             </LinearLayout>
