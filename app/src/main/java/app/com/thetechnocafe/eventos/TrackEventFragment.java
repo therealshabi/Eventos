@@ -54,7 +54,7 @@ public class TrackEventFragment extends Fragment {
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_track_event_toolbar);
         activity.setSupportActionBar(toolbar);
         if(activity.getSupportActionBar() != null) {
-            activity.getSupportActionBar().setDisplayShowTitleEnabled(true);
+            activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
             activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 

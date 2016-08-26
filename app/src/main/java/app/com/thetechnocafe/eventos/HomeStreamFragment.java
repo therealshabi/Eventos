@@ -19,6 +19,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -181,6 +183,12 @@ public class HomeStreamFragment extends Fragment {
             case android.R.id.home: {
                 mDrawerLayout.openDrawer(GravityCompat.START);
             }
+            case R.id.home_stream_menu_refresh: {
+                new DataFetcher().execute();
+                mSwipeRefreshLayout.setRefreshing(true);
+                new DataFetcher().execute();
+                return true;
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -215,5 +223,11 @@ public class HomeStreamFragment extends Fragment {
             super.onPostExecute(aVoid);
             mSwipeRefreshLayout.setRefreshing(false);
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.home_stream_menu, menu);
     }
 }

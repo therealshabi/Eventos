@@ -89,4 +89,6 @@
     <string name="attending_people">people attending your event</string>
     <string name="totla_rating">Total Ratings</string>
     <string name="average_rating">Avg. Rating</string>
+    <string name="stats">Stats</string>
+    <string name="refresh">Refresh</string>
 </resources>
