@@ -22,6 +22,7 @@ public class DetailFragment extends Fragment {
 
     private LinearLayout mRecentComments;
     private TextView mShowMoreCommentsText;
+    private LinearLayout mLinkContainer;
 
     public static DetailFragment getInstance() {
         return new DetailFragment();
@@ -39,6 +40,7 @@ public class DetailFragment extends Fragment {
 
         mRecentComments = (LinearLayout) view.findViewById(R.id.fragment_detail_comment_container);
         mShowMoreCommentsText = (TextView) view.findViewById(R.id.fragment_detail_show_more_comments);
+        mLinkContainer = (LinearLayout) view.findViewById(R.id.fragment_detail_link_container);
 
         //Add comments
         addRecentComments();
@@ -63,6 +65,8 @@ public class DetailFragment extends Fragment {
             }
         });
 
+        addLink();
+
         return view;
     }
 
@@ -81,12 +85,28 @@ public class DetailFragment extends Fragment {
         for (int i = 0; i < 3; i++) {
             View view = LayoutInflater.from(getContext()).inflate(R.layout.comment_recent_item, null);
             TextView textView = (TextView) view.findViewById(R.id.comment_recent_item_comment);
-            if(i == 0) {
+            if (i == 0) {
                 textView.setText("Nice event, maybe next time do your research and not waste time on just installing softwares");
-            } else if(i == 1) {
+            } else if (i == 1) {
                 textView.setText("Very poor event");
             }
             mRecentComments.addView(view);
+        }
+    }
+
+    private void addLink() {
+        for (int i = 0; i < 1; i++) {
+            View view = LayoutInflater.from(getContext()).inflate(R.layout.link_item, null);
+            TextView textView = (TextView) view.findViewById(R.id.link_item_text);
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), WebViewActivity.class);
+                    intent.putExtra(WebViewActivity.EXTRA_MESSAGE, "www.google.com");
+                    startActivity(intent);
+                }
+            });
+            mLinkContainer.addView(view);
         }
     }
 }

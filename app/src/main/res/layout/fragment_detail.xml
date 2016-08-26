@@ -153,11 +153,19 @@
                     android:textColor="@color/colorAccent"
                     android:textSize="16sp"/>
 
-                <TextView
-                    android:id="@+id/fragment_detail_forums_text"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="No submission forums for this event"/>
+                    android:orientation="vertical"
+                    android:id="@+id/fragment_detail_link_container">
+
+                    <TextView
+                        android:id="@+id/fragment_detail_forums_text_no_froum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="No submission forums for this event"/>
+
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -280,7 +288,6 @@
         </android.support.v4.widget.NestedScrollView>
 
     </LinearLayout>
-
 
     <ImageButton
         android:id="@+id/fragment_detail_image_share"

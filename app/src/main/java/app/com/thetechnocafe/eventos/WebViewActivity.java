@@ -3,6 +3,7 @@ package app.com.thetechnocafe.eventos;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -65,6 +66,14 @@ public class WebViewActivity extends AppCompatActivity {
             }
 
         });
+
+        //Set up toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.activity_web_view_toolbar);
+        setSupportActionBar(toolbar);
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     private class MyWebViewClient extends WebViewClient {
