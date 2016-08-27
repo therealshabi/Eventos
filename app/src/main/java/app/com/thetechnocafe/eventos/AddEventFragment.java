@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
@@ -44,6 +45,7 @@ public class AddEventFragment extends Fragment {
     private TextView mTimeText;
     private Date mEventDate;
     private Date mEventDateTime;
+    private TextView mAddCategoryButton;
 
     public static AddEventFragment getInstance() {
         return new AddEventFragment();
@@ -67,6 +69,19 @@ public class AddEventFragment extends Fragment {
         mLinkContainer = (LinearLayout) view.findViewById(R.id.fragment_add_event_forum_link_container);
         mDateText = (TextView) view.findViewById(R.id.fragment_add_event_date);
         mTimeText = (TextView) view.findViewById(R.id.fragment_add_event_time);
+        mAddCategoryButton = (TextView) view.findViewById(R.id.fragment_add_event_avatar);
+
+        mAddCategoryButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                View categoryView = LayoutInflater.from(getContext()).inflate(R.layout.category_dialog, null);
+                builder.setView(categoryView);
+                AlertDialog categoryDialog = builder.create();
+                categoryDialog.show();
+            }
+        });
 
         //Set up date and text
         mEventDate = new GregorianCalendar().getTime();
@@ -187,8 +202,8 @@ public class AddEventFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == Activity.RESULT_OK) {
-            if(requestCode == DATE_PICKER_CODE && data != null) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == DATE_PICKER_CODE && data != null) {
                 mEventDate = DialogDatePicker.getDate(data);
                 setDateText(mEventDate);
             } else if (requestCode == TIME_PICKER_CODE && data != null) {
