@@ -73,6 +73,7 @@ public class WebViewActivity extends AppCompatActivity {
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_remove_white);
         }
     }
 
