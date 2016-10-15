@@ -2,11 +2,11 @@ package app.com.thetechnocafe.eventos;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
@@ -27,9 +27,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import app.com.thetechnocafe.eventos.DataSync.DataSynchronizer;
+import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
+import app.com.thetechnocafe.eventos.Models.EventsModel;
 
 /**
  * Created by gurleensethi on 13/08/16.
@@ -39,10 +42,11 @@ public class HomeStreamFragment extends Fragment {
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-
-    RecyclerView recyclerView;
-    List<Data> data = new ArrayList<>();
-    RecyclerAdapter adapter;
+    private RecyclerView mRecyclerView;
+    private List<EventsModel> mEventsList;
+    private RecyclerAdapter mEventRecyclerAdapter;
+    private EventsDatabaseHelper mDatabaseHelper;
+    private DataSynchronizer mDataSynchronizer;
 
     public static HomeStreamFragment getInstance() {
         return new HomeStreamFragment();
@@ -57,17 +61,13 @@ public class HomeStreamFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home_stream, container, false);
+        final View view = inflater.inflate(R.layout.fragment_home_stream, container, false);
 
-        data = fill_with_data(data);
-
-        recyclerView = (RecyclerView) view.findViewById(R.id.home_stream_recycler_view);
-        adapter = new RecyclerAdapter(data, getContext());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mDrawerLayout = (DrawerLayout) view.findViewById(R.id.fragment_home_stream_drawer);
         mNavigationView = (NavigationView) view.findViewById(R.id.fragment_home_stream_navigation_view);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fragment_home_stream_swipe_refresh);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.home_stream_recycler_view);
+
 
         //Set up the toolbar
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_home_stream_toolbar);
@@ -114,19 +114,40 @@ public class HomeStreamFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new DataFetcher().execute();
+                //Send request to synchronize data
+                mDataSynchronizer.fetchEventsFromNetwork(getContext());
             }
         });
+
+        //Synchronize database with server
+        mDataSynchronizer = new DataSynchronizer() {
+            @Override
+            public void onDataSynchronized(boolean isSyncSuccessful) {
+                if (isSyncSuccessful) {
+                    //TODO:Notify recycler view of data changed
+                    setUpAndNotifyRecyclerView();
+                } else {
+                    //Notify user on sync failed
+                    Snackbar.make(view, getString(R.string.sync_failed), Snackbar.LENGTH_SHORT).show();
+                }
+                //Stop the Swipe refresh layout
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        };
+
+        //Fetch data and set swipe refresh to refreshing
+        mDataSynchronizer.fetchEventsFromNetwork(getContext());
+        mSwipeRefreshLayout.setRefreshing(true);
+
+        //Assign the database helper
+        mDatabaseHelper = new EventsDatabaseHelper(getContext());
+
+        //Set up recycler view
+        setUpAndNotifyRecyclerView();
 
         return view;
     }
 
-    public List<Data> fill_with_data(List<Data> data) {
-        data.add(new Data("GDG Event", "23-08-2016", R.drawable.calendar));
-        data.add(new Data("Knuth Programming", "23-08-2016", R.drawable.calendar));
-        data.add(new Data("JYC Event", "23-08-2016", R.drawable.calendar));
-        return data;
-    }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -155,35 +176,45 @@ public class HomeStreamFragment extends Fragment {
                 startActivity(intent);
             }
         }
+
+        void bindData(EventsModel event) {
+            //Set appropriate data
+            mDateText.setText(event.getDate().toString());
+            mTitleText.setText(event.getTitle());
+        }
     }
 
-    //Adapter
+    //Adapter for main stream recycler view
     public class RecyclerAdapter extends RecyclerView.Adapter<ViewHolder> {
 
-        List<Data> list = Collections.emptyList();
+        List<EventsModel> list = Collections.emptyList();
         Context context;
 
-        public RecyclerAdapter(List<Data> list, Context context) {
+        public RecyclerAdapter(List<EventsModel> list, Context context) {
             this.list = list;
             this.context = context;
         }
 
-
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_stream_recycler_view_item, parent, false);
-            ViewHolder holder = new ViewHolder(v);
-            return holder;
+            return new ViewHolder(v);
         }
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-
+            //Pass the appropriate EventsModel object
+            holder.bindData(list.get(position));
         }
 
         @Override
         public int getItemCount() {
             return list.size();
+        }
+
+        //Set the updated events list
+        public void setUpdatedList(List<EventsModel> updatedList) {
+            list = updatedList;
         }
     }
 
@@ -192,11 +223,11 @@ public class HomeStreamFragment extends Fragment {
         switch (item.getItemId()) {
             case android.R.id.home: {
                 mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
             }
             case R.id.home_stream_menu_refresh: {
-                new DataFetcher().execute();
+                mDataSynchronizer.fetchEventsFromNetwork(getContext());
                 mSwipeRefreshLayout.setRefreshing(true);
-                new DataFetcher().execute();
                 return true;
             }
         }
@@ -204,40 +235,38 @@ public class HomeStreamFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    class DataFetcher extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            Thread thread = new Thread() {
-                @Override
-                public void run() {
-                    super.run();
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-            thread.run();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.home_stream_menu, menu);
+    }
+
+    /**
+     * Set up the main recycler view
+     * Get events from sqlite database
+     * handle the changes after new data is fetched
+     */
+    private void setUpAndNotifyRecyclerView() {
+        if (mEventRecyclerAdapter == null) {
+            //Get the events list from database
+            mEventsList = mDatabaseHelper.getEventsList();
+
+            //Create the adapter
+            mEventRecyclerAdapter = new RecyclerAdapter(mEventsList, getContext());
+
+            //Set the recycler view with adapter and layout manager
+            mRecyclerView.setAdapter(mEventRecyclerAdapter);
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        } else {
+            //If new data is loaded
+            mEventRecyclerAdapter.setUpdatedList(mDatabaseHelper.getEventsList());
+            mEventRecyclerAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mDatabaseHelper.close();
     }
 }

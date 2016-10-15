@@ -24,10 +24,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import app.com.thetechnocafe.eventos.Models.EventsModel;
+
 public class OutsideEventFragment extends Fragment {
 
     RecyclerView recyclerView;
-    List<Data> data = new ArrayList<>();
+    List<EventsModel> data = new ArrayList<>();
     RecyclerAdapter adapter;
 
     public static OutsideEventFragment getInstance() {
@@ -44,8 +46,6 @@ public class OutsideEventFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_outside_event, container, false);
-
-        data = fill_with_data(data);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.outside_event_recycler_view);
         adapter = new RecyclerAdapter(data, getContext());
@@ -75,13 +75,6 @@ public class OutsideEventFragment extends Fragment {
             }
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public List<Data> fill_with_data(List<Data> data) {
-        data.add(new Data("GDG Event", "23-08-2016", R.drawable.calendar));
-        data.add(new Data("Knuth Programming", "23-08-2016", R.drawable.calendar));
-        data.add(new Data("JYC Event", "23-08-2016", R.drawable.calendar));
-        return data;
     }
 
 
@@ -117,10 +110,10 @@ public class OutsideEventFragment extends Fragment {
     //Adapter
     public class RecyclerAdapter extends RecyclerView.Adapter<ViewHolder> {
 
-        List<Data> list = Collections.emptyList();
+        List<EventsModel> list = Collections.emptyList();
         Context context;
 
-        public RecyclerAdapter(List<Data> list, Context context) {
+        public RecyclerAdapter(List<EventsModel> list, Context context) {
             this.list = list;
             this.context = context;
         }
@@ -140,7 +133,7 @@ public class OutsideEventFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return list.size();
+            return 5;
         }
     }
 }
