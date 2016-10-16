@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,13 +18,21 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+
+import app.com.thetechnocafe.eventos.DataSync.RequestUtils;
+import app.com.thetechnocafe.eventos.DataSync.StringUtils;
 
 /**
  * Created by gurleensethi on 20/08/16.
@@ -46,6 +55,13 @@ public class AddEventFragment extends Fragment {
     private Date mEventDate;
     private Date mEventDateTime;
     private TextView mAddCategoryButton;
+    private Button mSubmitButton;
+    private RequestUtils mRequestUtils;
+    private EditText mTitleEditText;
+    private EditText mDescriptionEditText;
+    private EditText mRequirementsEditText;
+    private EditText mImageEditText;
+    private EditText mVenueEditText;
 
     public static AddEventFragment getInstance() {
         return new AddEventFragment();
@@ -60,7 +76,7 @@ public class AddEventFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_event, container, false);
+        final View view = inflater.inflate(R.layout.fragment_add_event, container, false);
 
         mInfoText = (TextView) view.findViewById(R.id.fragment_add_event_info);
         mAddContactImageButton = (ImageButton) view.findViewById(R.id.fragment_add_event_add_contact);
@@ -70,18 +86,11 @@ public class AddEventFragment extends Fragment {
         mDateText = (TextView) view.findViewById(R.id.fragment_add_event_date);
         mTimeText = (TextView) view.findViewById(R.id.fragment_add_event_time);
         mAddCategoryButton = (TextView) view.findViewById(R.id.fragment_add_event_avatar);
-
-        mAddCategoryButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                View categoryView = LayoutInflater.from(getContext()).inflate(R.layout.category_dialog, null);
-                builder.setView(categoryView);
-                AlertDialog categoryDialog = builder.create();
-                categoryDialog.show();
-            }
-        });
+        mSubmitButton = (Button) view.findViewById(R.id.fragment_add_event_submit);
+        mTitleEditText = (EditText) view.findViewById(R.id.fragment_add_event_title);
+        mDescriptionEditText = (EditText) view.findViewById(R.id.fragment_add_event_description);
+        mVenueEditText = (EditText) view.findViewById(R.id.fragment_add_event_venue);
+        mImageEditText = (EditText) view.findViewById(R.id.fragment_add_event_image_link);
 
         //Set up date and text
         mEventDate = new GregorianCalendar().getTime();
@@ -110,6 +119,41 @@ public class AddEventFragment extends Fragment {
                 .append(" ")
                 .setSpan(new ImageSpan(textImage), builder.length() - 1, builder.length(), 0);
         mInfoText.setText(builder);
+
+        mRequestUtils = new RequestUtils() {
+            @Override
+            public void isRequestSuccessful(boolean isSuccessful) {
+                //TODO:Close the dialog box after form is submitted
+                //If successful the finish the activity
+                if (isSuccessful) {
+
+                } else {
+                    //Notify user about error
+                    if (isAdded()) {
+                        Snackbar.make(view, getString(R.string.forum_submission_error), Snackbar.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        };
+
+        //Set on click listeners
+        setOnClickListeners();
+
+        return view;
+    }
+
+    private void setOnClickListeners() {
+        mAddCategoryButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                View categoryView = LayoutInflater.from(getContext()).inflate(R.layout.category_dialog, null);
+                builder.setView(categoryView);
+                AlertDialog categoryDialog = builder.create();
+                categoryDialog.show();
+            }
+        });
 
         //Set up on click for add contact image button (add new view to linear layout contacts container)
         mAddContactImageButton.setOnClickListener(new View.OnClickListener() {
@@ -147,7 +191,17 @@ public class AddEventFragment extends Fragment {
             }
         });
 
-        return view;
+        //Set on click listener for submit button
+        mSubmitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (validateForum()) {
+                    JSONObject object = getJSONObjectFromFormData();
+                    mRequestUtils.submitForumToServer(getContext(), object);
+                    //TODO:SHOW Dialog box while submitting form
+                }
+            }
+        });
     }
 
     @Override
@@ -225,5 +279,59 @@ public class AddEventFragment extends Fragment {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
         String timeText = simpleDateFormat.format(date);
         mTimeText.setText(timeText);
+    }
+
+    //Validate forum before submission
+    private boolean validateForum() {
+        String errorString = "";
+        boolean isValid = true;
+
+        //Validate form
+        if (mTitleEditText.getText().toString().length() < 15) {
+            //Check title
+            mTitleEditText.requestFocus();
+            errorString = getString(R.string.form_error_title);
+            isValid = false;
+        } else if (mDescriptionEditText.getText().toString().length() < 50) {
+            //Check description
+            mDescriptionEditText.requestFocus();
+            errorString = getString(R.string.form_error_description);
+            isValid = false;
+        } else if (mVenueEditText.getText().toString().length() < 2) {
+            //Check venue
+            mVenueEditText.requestFocus();
+            errorString = getString(R.string.form_error_venue);
+            isValid = false;
+        } else if (mImageEditText.getText().toString().length() == 0) {
+            //Check image
+            mImageEditText.requestFocus();
+            errorString = getString(R.string.form_error_image);
+            isValid = false;
+        }
+
+        //Check if form passed validation
+        if (!isValid) {
+            Snackbar.make(getView(), errorString, Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
+    //Convert the forum data to JSON object
+    private JSONObject getJSONObjectFromFormData() {
+        JSONObject object = new JSONObject();
+
+        try {
+            object.put(StringUtils.JSON_TITLE, mTitleEditText.getText().toString());
+            object.put(StringUtils.JSON_DESCRIPTION, mDescriptionEditText.getText().toString());
+            object.put(StringUtils.JSON_VENUE, mVenueEditText.getText().toString());
+            object.put(StringUtils.JSON_IMAGE, mImageEditText.getText().toString());
+            object.put(StringUtils.JSON_AVATAR_ID, 0);
+        } catch (JSONException e) {
+            mRequestUtils.isRequestSuccessful(false);
+        }
+
+        return object;
     }
 }

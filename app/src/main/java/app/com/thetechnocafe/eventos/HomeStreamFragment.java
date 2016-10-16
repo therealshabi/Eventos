@@ -124,11 +124,12 @@ public class HomeStreamFragment extends Fragment {
             @Override
             public void onDataSynchronized(boolean isSyncSuccessful) {
                 if (isSyncSuccessful) {
-                    //TODO:Notify recycler view of data changed
                     setUpAndNotifyRecyclerView();
                 } else {
                     //Notify user on sync failed
-                    Snackbar.make(view, getString(R.string.sync_failed), Snackbar.LENGTH_SHORT).show();
+                    if (isAdded()) {
+                        Snackbar.make(view, getString(R.string.sync_failed), Snackbar.LENGTH_SHORT).show();
+                    }
                 }
                 //Stop the Swipe refresh layout
                 mSwipeRefreshLayout.setRefreshing(false);

@@ -93,4 +93,9 @@
     <string name="stats">Stats</string>
     <string name="refresh">Refresh</string>
     <string name="sync_failed">Unable to fetch new events.</string>
+    <string name="form_error_title">Title is too short.</string>
+    <string name="form_error_description">Description is too short.</string>
+    <string name="form_error_venue">Venue cannot be empty.</string>
+    <string name="form_error_image">Provide an image for the event.</string>
+    <string name="forum_submission_error">Unable to submit Event Form.</string>
 </resources>

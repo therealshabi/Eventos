@@ -38,12 +38,11 @@ public abstract class DataSynchronizer {
     private static final String JSON_EVENT_AVATAR_ID = "avatar_id";
     private static final String JSON_EVENT_ID = "_id";
 
-
     /**
-     * Function that notifies that
+     * Function that notifies if sync was successful or not
+     * Calling class has to override this function
      */
     public abstract void onDataSynchronized(boolean isSyncSuccessful);
-
 
     /**
      * Fetch data from network using volley
@@ -75,18 +74,19 @@ public abstract class DataSynchronizer {
                                 EventsModel event = new EventsModel();
 
                                 //Insert the details into event object
-                                insertEventDetails(event, eventJSONobject);
-
-                                //Insert the event into database
-                                mEventsDatabaseHelper.insertNewEvent(event);
+                                if (insertEventDetails(event, eventJSONobject)) {
+                                    //Insert the event into database
+                                    mEventsDatabaseHelper.insertNewEvent(event);
+                                }
                             }
+
+                            //Notify sync successful
+                            onDataSynchronized(true);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        onDataSynchronized(false);
                     }
-
-                    //Notify sync successful
-                    onDataSynchronized(true);
                 }
             }
         }, new Response.ErrorListener() {
@@ -105,13 +105,19 @@ public abstract class DataSynchronizer {
      * Set the required data in the EventsModel object
      * Checks if the particular data exists and inserts accordingly
      */
-    private void insertEventDetails(EventsModel event, JSONObject object) throws JSONException {
-        event.setTitle(object.getString(JSON_EVENT_TITLE));
-        event.setDescription(object.getString(JSON_EVENT_DESCRIPTION));
-        event.setImage(object.getString(JSON_EVENT_IMAGE));
-        event.setVenue(object.getString(JSON_EVENT_VENUE));
-        event.setId(object.getString(JSON_EVENT_ID));
-        event.setAvatarId(object.getInt(JSON_EVENT_AVATAR_ID));
-        event.setDate(new Date());
+    private boolean insertEventDetails(EventsModel event, JSONObject object) {
+        try {
+            event.setTitle(object.getString(JSON_EVENT_TITLE));
+            event.setDescription(object.getString(JSON_EVENT_DESCRIPTION));
+            event.setImage(object.getString(JSON_EVENT_IMAGE));
+            event.setVenue(object.getString(JSON_EVENT_VENUE));
+            event.setId(object.getString(JSON_EVENT_ID));
+            event.setAvatarId(object.getInt(JSON_EVENT_AVATAR_ID));
+            event.setDate(new Date());
+        } catch (JSONException e) {
+            //Bad event data
+            return false;
+        }
+        return true;
     }
 }

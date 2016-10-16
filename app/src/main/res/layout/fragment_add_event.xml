@@ -81,6 +81,7 @@
                 android:theme="@style/AddEventEditTextStyle">
 
                 <EditText
+                    android:id="@+id/fragment_add_event_title"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/title"
@@ -96,6 +97,7 @@
                 android:theme="@style/AddEventEditTextStyle">
 
                 <EditText
+                    android:id="@+id/fragment_add_event_description"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="top|left"
@@ -170,6 +172,7 @@
                 android:theme="@style/AddEventEditTextStyle">
 
                 <EditText
+                    android:id="@+id/fragment_add_event_requirement"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/requirements"/>
@@ -184,6 +187,7 @@
                 android:theme="@style/AddEventEditTextStyle">
 
                 <EditText
+                    android:id="@+id/fragment_add_event_venue"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/venue"
@@ -280,6 +284,7 @@
                     android:theme="@style/AddEventEditTextStyle">
 
                     <EditText
+                        android:id="@+id/fragment_add_event_image_link"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="@string/photo_text"

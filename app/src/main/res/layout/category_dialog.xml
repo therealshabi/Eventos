@@ -11,12 +11,16 @@
         android:layout_height="100dp"
         android:background="@color/colorPrimary">
 
-        <ImageView
+
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
+            android:text="AVATAR"
+            android:layout_gravity="center"
             android:gravity="center"
-            android:paddingTop="12dp"
-            android:src="@drawable/category" />
+            android:textColor="@android:color/white"
+            android:textSize="48dp"
+            android:fontFamily="sans-serif-thin"/>
 
     </LinearLayout>
 
