@@ -1,4 +1,4 @@
-package app.com.thetechnocafe.eventos;
+package app.com.thetechnocafe.eventos.Dialogs;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;

@@ -98,4 +98,6 @@
     <string name="form_error_venue">Venue cannot be empty.</string>
     <string name="form_error_image">Provide an image for the event.</string>
     <string name="forum_submission_error">Unable to submit Event Form.</string>
+    <string name="submitting_form">Submitting your event form.</string>
+    <string name="submission_success">Event submitted successfully. Once verified, your event will show up in tha main stream. </string>
 </resources>

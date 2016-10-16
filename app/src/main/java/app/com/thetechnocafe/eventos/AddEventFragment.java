@@ -33,6 +33,9 @@ import java.util.GregorianCalendar;
 
 import app.com.thetechnocafe.eventos.DataSync.RequestUtils;
 import app.com.thetechnocafe.eventos.DataSync.StringUtils;
+import app.com.thetechnocafe.eventos.Dialogs.DialogDatePicker;
+import app.com.thetechnocafe.eventos.Dialogs.DialogTimePicker;
+import app.com.thetechnocafe.eventos.Dialogs.LoadingDialog;
 
 /**
  * Created by gurleensethi on 20/08/16.
@@ -62,6 +65,7 @@ public class AddEventFragment extends Fragment {
     private EditText mRequirementsEditText;
     private EditText mImageEditText;
     private EditText mVenueEditText;
+    private LoadingDialog mLoadingDialog;
 
     public static AddEventFragment getInstance() {
         return new AddEventFragment();
@@ -133,6 +137,8 @@ public class AddEventFragment extends Fragment {
                         Snackbar.make(view, getString(R.string.forum_submission_error), Snackbar.LENGTH_SHORT).show();
                     }
                 }
+
+                mLoadingDialog.dismiss();
             }
         };
 
@@ -196,9 +202,13 @@ public class AddEventFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (validateForum()) {
+                    //Show loading dialog
+                    mLoadingDialog = LoadingDialog.getInstance(getString(R.string.submitting_form));
+                    mLoadingDialog.show(getFragmentManager(), "");
+
                     JSONObject object = getJSONObjectFromFormData();
                     mRequestUtils.submitForumToServer(getContext(), object);
-                    //TODO:SHOW Dialog box while submitting form
+
                 }
             }
         });
