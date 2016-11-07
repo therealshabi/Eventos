@@ -86,7 +86,7 @@ public class DetailFragment extends Fragment {
 
         //Update the UI
         updateUI();
-
+        setOnClickListeners();
         addLink();
 
         return view;
