@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
 import app.com.thetechnocafe.eventos.Models.EventsModel;
@@ -23,7 +24,7 @@ import app.com.thetechnocafe.eventos.Models.EventsModel;
  */
 public class DetailFragment extends Fragment {
 
-    private LinearLayout mRecentComments;
+    private ViewFlipper mRecentComments;
     private TextView mShowMoreCommentsText;
     private LinearLayout mLinkContainer;
     private TextView mTitleTextView;
@@ -63,7 +64,7 @@ public class DetailFragment extends Fragment {
         mDateTextView = (TextView) view.findViewById(R.id.fragment_detail_text_view_date);
         mVenueTextView = (TextView) view.findViewById(R.id.fragment_detail_text_view_venue);
         mRequirementsTextView = (TextView) view.findViewById(R.id.fragment_detail_requirement_text);
-        mRecentComments = (LinearLayout) view.findViewById(R.id.fragment_detail_comment_container);
+        mRecentComments = (ViewFlipper) view.findViewById(R.id.fragment_detail_comment_container);
         mShowMoreCommentsText = (TextView) view.findViewById(R.id.fragment_detail_show_more_comments);
         mLinkContainer = (LinearLayout) view.findViewById(R.id.fragment_detail_link_container);
 
@@ -114,8 +115,14 @@ public class DetailFragment extends Fragment {
             } else if (i == 1) {
                 textView.setText("Good");
             }
-            mRecentComments.addView(view);
+            mRecentComments.addView(view, i);
         }
+
+        //Change animation
+        mRecentComments.setOutAnimation(getContext(), R.anim.slide_out_left);
+        mRecentComments.setInAnimation(getContext(), R.anim.slide_in_right);
+        //Start the view flipper
+        mRecentComments.startFlipping();
     }
 
     //Set onClick listeners for various views
