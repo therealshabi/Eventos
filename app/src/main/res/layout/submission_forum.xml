@@ -20,7 +20,7 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/submission_forum_link_name"
+            android:id="@+id/submission_forum_item_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/link_name"
@@ -28,7 +28,7 @@
             android:theme="@style/AddEventEditTextStyle"/>
 
         <EditText
-            android:id="@+id/submission_forum_link_edit_text"
+            android:id="@+id/submission_forum_item_link"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/valid_link"

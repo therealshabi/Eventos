@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -343,10 +344,50 @@ public class AddEventFragment extends Fragment {
             object.put(StringUtils.JSON_IMAGE, mImageEditText.getText().toString());
             object.put(StringUtils.JSON_AVATAR_ID, 0);
             object.put(StringUtils.JSON_REQUIREMENTS, mRequirementsEditText.getText().toString());
+
+            //Get links list
+            JSONArray list = getLinksList();
+            if (list != null) {
+                object.put(StringUtils.JSON_LINKS, list);
+            }
         } catch (JSONException e) {
             mRequestUtils.isRequestSuccessful(false);
         }
 
         return object;
     }
+
+    private JSONArray getLinksList() {
+        JSONArray jsonArray = new JSONArray();
+
+        //Traverse the childs
+        for (int count = 0; count < mLinkContainer.getChildCount(); count++) {
+            View view = mLinkContainer.getChildAt(count);
+
+            EditText mNameEditText = (EditText) view.findViewById(R.id.submission_forum_item_name);
+            EditText mLinkEditText = (EditText) view.findViewById(R.id.submission_forum_item_link);
+
+            if (!mNameEditText.getText().toString().equals("") && !mLinkEditText.getText().toString().equals("")) {
+                //Create a json object
+                JSONObject object = new JSONObject();
+                try {
+                    object.put(StringUtils.JSON_LINKS_NAME, mNameEditText.getText().toString());
+                    object.put(StringUtils.JSON_LINKS_ADDRESS, mLinkEditText.getText().toString());
+                    //Add to json array
+                    jsonArray.put(object);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+
+        //If no links found return null
+        if (jsonArray.length() == 0) {
+            return null;
+        }
+
+        return jsonArray;
+    }
+
 }

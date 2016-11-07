@@ -17,4 +17,7 @@ public class StringUtils {
     public static final String JSON_AVATAR_ID = "avatar_id";
     public static final String JSON_ID = "_id";
     public static final String JSON_REQUIREMENTS = "requirements";
+    public static final String JSON_LINKS = "event_links";
+    public static final String JSON_LINKS_NAME = "link_name";
+    public static final String JSON_LINKS_ADDRESS = "link_address";
 }
