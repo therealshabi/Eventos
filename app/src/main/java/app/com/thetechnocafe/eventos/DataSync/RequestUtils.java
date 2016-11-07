@@ -1,7 +1,6 @@
 package app.com.thetechnocafe.eventos.DataSync;
 
 import android.content.Context;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -25,11 +24,6 @@ public abstract class RequestUtils {
      * requires
      */
     public void submitForumToServer(Context context, final JSONObject jsonObject) {
-        try {
-            Toast.makeText(context, jsonObject.get(StringUtils.JSON_LINKS).toString(), Toast.LENGTH_SHORT).show();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         //Create new JSON Object Request
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, LINK_EVENT_REQUEST, jsonObject, new Response.Listener<JSONObject>() {
             @Override

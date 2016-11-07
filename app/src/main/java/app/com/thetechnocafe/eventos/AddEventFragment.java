@@ -346,10 +346,12 @@ public class AddEventFragment extends Fragment {
             object.put(StringUtils.JSON_REQUIREMENTS, mRequirementsEditText.getText().toString());
 
             //Get links list
-            JSONArray list = getLinksList();
-            if (list != null) {
-                object.put(StringUtils.JSON_LINKS, list);
-            }
+            JSONArray links = getLinksList();
+            object.put(StringUtils.JSON_LINKS, links);
+
+            //Get contact list
+            JSONArray contacts = getContactsList();
+            object.put(StringUtils.JSON_CONTACTS, contacts);
         } catch (JSONException e) {
             mRequestUtils.isRequestSuccessful(false);
         }
@@ -382,9 +384,35 @@ public class AddEventFragment extends Fragment {
             }
         }
 
-        //If no links found return null
-        if (jsonArray.length() == 0) {
-            return null;
+        return jsonArray;
+    }
+
+
+    private JSONArray getContactsList() {
+        JSONArray jsonArray = new JSONArray();
+
+        //Traverse the childer
+        for (int count = 0; count < mContactsContainer.getChildCount(); count++) {
+            View view = mContactsContainer.getChildAt(count);
+
+            EditText mNameEditText = (EditText) view.findViewById(R.id.contact_email_phone_name);
+            EditText mEmailEditText = (EditText) view.findViewById(R.id.contact_email_phone_email);
+            EditText mPhoneEditText = (EditText) view.findViewById(R.id.contact_email_phone_number);
+
+            if (!mNameEditText.getText().toString().equals("") && !mPhoneEditText.getText().toString().equals("")) {
+                //Create new json object
+                JSONObject object = new JSONObject();
+                try {
+                    object.put(StringUtils.JSON_CONTACTS_NAME, mNameEditText.getText().toString());
+                    object.put(StringUtils.JSON_CONTACTS_EMAIL, mEmailEditText.getText().toString());
+                    object.put(StringUtils.JSON_CONTACTS_PHONE, mPhoneEditText.getText().toString());
+
+                    //Add to array
+                    jsonArray.put(object);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return jsonArray;

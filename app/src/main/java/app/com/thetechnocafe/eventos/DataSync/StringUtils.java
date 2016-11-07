@@ -20,4 +20,8 @@ public class StringUtils {
     public static final String JSON_LINKS = "event_links";
     public static final String JSON_LINKS_NAME = "link_name";
     public static final String JSON_LINKS_ADDRESS = "link_address";
+    public static final String JSON_CONTACTS = "event_contacts";
+    public static final String JSON_CONTACTS_NAME = "contact_name";
+    public static final String JSON_CONTACTS_EMAIL = "contacts_email";
+    public static final String JSON_CONTACTS_PHONE = "contacts_phone";
 }
