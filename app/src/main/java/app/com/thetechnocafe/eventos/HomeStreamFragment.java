@@ -68,7 +68,6 @@ public class HomeStreamFragment extends Fragment {
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fragment_home_stream_swipe_refresh);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.home_stream_recycler_view);
 
-
         //Set up the toolbar
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_home_stream_toolbar);
         AppCompatActivity activity = (AppCompatActivity) getActivity();

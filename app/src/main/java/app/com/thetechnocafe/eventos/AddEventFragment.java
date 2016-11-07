@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -130,7 +131,9 @@ public class AddEventFragment extends Fragment {
                 //TODO:Close the dialog box after form is submitted
                 //If successful the finish the activity
                 if (isSuccessful) {
-
+                    //Show Toast message and finish the activity
+                    Toast.makeText(getContext(), getString(R.string.submission_success), Toast.LENGTH_LONG).show();
+                    getActivity().finish();
                 } else {
                     //Notify user about error
                     if (isAdded()) {

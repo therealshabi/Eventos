@@ -86,9 +86,9 @@ public class DetailFragment extends Fragment {
             View view = LayoutInflater.from(getContext()).inflate(R.layout.comment_recent_item, null);
             TextView textView = (TextView) view.findViewById(R.id.comment_recent_item_comment);
             if (i == 0) {
-                textView.setText("Nice event, maybe next time do your research and not waste time on just installing softwares");
+                textView.setText("Nice event");
             } else if (i == 1) {
-                textView.setText("Very poor event");
+                textView.setText("Good");
             }
             mRecentComments.addView(view);
         }
