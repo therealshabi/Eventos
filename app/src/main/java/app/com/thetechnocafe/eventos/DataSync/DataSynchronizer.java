@@ -38,6 +38,7 @@ public abstract class DataSynchronizer {
     private static final String JSON_EVENT_IMAGE = "image";
     private static final String JSON_EVENT_AVATAR_ID = "avatar_id";
     private static final String JSON_EVENT_ID = "_id";
+    private static final String JSON_EVENT_REQUIREMENTS = "requirements";
 
     /**
      * Function that notifies if sync was successful or not
@@ -118,6 +119,7 @@ public abstract class DataSynchronizer {
             event.setId(object.getString(JSON_EVENT_ID));
             event.setAvatarId(object.getInt(JSON_EVENT_AVATAR_ID));
             event.setDate(new Date());
+            event.setRequirements(object.getString(JSON_EVENT_REQUIREMENTS));
         } catch (JSONException e) {
             //Bad event data
             return false;

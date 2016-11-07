@@ -30,6 +30,7 @@ public class DetailFragment extends Fragment {
     private TextView mDescriptionTextView;
     private TextView mDateTextView;
     private TextView mVenueTextView;
+    private TextView mRequirementsTextView;
     private static final String EVENT_ID_TAG = "eventid";
     private static String EVENT_ID;
     private EventsModel mEvent;
@@ -61,6 +62,7 @@ public class DetailFragment extends Fragment {
         mDescriptionTextView = (TextView) view.findViewById(R.id.fragment_detail_text_view_description);
         mDateTextView = (TextView) view.findViewById(R.id.fragment_detail_text_view_date);
         mVenueTextView = (TextView) view.findViewById(R.id.fragment_detail_text_view_venue);
+        mRequirementsTextView = (TextView) view.findViewById(R.id.fragment_detail_requirement_text);
         mRecentComments = (LinearLayout) view.findViewById(R.id.fragment_detail_comment_container);
         mShowMoreCommentsText = (TextView) view.findViewById(R.id.fragment_detail_show_more_comments);
         mLinkContainer = (LinearLayout) view.findViewById(R.id.fragment_detail_link_container);
@@ -156,6 +158,10 @@ public class DetailFragment extends Fragment {
         mDescriptionTextView.setText(mEvent.getDescription());
         mDateTextView.setText(mEvent.getDate().toString());
         mVenueTextView.setText(mEvent.getVenue());
+        //Check if requirements exits
+        if (mEvent.getRequirements() != null && !mEvent.getRequirements().isEmpty()) {
+            mRequirementsTextView.setText(mEvent.getRequirements());
+        }
     }
 
     @Override

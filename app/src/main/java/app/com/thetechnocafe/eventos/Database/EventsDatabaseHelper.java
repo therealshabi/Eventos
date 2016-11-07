@@ -29,6 +29,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
     private static final String EVENT_COLUMN_VENUE = "venue";
     private static final String EVENT_COLUMN_AVATAR_ID = "avatar_id";
     private static final String EVENT_COLUMN_IMAGE = "image";
+    private static final String EVENT_COLUMN_REQUIREMENTS = "requirements";
 
 
     public EventsDatabaseHelper(Context context) {
@@ -44,7 +45,8 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
                 EVENT_COLUMN_DATE + " VARCHAR, " +
                 EVENT_COLUMN_VENUE + " VARCHAR, " +
                 EVENT_COLUMN_AVATAR_ID + " INTEGER, " +
-                EVENT_COLUMN_IMAGE + " VARCHAR " +
+                EVENT_COLUMN_IMAGE + " VARCHAR, " +
+                EVENT_COLUMN_REQUIREMENTS + " VARCHAR " +
                 ");";
         db.execSQL(sql);
     }
@@ -70,6 +72,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(EVENT_COLUMN_VENUE, event.getVenue());
         contentValues.put(EVENT_COLUMN_IMAGE, event.getImage());
         contentValues.put(EVENT_COLUMN_DATE, event.getDate().toString());
+        contentValues.put(EVENT_COLUMN_REQUIREMENTS, event.getRequirements());
 
 
         database.insert(EVENTS_TABLE, null, contentValues);
@@ -135,7 +138,9 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
             eventsModel.setTitle(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_TITLE)));
             eventsModel.setDescription(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_DESCRIPTION)));
             eventsModel.setAvatarId(cursor.getInt(cursor.getColumnIndex(EVENT_COLUMN_AVATAR_ID)));
-            eventsModel.setImage(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_VENUE)));
+            eventsModel.setImage(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_IMAGE)));
+            eventsModel.setVenue(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_VENUE)));
+            eventsModel.setRequirements(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_REQUIREMENTS)));
             eventsModel.setDate(new Date());
         }
 

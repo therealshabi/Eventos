@@ -96,6 +96,7 @@ public class AddEventFragment extends Fragment {
         mDescriptionEditText = (EditText) view.findViewById(R.id.fragment_add_event_description);
         mVenueEditText = (EditText) view.findViewById(R.id.fragment_add_event_venue);
         mImageEditText = (EditText) view.findViewById(R.id.fragment_add_event_image_link);
+        mRequirementsEditText = (EditText) view.findViewById(R.id.fragment_add_event_requirement);
 
         //Set up date and text
         mEventDate = new GregorianCalendar().getTime();
@@ -341,6 +342,7 @@ public class AddEventFragment extends Fragment {
             object.put(StringUtils.JSON_VENUE, mVenueEditText.getText().toString());
             object.put(StringUtils.JSON_IMAGE, mImageEditText.getText().toString());
             object.put(StringUtils.JSON_AVATAR_ID, 0);
+            object.put(StringUtils.JSON_REQUIREMENTS, mRequirementsEditText.getText().toString());
         } catch (JSONException e) {
             mRequestUtils.isRequestSuccessful(false);
         }

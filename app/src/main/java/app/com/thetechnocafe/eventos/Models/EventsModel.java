@@ -15,6 +15,7 @@ public class EventsModel {
     private Date date;
     private int avatar_id;
     private String image;
+    private String requirements;
 
     public int getAvatarId() {
         return avatar_id;
@@ -70,5 +71,21 @@ public class EventsModel {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getRequirements() {
+        return requirements;
+    }
+
+    public void setRequirements(String requirements) {
+        this.requirements = requirements;
+    }
+
+    public int getAvatar_id() {
+        return avatar_id;
+    }
+
+    public void setAvatar_id(int avatar_id) {
+        this.avatar_id = avatar_id;
     }
 }
