@@ -17,7 +17,7 @@ public class DetailActivity extends AppCompatActivity {
         Fragment fragment = fragmentManager.findFragmentById(R.id.main_activity);
 
         if (fragment == null) {
-            fragment = DetailFragment.getInstance();
+            fragment = DetailFragment.getInstance(getIntent().getStringExtra(HomeStreamFragment.INTENT_EXTRA_EVENT_ID));
             fragmentManager.beginTransaction().add(R.id.main_activity, fragment).commit();
         }
     }

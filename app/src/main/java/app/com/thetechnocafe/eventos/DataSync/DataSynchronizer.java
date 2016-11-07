@@ -24,6 +24,7 @@ import app.com.thetechnocafe.eventos.Models.EventsModel;
 public abstract class DataSynchronizer {
     private EventsDatabaseHelper mEventsDatabaseHelper;
 
+    private static final String TAG = "DataSynchronizer";
     private static final String LINK_EVENT_REQUEST = "http://192.168.43.55:8000/api/events";
     //String related to json data fetched
     private static final String JSON_STATUS = "status";
@@ -75,8 +76,11 @@ public abstract class DataSynchronizer {
 
                                 //Insert the details into event object
                                 if (insertEventDetails(event, eventJSONobject)) {
+                                    //Check if events already is in database
                                     //Insert the event into database
-                                    mEventsDatabaseHelper.insertNewEvent(event);
+                                    if (!mEventsDatabaseHelper.doesEventAlreadyExists(event.getId())) {
+                                        mEventsDatabaseHelper.insertNewEvent(event);
+                                    }
                                 }
                             }
 

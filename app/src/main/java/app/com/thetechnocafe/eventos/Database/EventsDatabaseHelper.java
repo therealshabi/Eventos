@@ -19,6 +19,7 @@ import app.com.thetechnocafe.eventos.Models.EventsModel;
 public class EventsDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "eventos_database";
     private static final int VERSION = 1;
+    private static final String TAG = "EventsDatabaseHelper";
 
     private static final String EVENTS_TABLE = "events";
     private static final String EVENT_COLUMN_ID = "id";
@@ -70,7 +71,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(EVENT_COLUMN_IMAGE, event.getImage());
         contentValues.put(EVENT_COLUMN_DATE, event.getDate().toString());
 
-        //Insert into database
+
         database.insert(EVENTS_TABLE, null, contentValues);
     }
 
@@ -110,6 +111,62 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return eventsList;
+    }
 
+    //Return the particular event corresponding to the id
+    public EventsModel getEvent(String id) {
+        //Check if event id is null
+        if (id == null) {
+            return null;
+        }
+
+        EventsModel eventsModel = new EventsModel();
+
+        SQLiteDatabase database = getReadableDatabase();
+
+        String sql = "SELECT * FROM " + EVENTS_TABLE + " WHERE " + EVENT_COLUMN_ID + " = '" + id + "'";
+
+        //Run query
+        Cursor cursor = database.rawQuery(sql, null);
+
+        //Traverse the cursor
+        while (cursor.moveToNext()) {
+            eventsModel.setId(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_ID)));
+            eventsModel.setTitle(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_TITLE)));
+            eventsModel.setDescription(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_DESCRIPTION)));
+            eventsModel.setAvatarId(cursor.getInt(cursor.getColumnIndex(EVENT_COLUMN_AVATAR_ID)));
+            eventsModel.setImage(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_VENUE)));
+            eventsModel.setDate(new Date());
+        }
+
+        //Close the cursor
+        cursor.close();
+
+        return eventsModel;
+    }
+
+    //Check if event is already in database
+    public boolean doesEventAlreadyExists(String id) {
+        //If event id is wrong return true
+        if (id == null) {
+            return true;
+        }
+
+        String sql = "SELECT * FROM " + EVENTS_TABLE + " WHERE " + EVENT_COLUMN_ID + " = '" + id + "'";
+
+        //Execute query
+        Cursor cursor = getReadableDatabase().rawQuery(sql, null);
+
+        if (cursor.getCount() > 0) {
+            //Close cursor
+            cursor.close();
+
+            return true;
+        }
+
+        //Close cursor
+        cursor.close();
+
+        return false;
     }
 }

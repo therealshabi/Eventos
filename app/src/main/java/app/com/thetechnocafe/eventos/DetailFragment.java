@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
+import app.com.thetechnocafe.eventos.Models.EventsModel;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,9 +26,25 @@ public class DetailFragment extends Fragment {
     private LinearLayout mRecentComments;
     private TextView mShowMoreCommentsText;
     private LinearLayout mLinkContainer;
+    private TextView mTitleTextView;
+    private TextView mDescriptionTextView;
+    private TextView mDateTextView;
+    private TextView mVenueTextView;
+    private static final String EVENT_ID_TAG = "eventid";
+    private static String EVENT_ID;
+    private EventsModel mEvent;
+    private EventsDatabaseHelper mEventsDatabaseHelper;
 
-    public static DetailFragment getInstance() {
-        return new DetailFragment();
+    public static DetailFragment getInstance(String id) {
+        //Create bundle
+        Bundle args = new Bundle();
+        args.putString(EVENT_ID_TAG, id);
+
+        //Set arguments
+        DetailFragment fragment = new DetailFragment();
+        fragment.setArguments(args);
+
+        return fragment;
     }
 
     @Override
@@ -38,9 +57,18 @@ public class DetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_detail, container, false);
 
+        mTitleTextView = (TextView) view.findViewById(R.id.fragment_detail_text_view_title);
+        mDescriptionTextView = (TextView) view.findViewById(R.id.fragment_detail_text_view_description);
+        mDateTextView = (TextView) view.findViewById(R.id.fragment_detail_text_view_date);
+        mVenueTextView = (TextView) view.findViewById(R.id.fragment_detail_text_view_venue);
         mRecentComments = (LinearLayout) view.findViewById(R.id.fragment_detail_comment_container);
         mShowMoreCommentsText = (TextView) view.findViewById(R.id.fragment_detail_show_more_comments);
         mLinkContainer = (LinearLayout) view.findViewById(R.id.fragment_detail_link_container);
+
+        //Retrieve id from fragment arguments
+        EVENT_ID = getArguments().getString(EVENT_ID_TAG, null);
+        mEventsDatabaseHelper = new EventsDatabaseHelper(getContext());
+        mEvent = mEventsDatabaseHelper.getEvent(EVENT_ID);
 
         //Add comments
         addRecentComments();
@@ -56,14 +84,8 @@ public class DetailFragment extends Fragment {
             activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back);
         }
 
-        //Set up show more comments
-        mShowMoreCommentsText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), CommentsActivity.class);
-                startActivity(intent);
-            }
-        });
+        //Update the UI
+        updateUI();
 
         addLink();
 
@@ -94,6 +116,18 @@ public class DetailFragment extends Fragment {
         }
     }
 
+    //Set onClick listeners for various views
+    private void setOnClickListeners() {
+        //Set up show more comments
+        mShowMoreCommentsText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), CommentsActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
     private void addLink() {
         for (int i = 0; i < 1; i++) {
             View view = LayoutInflater.from(getContext()).inflate(R.layout.link_item, null);
@@ -108,5 +142,26 @@ public class DetailFragment extends Fragment {
             });
             mLinkContainer.addView(view);
         }
+    }
+
+    //Update the UI with data
+    private void updateUI() {
+        //If event is null close the activity
+        if (mEvent == null) {
+            getActivity().finish();
+            return;
+        }
+
+        mTitleTextView.setText(mEvent.getTitle());
+        mDescriptionTextView.setText(mEvent.getDescription());
+        mDateTextView.setText(mEvent.getDate().toString());
+        mVenueTextView.setText(mEvent.getVenue());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        mEventsDatabaseHelper.close();
     }
 }

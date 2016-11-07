@@ -39,6 +39,7 @@ import app.com.thetechnocafe.eventos.Models.EventsModel;
  */
 public class HomeStreamFragment extends Fragment {
 
+    public static final String INTENT_EXTRA_EVENT_ID = "eventidintenetextra";
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -155,6 +156,7 @@ public class HomeStreamFragment extends Fragment {
         private TextView mTitleText;
         private TextView mDateText;
         private ImageView mImageView;
+        private EventsModel mEvent;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -167,6 +169,11 @@ public class HomeStreamFragment extends Fragment {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(getContext(), DetailActivity.class);
+
+            //Add event id to intent
+            intent.putExtra(INTENT_EXTRA_EVENT_ID, mEvent.getId());
+
+            //Make Shared element transition
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 Pair<View, String> p1 = Pair.create((View) mTitleText, getString(R.string.shared_title));
                 Pair<View, String> p2 = Pair.create((View) mDateText, getString(R.string.shared_date));
@@ -178,6 +185,8 @@ public class HomeStreamFragment extends Fragment {
         }
 
         void bindData(EventsModel event) {
+            mEvent = event;
+
             //Set appropriate data
             mDateText.setText(event.getDate().toString());
             mTitleText.setText(event.getTitle());
