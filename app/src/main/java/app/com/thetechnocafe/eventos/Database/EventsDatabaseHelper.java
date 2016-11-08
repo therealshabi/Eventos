@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import app.com.thetechnocafe.eventos.Models.CommentsModel;
 import app.com.thetechnocafe.eventos.Models.EventsModel;
 
 /**
@@ -31,6 +32,12 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
     private static final String EVENT_COLUMN_IMAGE = "image";
     private static final String EVENT_COLUMN_REQUIREMENTS = "requirements";
 
+    private static final String CONTACTS_TABLE = "event_contacts";
+    private static final String CONTACTS_EVENT_ID = "event_id";
+    private static final String CONTACTS_PHONE_NUMBER = "phone";
+    private static final String CONTACTS_EMAIL_ID = "email";
+    private static final String CONTACTS_NAME = "name";
+
 
     public EventsDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
@@ -38,7 +45,8 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql = "CREATE TABLE " + EVENTS_TABLE + " (" +
+        //Prepare sql statements
+        String eventsTableSQL = "CREATE TABLE " + EVENTS_TABLE + " (" +
                 EVENT_COLUMN_ID + " VARCHAR PRIMARY KEY, " +
                 EVENT_COLUMN_TITLE + " VARCHAR, " +
                 EVENT_COLUMN_DESCRIPTION + " VARCHAR, " +
@@ -48,7 +56,18 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
                 EVENT_COLUMN_IMAGE + " VARCHAR, " +
                 EVENT_COLUMN_REQUIREMENTS + " VARCHAR " +
                 ");";
-        db.execSQL(sql);
+
+        String contactsTableSQL = "CREATE TABLE " + CONTACTS_TABLE + " (" +
+                CONTACTS_EVENT_ID + " VARCHAR, " +
+                CONTACTS_NAME + " VARCHAR, " +
+                CONTACTS_PHONE_NUMBER + " VARCHAR, " +
+                CONTACTS_EMAIL_ID + " VARCHAR" +
+                ");";
+
+        //Run the queries to create tables
+        db.execSQL(eventsTableSQL);
+        db.execSQL(contactsTableSQL);
+
     }
 
     @Override
@@ -116,7 +135,9 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         return eventsList;
     }
 
-    //Return the particular event corresponding to the id
+    /**
+     * Return the Particular event corresponding to the id
+     */
     public EventsModel getEvent(String id) {
         //Check if event id is null
         if (id == null) {
@@ -173,5 +194,13 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return false;
+    }
+
+    /**
+     * Take CommentsModel as input
+     * Extract values, create content values and insert into table
+     */
+    public void insertNewContact(CommentsModel commentsModel) {
+
     }
 }
