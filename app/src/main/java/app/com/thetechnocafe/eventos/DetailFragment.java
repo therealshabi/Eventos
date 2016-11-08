@@ -2,6 +2,7 @@ package app.com.thetechnocafe.eventos;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,7 +16,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+import java.util.List;
+
 import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
+import app.com.thetechnocafe.eventos.Models.ContactsModel;
 import app.com.thetechnocafe.eventos.Models.EventsModel;
 
 
@@ -25,8 +29,9 @@ import app.com.thetechnocafe.eventos.Models.EventsModel;
 public class DetailFragment extends Fragment {
 
     private ViewFlipper mRecentComments;
-    private TextView mShowMoreCommentsText;
     private LinearLayout mLinkContainer;
+    private LinearLayout mContactsContainer;
+    private TextView mShowMoreCommentsText;
     private TextView mTitleTextView;
     private TextView mDescriptionTextView;
     private TextView mDateTextView;
@@ -36,6 +41,7 @@ public class DetailFragment extends Fragment {
     private static String EVENT_ID;
     private EventsModel mEvent;
     private EventsDatabaseHelper mEventsDatabaseHelper;
+    private TextView mNoContactsTextView;
 
     public static DetailFragment getInstance(String id) {
         //Create bundle
@@ -67,6 +73,8 @@ public class DetailFragment extends Fragment {
         mRecentComments = (ViewFlipper) view.findViewById(R.id.fragment_detail_comment_container);
         mShowMoreCommentsText = (TextView) view.findViewById(R.id.fragment_detail_show_more_comments);
         mLinkContainer = (LinearLayout) view.findViewById(R.id.fragment_detail_link_container);
+        mContactsContainer = (LinearLayout) view.findViewById(R.id.fragment_detail_contacts_container);
+        mNoContactsTextView = (TextView) view.findViewById(R.id.fragment_detail_no_contacts_text);
 
         //Retrieve id from fragment arguments
         EVENT_ID = getArguments().getString(EVENT_ID_TAG, null);
@@ -90,7 +98,6 @@ public class DetailFragment extends Fragment {
         //Update the UI
         updateUI();
         setOnClickListeners();
-        addLink();
 
         return view;
     }
@@ -104,6 +111,73 @@ public class DetailFragment extends Fragment {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //Set onClick listeners for various views
+    private void setOnClickListeners() {
+        //Set up show more comments
+        mShowMoreCommentsText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), CommentsActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    //Add contacts in the contacts container
+    private void addAndSetUpContacts() {
+        //Get the contact list
+        final List<ContactsModel> list = mEventsDatabaseHelper.getContactsList(EVENT_ID);
+
+        //If contacts exist, remove the text view that says "No contacts for this event"
+        if (list.size() > 0) {
+            mNoContactsTextView.setVisibility(View.GONE);
+
+            //Loop over the list and add them to the container
+            for (int i = 0; i < list.size(); i++) {
+                final ContactsModel contact = list.get(i);
+
+                View contactView = LayoutInflater.from(getContext()).inflate(R.layout.contacts_item, mContactsContainer, false);
+                //Set the data
+                TextView mNameText = (TextView) contactView.findViewById(R.id.contacts_item_name);
+                TextView mEmailText = (TextView) contactView.findViewById(R.id.contacts_item_email);
+                TextView mPhoneText = (TextView) contactView.findViewById(R.id.contacts_item_phone);
+
+                //Set on click listeners for phone and email
+                mPhoneText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //Send call intent when clicked on phone number
+                        Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + contact.getPhoneNumber()));
+                        startActivity(callIntent);
+                    }
+                });
+
+                mEmailText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //Send email intent when clicked on email
+                        Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse("mailto:" + contact.getEmailID()));
+                        startActivity(Intent.createChooser(intent, getString(R.string.email_chooser)));
+                    }
+                });
+
+
+                mNameText.setText(contact.getContactName());
+                mPhoneText.setText(contact.getPhoneNumber());
+                //If email field does't exists then hide the email view in layout
+                if (!list.get(i).getEmailID().equals("")) {
+                    mEmailText.setText(contact.getEmailID());
+                } else {
+                    mEmailText.setVisibility(View.GONE);
+                }
+
+                //Add the view to container
+                mContactsContainer.addView(contactView);
+            }
+        }
+
     }
 
     private void addRecentComments() {
@@ -125,18 +199,7 @@ public class DetailFragment extends Fragment {
         mRecentComments.startFlipping();
     }
 
-    //Set onClick listeners for various views
-    private void setOnClickListeners() {
-        //Set up show more comments
-        mShowMoreCommentsText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), CommentsActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
-
+    //Add links to the link container linear layout
     private void addLink() {
         for (int i = 0; i < 1; i++) {
             View view = LayoutInflater.from(getContext()).inflate(R.layout.link_item, null);
@@ -169,12 +232,17 @@ public class DetailFragment extends Fragment {
         if (mEvent.getRequirements() != null && !mEvent.getRequirements().isEmpty()) {
             mRequirementsTextView.setText(mEvent.getRequirements());
         }
+
+        //Add the corresponding data
+        addLink();
+        addAndSetUpContacts();
     }
 
     @Override
     public void onStop() {
         super.onStop();
 
+        //Close database
         mEventsDatabaseHelper.close();
     }
 }
