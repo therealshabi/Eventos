@@ -160,10 +160,10 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/fragment_detail_forums_text_no_froum"
+                        android:id="@+id/fragment_detail_forums_text_no_links"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="No submission forums for this event"/>
+                        android:text="@string/no_links"/>
 
                 </LinearLayout>
 

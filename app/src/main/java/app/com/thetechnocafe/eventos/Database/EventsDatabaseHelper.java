@@ -284,7 +284,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
      * Get links list
      * Return a list of LinksModel corresponding to a particular event
      */
-    public List<LinksModel> getLinksModel(String eventID) {
+    public List<LinksModel> getLinksList(String eventID) {
         //Create a list
         ArrayList<LinksModel> mList = new ArrayList<>();
 

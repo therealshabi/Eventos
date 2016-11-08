@@ -21,6 +21,7 @@ import java.util.List;
 import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
 import app.com.thetechnocafe.eventos.Models.ContactsModel;
 import app.com.thetechnocafe.eventos.Models.EventsModel;
+import app.com.thetechnocafe.eventos.Models.LinksModel;
 
 
 /**
@@ -42,6 +43,7 @@ public class DetailFragment extends Fragment {
     private EventsModel mEvent;
     private EventsDatabaseHelper mEventsDatabaseHelper;
     private TextView mNoContactsTextView;
+    private TextView mNoLinksTextView;
 
     public static DetailFragment getInstance(String id) {
         //Create bundle
@@ -75,6 +77,7 @@ public class DetailFragment extends Fragment {
         mLinkContainer = (LinearLayout) view.findViewById(R.id.fragment_detail_link_container);
         mContactsContainer = (LinearLayout) view.findViewById(R.id.fragment_detail_contacts_container);
         mNoContactsTextView = (TextView) view.findViewById(R.id.fragment_detail_no_contacts_text);
+        mNoLinksTextView = (TextView) view.findViewById(R.id.fragment_detail_forums_text_no_links);
 
         //Retrieve id from fragment arguments
         EVENT_ID = getArguments().getString(EVENT_ID_TAG, null);
@@ -180,6 +183,36 @@ public class DetailFragment extends Fragment {
 
     }
 
+    private void addAndSetUpLinks() {
+        //Get the links list
+        List<LinksModel> mList = mEventsDatabaseHelper.getLinksList(EVENT_ID);
+
+        //If links exits remove the no links text view and add all links
+        if (mList.size() > 0) {
+            mNoLinksTextView.setVisibility(View.GONE);
+
+            for (int i = 0; i < mList.size(); i++) {
+                final LinksModel linksModel = mList.get(i);
+
+                TextView textView = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.link_item, mLinkContainer, false);
+                textView.setText(linksModel.getLinkName());
+
+                //Set on click listener
+                textView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getContext(), WebViewActivity.class);
+                        intent.putExtra(WebViewActivity.EXTRA_MESSAGE, linksModel.getLinkAddress());
+                        startActivity(intent);
+                    }
+                });
+
+                //Add to container
+                mLinkContainer.addView(textView);
+            }
+        }
+    }
+
     private void addRecentComments() {
         for (int i = 0; i < 3; i++) {
             View view = LayoutInflater.from(getContext()).inflate(R.layout.comment_recent_item, null);
@@ -197,23 +230,6 @@ public class DetailFragment extends Fragment {
         mRecentComments.setInAnimation(getContext(), R.anim.slide_in_right);
         //Start the view flipper
         mRecentComments.startFlipping();
-    }
-
-    //Add links to the link container linear layout
-    private void addLink() {
-        for (int i = 0; i < 1; i++) {
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.link_item, null);
-            TextView textView = (TextView) view.findViewById(R.id.link_item_text);
-            textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getContext(), WebViewActivity.class);
-                    intent.putExtra(WebViewActivity.EXTRA_MESSAGE, "http://www.google.com");
-                    startActivity(intent);
-                }
-            });
-            mLinkContainer.addView(view);
-        }
     }
 
     //Update the UI with data
@@ -234,7 +250,7 @@ public class DetailFragment extends Fragment {
         }
 
         //Add the corresponding data
-        addLink();
+        addAndSetUpLinks();
         addAndSetUpContacts();
     }
 
