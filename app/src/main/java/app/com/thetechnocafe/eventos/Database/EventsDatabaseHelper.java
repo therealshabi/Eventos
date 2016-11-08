@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import app.com.thetechnocafe.eventos.Models.CommentsModel;
+import app.com.thetechnocafe.eventos.Models.ContactsModel;
 import app.com.thetechnocafe.eventos.Models.EventsModel;
 
 /**
@@ -198,9 +198,55 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * Take CommentsModel as input
-     * Extract values, create content values and insert into table
+     * Extract values from model, create content values and insert into table
      */
-    public void insertNewContact(CommentsModel commentsModel) {
+    public void insertNewContact(ContactsModel contactsModel) {
+        //Get writable database
+        SQLiteDatabase database = getWritableDatabase();
 
+        //Prepare content values
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CONTACTS_EVENT_ID, contactsModel.getEventsID());
+        contentValues.put(CONTACTS_NAME, contactsModel.getContactName());
+        contentValues.put(CONTACTS_EMAIL_ID, contactsModel.getEmailID());
+        contentValues.put(CONTACTS_PHONE_NUMBER, contactsModel.getPhoneNumber());
+
+        //Insert into database
+        database.insert(CONTACTS_TABLE, null, contentValues);
+    }
+
+    /**
+     * Get Contacts List
+     * Returns a list of ContactsModel for a particular event ID
+     */
+    public List<ContactsModel> getContactsList(String eventID) {
+        //Create a list
+        ArrayList<ContactsModel> mList = new ArrayList<>();
+
+        //Get database
+        SQLiteDatabase database = getReadableDatabase();
+
+        //Prepare query
+        String sql = "SELECT * FROM " + CONTACTS_TABLE + " WHERE " + CONTACTS_EVENT_ID + "= " + "'" + eventID + "'";
+
+        //Run query and get a cursor
+        Cursor cursor = database.rawQuery(sql, null);
+
+        //Loop over the cursor and inflate the list
+        while (cursor.moveToNext()) {
+            //Create new contact
+            ContactsModel contact = new ContactsModel();
+            contact.setEventsID(cursor.getString(cursor.getColumnIndex(CONTACTS_EVENT_ID)));
+            contact.setEmailID(cursor.getString(cursor.getColumnIndex(CONTACTS_EMAIL_ID)));
+            contact.setPhoneNumber(cursor.getString(cursor.getColumnIndex(CONTACTS_PHONE_NUMBER)));
+            contact.setContactName(cursor.getString(cursor.getColumnIndex(CONTACTS_NAME)));
+
+            mList.add(contact);
+        }
+
+        //Close cursor
+        cursor.close();
+
+        return mList;
     }
 }

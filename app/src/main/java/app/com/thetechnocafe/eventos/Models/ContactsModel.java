@@ -4,7 +4,8 @@ package app.com.thetechnocafe.eventos.Models;
  * Created by gurleensethi on 08/11/16.
  */
 
-public class CommentsModel {
+public class ContactsModel {
+    private String eventsID;
     private String contactName;
     private String emailID;
     private String phoneNumber;
@@ -31,5 +32,13 @@ public class CommentsModel {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getEventsID() {
+        return eventsID;
+    }
+
+    public void setEventsID(String eventsID) {
+        this.eventsID = eventsID;
     }
 }

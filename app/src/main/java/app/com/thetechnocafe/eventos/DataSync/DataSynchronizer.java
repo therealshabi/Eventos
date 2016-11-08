@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import java.util.Date;
 
 import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
+import app.com.thetechnocafe.eventos.Models.ContactsModel;
 import app.com.thetechnocafe.eventos.Models.EventsModel;
 
 /**
@@ -81,12 +82,27 @@ public abstract class DataSynchronizer {
                                     //Insert the event into database
                                     if (!mEventsDatabaseHelper.doesEventAlreadyExists(event.getId())) {
                                         mEventsDatabaseHelper.insertNewEvent(event);
+
+                                        //Get the contacts
+                                        JSONArray contactJSONArray = eventJSONobject.getJSONArray(StringUtils.JSON_CONTACTS);
+
+                                        //Loop over the array and retrieve contacts JSON objects
+                                        for (int contactsCount = 0; contactsCount < contactJSONArray.length(); contactsCount++) {
+                                            ContactsModel contactsModel = new ContactsModel();
+                                            //Inflate the object with data
+                                            insertContactDetails(event.getId(), contactsModel, contactJSONArray.getJSONObject(contactsCount));
+                                            //Insert into database
+                                            mEventsDatabaseHelper.insertNewContact(contactsModel);
+                                        }
                                     }
                                 }
                             }
 
                             //Notify sync successful
                             onDataSynchronized(true);
+
+                            //Close database
+                            mEventsDatabaseHelper.close();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -122,6 +138,22 @@ public abstract class DataSynchronizer {
             event.setRequirements(object.getString(JSON_EVENT_REQUIREMENTS));
         } catch (JSONException e) {
             //Bad event data
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Set the required data in ContactsModel object
+     */
+    private boolean insertContactDetails(String eventID, ContactsModel model, JSONObject object) {
+        try {
+            model.setEventsID(eventID);
+            model.setContactName(object.getString(StringUtils.JSON_CONTACTS_NAME));
+            model.setPhoneNumber(object.getString(StringUtils.JSON_CONTACTS_PHONE));
+            model.setEmailID(object.getString(StringUtils.JSON_CONTACTS_EMAIL));
+        } catch (JSONException e) {
+            //Bad data
             return false;
         }
         return true;
