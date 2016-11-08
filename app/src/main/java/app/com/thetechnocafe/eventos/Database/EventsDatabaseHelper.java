@@ -12,6 +12,7 @@ import java.util.List;
 
 import app.com.thetechnocafe.eventos.Models.ContactsModel;
 import app.com.thetechnocafe.eventos.Models.EventsModel;
+import app.com.thetechnocafe.eventos.Models.LinksModel;
 
 /**
  * Created by gurleensethi on 15/10/16.
@@ -37,6 +38,11 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
     private static final String CONTACTS_PHONE_NUMBER = "phone";
     private static final String CONTACTS_EMAIL_ID = "email";
     private static final String CONTACTS_NAME = "name";
+
+    private static final String LINKS_TABLE = "links";
+    private static final String LINKS_NAME = "name";
+    private static final String LINKS_EVENT_ID = "event_id";
+    private static final String LINKS_ADDRESS = "address";
 
 
     public EventsDatabaseHelper(Context context) {
@@ -64,10 +70,16 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
                 CONTACTS_EMAIL_ID + " VARCHAR" +
                 ");";
 
+        String linksTableSQL = "CREATE TABLE " + LINKS_TABLE + " (" +
+                LINKS_EVENT_ID + " VARCHAR, " +
+                LINKS_NAME + " VARCHAR, " +
+                LINKS_ADDRESS + " VARCHAR" +
+                ");";
+
         //Run the queries to create tables
         db.execSQL(eventsTableSQL);
         db.execSQL(contactsTableSQL);
-
+        db.execSQL(linksTableSQL);
     }
 
     @Override
@@ -242,6 +254,57 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
             contact.setContactName(cursor.getString(cursor.getColumnIndex(CONTACTS_NAME)));
 
             mList.add(contact);
+        }
+
+        //Close cursor
+        cursor.close();
+
+        return mList;
+    }
+
+    /**
+     * Insert a new link into links table
+     * Get a LinksModel, extract data and put in content values
+     */
+    public void insertNewLink(LinksModel model) {
+        //Get database
+        SQLiteDatabase database = getWritableDatabase();
+
+        //Create content values
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(LINKS_EVENT_ID, model.getEventID());
+        contentValues.put(LINKS_NAME, model.getLinkName());
+        contentValues.put(LINKS_ADDRESS, model.getLinkAddress());
+
+        //Insert into database
+        database.insert(LINKS_TABLE, null, contentValues);
+    }
+
+    /**
+     * Get links list
+     * Return a list of LinksModel corresponding to a particular event
+     */
+    public List<LinksModel> getLinksModel(String eventID) {
+        //Create a list
+        ArrayList<LinksModel> mList = new ArrayList<>();
+
+        //Get the data base
+        SQLiteDatabase database = getReadableDatabase();
+
+        //Prepare sql statement
+        String sql = "SELECT * FROM " + LINKS_TABLE + " WHERE " + LINKS_EVENT_ID + "= " + "'" + eventID + "'";
+
+        //Run query and get a cursor
+        Cursor cursor = database.rawQuery(sql, null);
+
+        //Loop over the cursor and extract data
+        while (cursor.moveToNext()) {
+            LinksModel model = new LinksModel();
+            model.setEventID(eventID);
+            model.setLinkAddress(cursor.getString(cursor.getColumnIndex(LINKS_ADDRESS)));
+            model.setLinkName(cursor.getString(cursor.getColumnIndex(LINKS_NAME)));
+
+            mList.add(model);
         }
 
         //Close cursor

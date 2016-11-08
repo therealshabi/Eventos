@@ -16,6 +16,7 @@ import java.util.Date;
 import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
 import app.com.thetechnocafe.eventos.Models.ContactsModel;
 import app.com.thetechnocafe.eventos.Models.EventsModel;
+import app.com.thetechnocafe.eventos.Models.LinksModel;
 
 /**
  * Created by gurleensethi on 15/10/16.
@@ -90,9 +91,23 @@ public abstract class DataSynchronizer {
                                         for (int contactsCount = 0; contactsCount < contactJSONArray.length(); contactsCount++) {
                                             ContactsModel contactsModel = new ContactsModel();
                                             //Inflate the object with data
-                                            insertContactDetails(event.getId(), contactsModel, contactJSONArray.getJSONObject(contactsCount));
-                                            //Insert into database
-                                            mEventsDatabaseHelper.insertNewContact(contactsModel);
+                                            if (insertContactDetails(event.getId(), contactsModel, contactJSONArray.getJSONObject(contactsCount))) {
+                                                //Insert into database
+                                                mEventsDatabaseHelper.insertNewContact(contactsModel);
+                                            }
+                                        }
+
+                                        //Get the links
+                                        JSONArray linksJSONArray = eventJSONobject.getJSONArray(StringUtils.JSON_LINKS);
+
+                                        //Loop over the array and retrieve links JSON objects
+                                        for (int linksCount = 0; linksCount < linksJSONArray.length(); linksCount++) {
+                                            LinksModel linksModel = new LinksModel();
+                                            //Inflate the object with data
+                                            if (insertLinkDetails(event.getId(), linksModel, linksJSONArray.getJSONObject(linksCount))) {
+                                                //Insert into database
+                                                mEventsDatabaseHelper.insertNewLink(linksModel);
+                                            }
                                         }
                                     }
                                 }
@@ -144,7 +159,7 @@ public abstract class DataSynchronizer {
     }
 
     /**
-     * Set the required data in ContactsModel object
+     * Set the required data in ContactsModel object from the JSONObject
      */
     private boolean insertContactDetails(String eventID, ContactsModel model, JSONObject object) {
         try {
@@ -152,6 +167,21 @@ public abstract class DataSynchronizer {
             model.setContactName(object.getString(StringUtils.JSON_CONTACTS_NAME));
             model.setPhoneNumber(object.getString(StringUtils.JSON_CONTACTS_PHONE));
             model.setEmailID(object.getString(StringUtils.JSON_CONTACTS_EMAIL));
+        } catch (JSONException e) {
+            //Bad data
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Set the required data in LinksModel object from the JSONObject
+     */
+    private boolean insertLinkDetails(String eventID, LinksModel model, JSONObject object) {
+        try {
+            model.setEventID(eventID);
+            model.setLinkName(object.getString(StringUtils.JSON_LINKS_NAME));
+            model.setLinkAddress(object.getString(StringUtils.JSON_LINKS_ADDRESS));
         } catch (JSONException e) {
             //Bad data
             return false;
