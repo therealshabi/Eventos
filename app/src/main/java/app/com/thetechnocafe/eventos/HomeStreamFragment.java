@@ -2,6 +2,7 @@ package app.com.thetechnocafe.eventos;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,6 +28,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.like.LikeButton;
+import com.like.OnLikeListener;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -34,12 +38,16 @@ import app.com.thetechnocafe.eventos.DataSync.DataSynchronizer;
 import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
 import app.com.thetechnocafe.eventos.Models.EventsModel;
 
-/**
- * Created by gurleensethi on 13/08/16.
- */
+import static android.R.attr.id;
+import static android.content.Context.MODE_PRIVATE;
+
 public class HomeStreamFragment extends Fragment {
 
     public static final String INTENT_EXTRA_EVENT_ID = "eventidintenetextra";
+    private static final String DATABASE_NAME = "eventos_database";
+    private static final String EVENT_COLUMN_ID = "id";
+    private static final String FAV_EVENTS_TABLE = "FavEvents";
+    public LikeButton mLikeButton;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -57,6 +65,7 @@ public class HomeStreamFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
     }
 
     @Nullable
@@ -110,6 +119,7 @@ public class HomeStreamFragment extends Fragment {
             }
         });
 
+
         //Set up on swipe refresh layout
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -147,84 +157,6 @@ public class HomeStreamFragment extends Fragment {
         setUpAndNotifyRecyclerView();
 
         return view;
-    }
-
-
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        private CardView mCardView;
-        private TextView mTitleText;
-        private TextView mDateText;
-        private ImageView mImageView;
-        private EventsModel mEvent;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            itemView.setOnClickListener(this);
-            mCardView = (CardView) itemView.findViewById(R.id.home_stream_recycler_view_item_card);
-            mTitleText = (TextView) itemView.findViewById(R.id.home_stream_recycler_view_item_title_text);
-            mDateText = (TextView) itemView.findViewById(R.id.home_stream_recycler_view_item_date_text);
-        }
-
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(getContext(), DetailActivity.class);
-
-            //Add event id to intent
-            intent.putExtra(INTENT_EXTRA_EVENT_ID, mEvent.getId());
-
-            //Make Shared element transition
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                Pair<View, String> p1 = Pair.create((View) mTitleText, getString(R.string.shared_title));
-                Pair<View, String> p2 = Pair.create((View) mDateText, getString(R.string.shared_date));
-                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), p1, p2);
-                startActivity(intent, optionsCompat.toBundle());
-            } else {
-                startActivity(intent);
-            }
-        }
-
-        void bindData(EventsModel event) {
-            mEvent = event;
-
-            //Set appropriate data
-            mDateText.setText(event.getDate().toString());
-            mTitleText.setText(event.getTitle());
-        }
-    }
-
-    //Adapter for main stream recycler view
-    public class RecyclerAdapter extends RecyclerView.Adapter<ViewHolder> {
-
-        List<EventsModel> list = Collections.emptyList();
-        Context context;
-
-        public RecyclerAdapter(List<EventsModel> list, Context context) {
-            this.list = list;
-            this.context = context;
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_stream_recycler_view_item, parent, false);
-            return new ViewHolder(v);
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            //Pass the appropriate EventsModel object
-            holder.bindData(list.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return list.size();
-        }
-
-        //Set the updated events list
-        public void setUpdatedList(List<EventsModel> updatedList) {
-            list = updatedList;
-        }
     }
 
     @Override
@@ -277,5 +209,99 @@ public class HomeStreamFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         mDatabaseHelper.close();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private CardView mCardView;
+        private TextView mTitleText;
+        private TextView mDateText;
+        private ImageView mImageView;
+        private EventsModel mEvent;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            itemView.setOnClickListener(this);
+            mCardView = (CardView) itemView.findViewById(R.id.home_stream_recycler_view_item_card);
+            mLikeButton = (LikeButton) itemView.findViewById(R.id.home_stream_recycler_view_like_button);
+            mTitleText = (TextView) itemView.findViewById(R.id.home_stream_recycler_view_item_title_text);
+            mDateText = (TextView) itemView.findViewById(R.id.home_stream_recycler_view_item_date_text);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(getContext(), DetailActivity.class);
+
+            //Add event id to intent
+            intent.putExtra(INTENT_EXTRA_EVENT_ID, mEvent.getId());
+
+            //Make Shared element transition
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Pair<View, String> p1 = Pair.create((View) mTitleText, getString(R.string.shared_title));
+                Pair<View, String> p2 = Pair.create((View) mDateText, getString(R.string.shared_date));
+                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), p1, p2);
+                startActivity(intent, optionsCompat.toBundle());
+            } else {
+                startActivity(intent);
+            }
+        }
+
+        void bindData(final EventsModel event) {
+            mEvent = event;
+
+            //Set appropriate data
+            mDateText.setText(event.getDate().toString());
+            mTitleText.setText(event.getTitle());
+            mLikeButton.setOnLikeListener(new OnLikeListener() {
+                @Override
+                public void liked(LikeButton likeButton) {
+                    String id = event.getId();
+                    EventsModel favEventModel = mDatabaseHelper.getEvent(id);
+
+                    if (!mDatabaseHelper.doesFavEventAlreadyExists(id)) {
+                        mDatabaseHelper.insertNewFavEvent(favEventModel);
+                    }
+                }
+
+                @Override
+                public void unLiked(LikeButton likeButton) {
+                    String sql = "Delete FROM " + FAV_EVENTS_TABLE + " where " + EVENT_COLUMN_ID + " = \"" + id + "\";";
+                }
+            });
+        }
+    }
+
+    //Adapter for main stream recycler view
+    public class RecyclerAdapter extends RecyclerView.Adapter<ViewHolder> {
+
+        List<EventsModel> list = Collections.emptyList();
+        Context context;
+
+        public RecyclerAdapter(List<EventsModel> list, Context context) {
+            this.list = list;
+            this.context = context;
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_stream_recycler_view_item, parent, false);
+            return new ViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            //Pass the appropriate EventsModel object
+            holder.bindData(list.get(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            return list.size();
+        }
+
+        //Set the updated events list
+        public void setUpdatedList(List<EventsModel> updatedList) {
+            list = updatedList;
+        }
     }
 }

@@ -1,6 +1,9 @@
 package app.com.thetechnocafe.eventos;
 
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,13 +20,36 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.LocalDate;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+
+import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
+import app.com.thetechnocafe.eventos.Models.EventsModel;
+
+import static app.com.thetechnocafe.eventos.HomeStreamFragment.INTENT_EXTRA_EVENT_ID;
 
 public class FavouriteActivity extends AppCompatActivity {
 
+    private static final String FAV_EVENTS_TABLE = "FavEvents";
+    private static final String DATABASE_NAME = "eventos_database";
+    private static final String EVENTS_TABLE = "events";
+    private static final String EVENT_COLUMN_ID = "id";
+    private static final String EVENT_COLUMN_TITLE = "title";
+    private static final String EVENT_COLUMN_DESCRIPTION = "description";
+    private static final String EVENT_COLUMN_DATE = "date";
+    private static final String EVENT_COLUMN_VENUE = "venue";
+    private static final String EVENT_COLUMN_AVATAR_ID = "avatar_id";
+    private static final String EVENT_COLUMN_IMAGE = "image";
+    private static final String EVENT_COLUMN_REQUIREMENTS = "requirements";
     public List<Favourite> favouriteList;
+    public String tempId;
     private RecyclerView recyclerView;
     private FavouriteAdapter adapter;
 
@@ -34,7 +61,6 @@ public class FavouriteActivity extends AppCompatActivity {
         favouriteList = new ArrayList<>();
 
         adapter = new FavouriteAdapter(this, favouriteList);
-
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -75,26 +101,66 @@ public class FavouriteActivity extends AppCompatActivity {
                 R.drawable.concert,
                 R.drawable.calendar,
                 R.drawable.dj,
-                R.drawable.sports,
-                R.drawable.concert,
-                R.drawable.concert};
+                R.drawable.sports};
+
+        SQLiteDatabase database = openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+
+        //Create new EventsModel list
+        List<EventsModel> eventsList = new ArrayList<>();
+
+        //Set up the query
+        String sql = "SELECT * FROM " + FAV_EVENTS_TABLE;
+
+        //Run the query and obtain cursor
+        Cursor cursor = database.rawQuery(sql, null);
+
+        //Extract the values while looping over cursor
+        while (cursor.moveToNext()) {
+            EventsModel event = new EventsModel();
+            String newSql = "SELECT * FROM " + EVENTS_TABLE + " where " + EVENT_COLUMN_ID + " = \"" + cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_ID)) + "\";";
+            Cursor curse = database.rawQuery(newSql, null);
+            curse.moveToFirst();
+            event.setId(curse.getString(curse.getColumnIndex(EVENT_COLUMN_ID)));
+            event.setVenue(curse.getString(curse.getColumnIndex(EVENT_COLUMN_VENUE)));
+            event.setDate(new Date(curse.getString(curse.getColumnIndex(EVENT_COLUMN_DATE))));
+            event.setAvatarId(curse.getInt(curse.getColumnIndex(EVENT_COLUMN_AVATAR_ID)));
+            event.setImage(curse.getString(curse.getColumnIndex(EVENT_COLUMN_IMAGE)));
+            event.setTitle(curse.getString(curse.getColumnIndex(EVENT_COLUMN_TITLE)));
+            event.setDescription(curse.getString(curse.getColumnIndex(EVENT_COLUMN_DESCRIPTION)));
+            //Add event to list
+            eventsList.add(event);
+            curse.close();
+        }
+        //Close cursor after use
+        cursor.close();
+
+        int i = 0;
+        while (i < eventsList.size()) {
+            EventsModel temp = eventsList.get(i);
+            String id = temp.getId();
+            String title = temp.getTitle();
+            String Venue = temp.getVenue();
+            String time = "" + temp.getDate().getHours();
+            time += ":" + temp.getDate().getMinutes() + " hrs";
+            /*
+            *  It's Wrong Update it with the correct code
+            * */
+            Log.d("Day", "" + temp.getDate().getDay());
+            Log.d("Month", "" + temp.getDate().getMonth());
+            Log.d("Year", "" + temp.getDate().getYear());
+            DateTime start = new DateTime();
+            String date = "" + temp.getDate().getYear() + "-" + temp.getDate().getMonth() + "-" + temp.getDate().getDay();
+            String daysLeft = "" + Days.daysBetween(DateTime.parse(date), start).getDays() + " Days Left";
+
+            Favourite fav = new Favourite(id, title, daysLeft, Venue, covers[i % 5], time);
+            favouriteList.add(fav);
+            i++;
+        }
 
 
-        Favourite a = new Favourite("GDG Dev Fest 2k16", "4 Days to go", "CL2", covers[0], "17:45 hrs");
-        favouriteList.add(a);
-
-
-        Favourite b = new Favourite("Programming Hub Knuth Cup 2k16", "5 Days to go", "Auditorium", covers[1], "15:30 hrs");
-        favouriteList.add(b);
-
-
-        Favourite c = new Favourite("Parola Hub Article Writing Competition on Technology", "6 Days to go", "LRC", covers[2], "12:00 hrs");
-        favouriteList.add(c);
-
-
-        Favourite d = new Favourite("Hackathon By GDG", "8 Days to go", "CL4", covers[3], "18:00 hrs");
-        favouriteList.add(d);
-
+        // Prototype
+        /*Favourite a = new Favourite("12abcd","GDG Dev Fest 2k16", "4 Days to go", "CL2", covers[0], "17:45 hrs");
+        favouriteList.add(a);*/
 
     }
 
@@ -130,18 +196,30 @@ public class FavouriteActivity extends AppCompatActivity {
 
         @Override
         public void onItemDismiss(int position) {
+            SQLiteDatabase database = openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
             temp = favouriteList.get(position);
             pos = position;
+            tempId = temp.getId();
             favouriteList.remove(position);
+            /*Intent in = new Intent(getBaseContext(),HomeStreamActivity.class);
+            in.putExtra("likeBtnStatus",Boolean.FALSE);*/
+            String sql = "Delete FROM " + FAV_EVENTS_TABLE + " where " + EVENT_COLUMN_ID + " = \"" + tempId + "\";";
+            database.execSQL(sql);
             notifyItemRemoved(position);
             Snackbar snackbar = Snackbar
-                    .make(getCurrentFocus(), "Message is deleted", Snackbar.LENGTH_LONG)
+                    .make(getCurrentFocus(), "Removed from the Favourites", Snackbar.LENGTH_LONG)
                     .setAction("UNDO", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            EventsDatabaseHelper mDatabaseHelper = new EventsDatabaseHelper(getBaseContext());
+                            EventsModel favEventModel = mDatabaseHelper.getEvent(tempId);
+
+                            if (!mDatabaseHelper.doesFavEventAlreadyExists(tempId)) {
+                                mDatabaseHelper.insertNewFavEvent(favEventModel);
+                            }
                             favouriteList.add(pos, temp);
                             notifyItemInserted(pos);
-                            Snackbar snackbar1 = Snackbar.make(getCurrentFocus(), "Message is restored!", Snackbar.LENGTH_SHORT);
+                            Snackbar snackbar1 = Snackbar.make(getCurrentFocus(), "Restored into the Favourites!", Snackbar.LENGTH_SHORT);
                             snackbar1.show();
                         }
                     });
@@ -166,28 +244,42 @@ public class FavouriteActivity extends AppCompatActivity {
 
         public void onBindViewHolder(final MyViewHolder holder, int position) {
             Favourite favourite = favouriteList.get(position);
-            holder.title1.setText(favourite.getName());
-            holder.title2.setText(favourite.getDaystogo());
-            holder.title3.setText(favourite.getLocation());
-            holder.title4.setText(favourite.getTime());
+
+            holder.mTitle.setText(favourite.getTitle());
+            holder.mDaysLeft.setText(favourite.getDaystogo());
+            holder.mVenue.setText(favourite.getLocation());
+            holder.mTime.setText(favourite.getTime());
             holder.thumbnail.setImageResource(favourite.getThumbnail());
+            holder.mFavEvent = favourite;
         }
 
         public int getItemCount() {
             return favouriteList.size();
         }
 
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView title1, title2, title3, title4;
+        public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+            public TextView mTitle, mDaysLeft, mVenue, mTime;
             public ImageView thumbnail;
+            private Favourite mFavEvent;
 
             public MyViewHolder(View view) {
                 super(view);
-                title1 = (TextView) view.findViewById(R.id.favourite_recycler_view_item_title_text);
-                title2 = (TextView) view.findViewById(R.id.favourite_recycler_view_item_time_left_text);
-                title3 = (TextView) view.findViewById(R.id.favourite_recycler_view_item_venue_text);
-                title4 = (TextView) view.findViewById(R.id.favourite_recycler_view_item_time_text);
+                view.setOnClickListener(this);
+                mTitle = (TextView) view.findViewById(R.id.favourite_recycler_view_item_title_text);
+                mDaysLeft = (TextView) view.findViewById(R.id.favourite_recycler_view_item_time_left_text);
+                mVenue = (TextView) view.findViewById(R.id.favourite_recycler_view_item_venue_text);
+                mTime = (TextView) view.findViewById(R.id.favourite_recycler_view_item_time_text);
                 thumbnail = (ImageView) view.findViewById(R.id.favourite_cardView_image);
+            }
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), DetailActivity.class);
+
+                //Add event id to intent
+                intent.putExtra(INTENT_EXTRA_EVENT_ID, mFavEvent.getId());
+                startActivity(intent);
+
             }
         }
 
@@ -197,26 +289,32 @@ public class FavouriteActivity extends AppCompatActivity {
     //ItemCallBack
 
     public class Favourite {
-        public String name;
+        public String id;
+        public String title;
         public String daystogo;
         public String location;
         public String time;
         public int thumbnail;
 
-        public Favourite(String name, String daystogo, String location, int thumbnail, String time) {
-            this.name = name;
+        public Favourite(String id, String title, String daystogo, String location, int thumbnail, String time) {
+            this.id = id;
+            this.title = title;
             this.daystogo = daystogo;
             this.location = location;
             this.thumbnail = thumbnail;
             this.time = time;
         }
 
-        public String getName() {
-            return name;
+        public String getId() {
+            return this.id;
         }
 
-        public void setName(String Name) {
-            this.name = name;
+        public String getTitle() {
+            return title;
+        }
+
+        public void setName(String title) {
+            this.title = title;
         }
 
         public String getDaystogo() {
