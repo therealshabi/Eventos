@@ -151,7 +151,6 @@ public class HomeStreamFragment extends Fragment {
 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
         private CardView mCardView;
         private TextView mTitleText;
         private TextView mDateText;
