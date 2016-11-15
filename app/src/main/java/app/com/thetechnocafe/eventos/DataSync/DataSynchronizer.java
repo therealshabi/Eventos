@@ -18,16 +18,9 @@ import app.com.thetechnocafe.eventos.Models.ContactsModel;
 import app.com.thetechnocafe.eventos.Models.EventsModel;
 import app.com.thetechnocafe.eventos.Models.LinksModel;
 
-/**
- * Created by gurleensethi on 15/10/16.
- * Synchronize data from network
- */
-
 public abstract class DataSynchronizer {
-    private EventsDatabaseHelper mEventsDatabaseHelper;
-
     private static final String TAG = "DataSynchronizer";
-    private static final String LINK_EVENT_REQUEST = "http://192.168.43.55:8000/api/events";
+    private static final String LINK_EVENT_REQUEST = "http://192.168.0.7:55555/api/events";
     //String related to json data fetched
     private static final String JSON_STATUS = "status";
     private static final String JSON_DATA = "data";
@@ -41,6 +34,7 @@ public abstract class DataSynchronizer {
     private static final String JSON_EVENT_AVATAR_ID = "avatar_id";
     private static final String JSON_EVENT_ID = "_id";
     private static final String JSON_EVENT_REQUIREMENTS = "requirements";
+    private EventsDatabaseHelper mEventsDatabaseHelper;
 
     /**
      * Function that notifies if sync was successful or not

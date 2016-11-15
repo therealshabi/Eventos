@@ -26,6 +26,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 
 import java.util.Collections;
 import java.util.List;
@@ -34,12 +38,13 @@ import app.com.thetechnocafe.eventos.DataSync.DataSynchronizer;
 import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
 import app.com.thetechnocafe.eventos.Models.EventsModel;
 
-/**
- * Created by gurleensethi on 13/08/16.
- */
 public class HomeStreamFragment extends Fragment {
 
     public static final String INTENT_EXTRA_EVENT_ID = "eventidintenetextra";
+    private static final String DATABASE_NAME = "eventos_database";
+    private static final String EVENT_COLUMN_ID = "id";
+    private static final String FAV_EVENTS_TABLE = "FavEvents";
+    public LikeButton mLikeButton;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -57,6 +62,7 @@ public class HomeStreamFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
     }
 
     @Nullable
@@ -110,6 +116,7 @@ public class HomeStreamFragment extends Fragment {
             }
         });
 
+
         //Set up on swipe refresh layout
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -149,6 +156,63 @@ public class HomeStreamFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            }
+            case R.id.home_stream_menu_refresh: {
+                mDataSynchronizer.fetchEventsFromNetwork(getContext());
+                mSwipeRefreshLayout.setRefreshing(true);
+                return true;
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.home_stream_menu, menu);
+    }
+
+    /**
+     * Set up the main recycler view
+     * Get events from sqlite database
+     * handle the changes after new data is fetched
+     */
+    private void setUpAndNotifyRecyclerView() {
+        //if (mEventRecyclerAdapter == null) {
+        //Get the events list from database
+        mEventsList = mDatabaseHelper.getEventsList();
+
+        //Create the adapter
+        mEventRecyclerAdapter = new RecyclerAdapter(mEventsList, getContext());
+
+        //Set the recycler view with adapter and layout manager
+        mRecyclerView.setAdapter(mEventRecyclerAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+     /*   } else {
+            //If new data is loaded
+            mEventRecyclerAdapter.setUpdatedList(mDatabaseHelper.getEventsList());
+            mEventRecyclerAdapter.notifyDataSetChanged();
+        }*/
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mDatabaseHelper.close();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setUpAndNotifyRecyclerView();
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private CardView mCardView;
@@ -161,6 +225,7 @@ public class HomeStreamFragment extends Fragment {
             super(itemView);
             itemView.setOnClickListener(this);
             mCardView = (CardView) itemView.findViewById(R.id.home_stream_recycler_view_item_card);
+            mLikeButton = (LikeButton) itemView.findViewById(R.id.home_stream_recycler_view_like_button);
             mTitleText = (TextView) itemView.findViewById(R.id.home_stream_recycler_view_item_title_text);
             mDateText = (TextView) itemView.findViewById(R.id.home_stream_recycler_view_item_date_text);
         }
@@ -183,12 +248,43 @@ public class HomeStreamFragment extends Fragment {
             }
         }
 
-        void bindData(EventsModel event) {
+        void bindData(final EventsModel event) {
             mEvent = event;
+
+            /*
+            To check whether if event is in favourite list then like button should be setLiked else not
+             */
+            String checkId = event.getId();
+            if (mDatabaseHelper.doesFavEventAlreadyExists(checkId)) {
+                mLikeButton.setLiked(Boolean.TRUE);
+            } else {
+                mLikeButton.setLiked(Boolean.FALSE);
+            }
 
             //Set appropriate data
             mDateText.setText(event.getDate().toString());
             mTitleText.setText(event.getTitle());
+            mLikeButton.setOnLikeListener(new OnLikeListener() {
+                String id = event.getId();
+                EventsModel favEventModel = mDatabaseHelper.getEvent(id);
+
+                @Override
+                public void liked(LikeButton likeButton) {
+
+                    if (!mDatabaseHelper.doesFavEventAlreadyExists(id)) {
+                        mDatabaseHelper.insertNewFavEvent(favEventModel);
+                        Toast.makeText(getContext(), event.getTitle() + " added to Favorites", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void unLiked(LikeButton likeButton) {
+                    if (mDatabaseHelper.doesFavEventAlreadyExists(id)) {
+                        mDatabaseHelper.deleteFavEvent(favEventModel);
+                        Toast.makeText(getContext(), event.getTitle() + " removed from Favorites", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
     }
 
@@ -226,55 +322,4 @@ public class HomeStreamFragment extends Fragment {
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home: {
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-            }
-            case R.id.home_stream_menu_refresh: {
-                mDataSynchronizer.fetchEventsFromNetwork(getContext());
-                mSwipeRefreshLayout.setRefreshing(true);
-                return true;
-            }
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.home_stream_menu, menu);
-    }
-
-    /**
-     * Set up the main recycler view
-     * Get events from sqlite database
-     * handle the changes after new data is fetched
-     */
-    private void setUpAndNotifyRecyclerView() {
-        if (mEventRecyclerAdapter == null) {
-            //Get the events list from database
-            mEventsList = mDatabaseHelper.getEventsList();
-
-            //Create the adapter
-            mEventRecyclerAdapter = new RecyclerAdapter(mEventsList, getContext());
-
-            //Set the recycler view with adapter and layout manager
-            mRecyclerView.setAdapter(mEventRecyclerAdapter);
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        } else {
-            //If new data is loaded
-            mEventRecyclerAdapter.setUpdatedList(mDatabaseHelper.getEventsList());
-            mEventRecyclerAdapter.notifyDataSetChanged();
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mDatabaseHelper.close();
-    }
 }

@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.0"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.3"
 
     defaultConfig {
         applicationId "app.com.thetechnocafe.eventos"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
     }
@@ -32,4 +32,5 @@ dependencies {
     compile 'com.github.JakeWharton:ViewPagerIndicator:2.4.1@aar'
     compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'
     compile 'eu.the4thfloor.volley:com.android.volley:2015.05.28'
+    compile 'joda-time:joda-time:2.9.6'
 }

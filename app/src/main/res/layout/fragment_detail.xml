@@ -94,7 +94,8 @@
                     android:paddingRight="16dp"
                     android:text="G2"
                     android:textColor="@android:color/white"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp"
+                    android:transitionName="@string/shared_venue" />
 
             </LinearLayout>
 

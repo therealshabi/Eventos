@@ -14,6 +14,8 @@ import app.com.thetechnocafe.eventos.Models.ContactsModel;
 import app.com.thetechnocafe.eventos.Models.EventsModel;
 import app.com.thetechnocafe.eventos.Models.LinksModel;
 
+import static android.R.attr.id;
+
 /**
  * Created by gurleensethi on 15/10/16.
  */
@@ -44,6 +46,9 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
     private static final String LINKS_EVENT_ID = "event_id";
     private static final String LINKS_ADDRESS = "address";
 
+    private static final String FAV_EVENTS_TABLE = "FavEvents";
+    private static final String FAV_EVENT_COLUMN_ID = "id";
+
 
     public EventsDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
@@ -63,6 +68,10 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
                 EVENT_COLUMN_REQUIREMENTS + " VARCHAR " +
                 ");";
 
+        String favEventsTableSQL = "CREATE TABLE " + FAV_EVENTS_TABLE + " (" +
+                FAV_EVENT_COLUMN_ID + " VARCHAR PRIMARY KEY " +
+                ");";
+
         String contactsTableSQL = "CREATE TABLE " + CONTACTS_TABLE + " (" +
                 CONTACTS_EVENT_ID + " VARCHAR, " +
                 CONTACTS_NAME + " VARCHAR, " +
@@ -80,6 +89,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(eventsTableSQL);
         db.execSQL(contactsTableSQL);
         db.execSQL(linksTableSQL);
+        db.execSQL(favEventsTableSQL);
     }
 
     @Override
@@ -107,6 +117,14 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
 
 
         database.insert(EVENTS_TABLE, null, contentValues);
+    }
+
+    public void insertNewFavEvent(EventsModel event) {
+        SQLiteDatabase database = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(FAV_EVENT_COLUMN_ID, event.getId());
+
+        database.insert(FAV_EVENTS_TABLE, null, contentValues);
     }
 
     /**
@@ -191,6 +209,30 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         }
 
         String sql = "SELECT * FROM " + EVENTS_TABLE + " WHERE " + EVENT_COLUMN_ID + " = '" + id + "'";
+
+        //Execute query
+        Cursor cursor = getReadableDatabase().rawQuery(sql, null);
+
+        if (cursor.getCount() > 0) {
+            //Close cursor
+            cursor.close();
+
+            return true;
+        }
+
+        //Close cursor
+        cursor.close();
+
+        return false;
+    }
+
+    public boolean doesFavEventAlreadyExists(String id) {
+        //If event id is wrong return true
+        if (id == null) {
+            return true;
+        }
+
+        String sql = "SELECT * FROM " + FAV_EVENTS_TABLE + " WHERE " + FAV_EVENT_COLUMN_ID + " = '" + id + "'";
 
         //Execute query
         Cursor cursor = getReadableDatabase().rawQuery(sql, null);
@@ -311,5 +353,13 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return mList;
+    }
+
+    public void deleteFavEvent(EventsModel event) {
+        SQLiteDatabase database = getWritableDatabase();
+        String sql = "Delete FROM " + FAV_EVENTS_TABLE + " where " + EVENT_COLUMN_ID + " = \"" + event.getId() + "\";";
+
+        database.execSQL(sql);
+
     }
 }

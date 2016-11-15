@@ -10,12 +10,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by gurleensethi on 16/10/16.
- */
-
 public abstract class RequestUtils {
-    private static final String LINK_EVENT_REQUEST = "http://192.168.43.55:8000/api/events";
+    private static final String LINK_EVENT_REQUEST = "http://192.168.0.7:55555/api/events";
 
     public abstract void isRequestSuccessful(boolean isSuccessful);
 

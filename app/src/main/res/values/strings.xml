@@ -103,4 +103,5 @@
     <string name="no_contacts">No contacts for this event</string>
     <string name="email_chooser">Send Mail</string>
     <string name="no_links">No links/form for this event</string>
+    <string name="shared_venue">shared_venue</string>
 </resources>
