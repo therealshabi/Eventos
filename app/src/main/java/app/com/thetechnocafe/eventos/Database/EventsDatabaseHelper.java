@@ -14,6 +14,8 @@ import app.com.thetechnocafe.eventos.Models.ContactsModel;
 import app.com.thetechnocafe.eventos.Models.EventsModel;
 import app.com.thetechnocafe.eventos.Models.LinksModel;
 
+import static android.R.attr.id;
+
 /**
  * Created by gurleensethi on 15/10/16.
  */
@@ -351,5 +353,13 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return mList;
+    }
+
+    public void deleteFavEvent(EventsModel event) {
+        SQLiteDatabase database = getWritableDatabase();
+        String sql = "Delete FROM " + FAV_EVENTS_TABLE + " where " + EVENT_COLUMN_ID + " = \"" + event.getId() + "\";";
+
+        database.execSQL(sql);
+
     }
 }

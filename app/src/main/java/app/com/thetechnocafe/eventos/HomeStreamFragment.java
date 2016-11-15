@@ -2,7 +2,6 @@ package app.com.thetechnocafe.eventos;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.like.LikeButton;
 import com.like.OnLikeListener;
@@ -37,9 +37,6 @@ import java.util.List;
 import app.com.thetechnocafe.eventos.DataSync.DataSynchronizer;
 import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
 import app.com.thetechnocafe.eventos.Models.EventsModel;
-
-import static android.R.attr.id;
-import static android.content.Context.MODE_PRIVATE;
 
 public class HomeStreamFragment extends Fragment {
 
@@ -188,27 +185,33 @@ public class HomeStreamFragment extends Fragment {
      * handle the changes after new data is fetched
      */
     private void setUpAndNotifyRecyclerView() {
-        if (mEventRecyclerAdapter == null) {
-            //Get the events list from database
-            mEventsList = mDatabaseHelper.getEventsList();
+        //if (mEventRecyclerAdapter == null) {
+        //Get the events list from database
+        mEventsList = mDatabaseHelper.getEventsList();
 
-            //Create the adapter
-            mEventRecyclerAdapter = new RecyclerAdapter(mEventsList, getContext());
+        //Create the adapter
+        mEventRecyclerAdapter = new RecyclerAdapter(mEventsList, getContext());
 
-            //Set the recycler view with adapter and layout manager
-            mRecyclerView.setAdapter(mEventRecyclerAdapter);
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        } else {
+        //Set the recycler view with adapter and layout manager
+        mRecyclerView.setAdapter(mEventRecyclerAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+     /*   } else {
             //If new data is loaded
             mEventRecyclerAdapter.setUpdatedList(mDatabaseHelper.getEventsList());
             mEventRecyclerAdapter.notifyDataSetChanged();
-        }
+        }*/
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         mDatabaseHelper.close();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setUpAndNotifyRecyclerView();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -249,23 +252,38 @@ public class HomeStreamFragment extends Fragment {
         void bindData(final EventsModel event) {
             mEvent = event;
 
+            /*
+            To check whether if event is in favourite list then like button should be setLiked else not
+             */
+            String checkId = event.getId();
+            if (mDatabaseHelper.doesFavEventAlreadyExists(checkId)) {
+                mLikeButton.setLiked(Boolean.TRUE);
+            } else {
+                mLikeButton.setLiked(Boolean.FALSE);
+            }
+
             //Set appropriate data
             mDateText.setText(event.getDate().toString());
             mTitleText.setText(event.getTitle());
             mLikeButton.setOnLikeListener(new OnLikeListener() {
+                String id = event.getId();
+                EventsModel favEventModel = mDatabaseHelper.getEvent(id);
+
                 @Override
                 public void liked(LikeButton likeButton) {
-                    String id = event.getId();
-                    EventsModel favEventModel = mDatabaseHelper.getEvent(id);
 
                     if (!mDatabaseHelper.doesFavEventAlreadyExists(id)) {
                         mDatabaseHelper.insertNewFavEvent(favEventModel);
+                        Toast.makeText(getContext(), event.getTitle() + " added to Favorites", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void unLiked(LikeButton likeButton) {
-                    String sql = "Delete FROM " + FAV_EVENTS_TABLE + " where " + EVENT_COLUMN_ID + " = \"" + id + "\";";
+                    if (mDatabaseHelper.doesFavEventAlreadyExists(id)) {
+                        mDatabaseHelper.deleteFavEvent(favEventModel);
+                        Toast.makeText(getContext(), event.getTitle() + " removed from Favorites", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
@@ -304,4 +322,5 @@ public class HomeStreamFragment extends Fragment {
             list = updatedList;
         }
     }
+
 }

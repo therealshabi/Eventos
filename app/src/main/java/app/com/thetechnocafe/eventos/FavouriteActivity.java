@@ -200,6 +200,7 @@ public class FavouriteActivity extends AppCompatActivity {
             temp = favouriteList.get(position);
             pos = position;
             tempId = temp.getId();
+            final String tempTitle = favouriteList.get(pos).getTitle();
             favouriteList.remove(position);
             /*Intent in = new Intent(getBaseContext(),HomeStreamActivity.class);
             in.putExtra("likeBtnStatus",Boolean.FALSE);*/
@@ -207,7 +208,7 @@ public class FavouriteActivity extends AppCompatActivity {
             database.execSQL(sql);
             notifyItemRemoved(position);
             Snackbar snackbar = Snackbar
-                    .make(getCurrentFocus(), "Removed from the Favourites", Snackbar.LENGTH_LONG)
+                    .make(getCurrentFocus(), tempTitle + " removed from Favourites", Snackbar.LENGTH_LONG)
                     .setAction("UNDO", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -219,7 +220,7 @@ public class FavouriteActivity extends AppCompatActivity {
                             }
                             favouriteList.add(pos, temp);
                             notifyItemInserted(pos);
-                            Snackbar snackbar1 = Snackbar.make(getCurrentFocus(), "Restored into the Favourites!", Snackbar.LENGTH_SHORT);
+                            Snackbar snackbar1 = Snackbar.make(getCurrentFocus(), tempTitle + " restored into the Favourites!", Snackbar.LENGTH_SHORT);
                             snackbar1.show();
                         }
                     });
@@ -393,6 +394,3 @@ public class FavouriteActivity extends AppCompatActivity {
 
 
 }
-
-
-
