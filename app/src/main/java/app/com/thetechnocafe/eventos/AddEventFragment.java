@@ -129,7 +129,7 @@ public class AddEventFragment extends Fragment {
 
         mRequestUtils = new RequestUtils() {
             @Override
-            public void isRequestSuccessful(boolean isSuccessful) {
+            public void isRequestSuccessful(boolean isSuccessful, String message) {
                 //TODO:Close the dialog box after form is submitted
                 //If successful the finish the activity
                 if (isSuccessful) {
@@ -353,7 +353,7 @@ public class AddEventFragment extends Fragment {
             JSONArray contacts = getContactsList();
             object.put(StringUtils.JSON_CONTACTS, contacts);
         } catch (JSONException e) {
-            mRequestUtils.isRequestSuccessful(false);
+            mRequestUtils.isRequestSuccessful(false, null);
         }
 
         return object;

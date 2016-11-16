@@ -5,6 +5,8 @@ package app.com.thetechnocafe.eventos.DataSync;
  */
 
 public class StringUtils {
+    public static final String ENCRYPTION_KEY = "124m%3ug4*839kjafoiy82";
+
     //String related to json data fetched
     public static final String JSON_STATUS = "status";
     public static final String JSON_DATA = "data";
@@ -24,4 +26,7 @@ public class StringUtils {
     public static final String JSON_CONTACTS_NAME = "contact_name";
     public static final String JSON_CONTACTS_EMAIL = "contacts_email";
     public static final String JSON_CONTACTS_PHONE = "contacts_phone";
+    public static final String JSON_PASSWORD = "password";
+    public static final String JSON_EMAIL = "email";
+    public static final String JSON_PHONE = "phone";
 }
