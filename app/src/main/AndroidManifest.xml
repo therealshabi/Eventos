@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="app.com.thetechnocafe.eventos">
+          package="app.com.thetechnocafe.eventos">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -15,22 +15,24 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".HomeStreamActivity"></activity>
-        <activity android:name=".DetailActivity" />
-        <activity android:name=".AboutActivity"></activity>
-        <activity android:name=".CommentsActivity"></activity>
-        <activity android:name=".SigninActivity"></activity>
-        <activity android:name=".AddTrackEventActivity"></activity>
-        <activity android:name=".AddEventActivity"></activity>
-        <activity android:name=".TrackEventActivity"></activity>
-        <activity android:name=".OutsideEventActivity"></activity>
-        <activity android:name=".FavouriteActivity"></activity>
-        <activity android:name=".WebViewActivity"></activity>
+        <activity android:name=".HomeStreamActivity"/>
+        <activity android:name=".DetailActivity"/>
+        <activity android:name=".AboutActivity"/>
+        <activity android:name=".CommentsActivity"/>
+        <activity android:name=".SigninActivity"/>
+        <activity android:name=".AddTrackEventActivity"/>
+        <activity android:name=".AddEventActivity"/>
+        <activity android:name=".TrackEventActivity"/>
+        <activity android:name=".OutsideEventActivity"/>
+        <activity android:name=".FavouriteActivity"/>
+        <activity android:name=".WebViewActivity"/>
+        <activity android:name=".SignUpActvity">
+        </activity>
     </application>
 
 </manifest>

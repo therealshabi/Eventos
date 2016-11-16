@@ -104,4 +104,12 @@
     <string name="email_chooser">Send Mail</string>
     <string name="no_links">No links/form for this event</string>
     <string name="shared_venue">shared_venue</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="enter_password">PASSWORD</string>
+    <string name="enter_password_again">ENTER PASSWORD AGAIN</string>
+    <string name="password_match_error">Passwords don\'t match</string>
+    <string name="enter_email">EMAIL</string>
+    <string name="enter_phone">ENTER PHONE NUMBER</string>
+    <string name="signup">Sign Up</string>
+    <string name="dont_have_account">Don\'t have an account? Sign up</string>
 </resources>

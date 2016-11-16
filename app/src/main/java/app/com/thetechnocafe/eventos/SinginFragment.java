@@ -23,6 +23,7 @@ public class SinginFragment extends Fragment {
     private EditText mPasswordEditText;
     private TextInputLayout mUsernameTextLayout;
     private TextInputLayout mPasswordTextLayout;
+    private TextView mSignUpTextView;
 
     public static SinginFragment getInstance() {
         return new SinginFragment();
@@ -39,8 +40,14 @@ public class SinginFragment extends Fragment {
         mPasswordEditText = (EditText) view.findViewById(R.id.fragment_signin_password_edit_text);
         mUsernameTextLayout = (TextInputLayout) view.findViewById(R.id.fragment_signin_username_text_layout);
         mPasswordTextLayout = (TextInputLayout) view.findViewById(R.id.fragment_signin_password_text_layout);
+        mSignUpTextView = (TextView) view.findViewById(R.id.fragment_signin_signup_text_view);
 
+        setUpOnClickListeners();
 
+        return view;
+    }
+
+    private void setUpOnClickListeners() {
         //Problem Dialog Box
         mProblemTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,12 +66,18 @@ public class SinginFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), HomeStreamActivity.class);
                 //if (validateInputs()) {
-                    startActivity(intent);
+                startActivity(intent);
                 //}
             }
         });
 
-        return view;
+        mSignUpTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), SignUpActvity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private boolean validateInputs() {

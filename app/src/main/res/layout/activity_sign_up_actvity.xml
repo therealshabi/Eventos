@@ -3,13 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_sign_up_actvity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:fitsSystemWindows="true"
-    android:focusableInTouchMode="true"
-    android:gravity="center"
-    tools:context="app.com.thetechnocafe.eventos.SigninActivity">
+    tools:context="app.com.thetechnocafe.eventos.SignUpActvity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -19,6 +18,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="center"
             android:orientation="vertical">
 
             <LinearLayout
@@ -26,7 +26,7 @@
                 android:layout_height="0dp"
                 android:layout_marginBottom="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_weight="0.5"
+                android:layout_weight="0.2"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -37,19 +37,20 @@
                     android:src="@drawable/calendar"
                     android:transitionName="@string/imgTrans"/>
 
-                <TextView
-                    android:id="@+id/fragment_signin_app_name_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="sans-serif-light"
-                    android:text="@string/app_name"
-                    android:textAllCaps="true"
-                    android:textColor="@android:color/white"
-                    android:textSize="40sp"
-                    android:transitionName="@string/textTrans"/>
-
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/fragment_signin_app_name_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/sign_up"
+                android:textAllCaps="true"
+                android:textColor="@android:color/white"
+                android:textSize="40sp"
+                android:transitionName="@string/textTrans"/>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -62,7 +63,7 @@
                 android:orientation="vertical">
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/fragment_signin_username_text_layout"
+                    android:id="@+id/fragment_signup_username_text_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
@@ -73,12 +74,12 @@
                     app:errorTextAppearance="@style/TextLayoutErrorText">
 
                     <EditText
-                        android:id="@+id/fragment_signin_username_edit_text"
+                        android:id="@+id/fragment_signup_email_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/white"
-                        android:hint="@string/username"
-                        android:inputType="number"
+                        android:hint="@string/enter_email"
+                        android:inputType="textEmailAddress"
                         android:textColor="@android:color/white"
                         android:textColorHint="@android:color/white"
                         android:textColorLink="@android:color/white"
@@ -87,7 +88,7 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/fragment_signin_password_text_layout"
+                    android:id="@+id/fragment_signup_password_text_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
@@ -98,12 +99,62 @@
                     app:errorTextAppearance="@style/TextLayoutErrorText">
 
                     <EditText
-                        android:id="@+id/fragment_signin_password_edit_text"
+                        android:id="@+id/fragment_signup_password_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/white"
-                        android:hint="@string/password"
+                        android:hint="@string/enter_password"
                         android:inputType="textPassword"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@android:color/white"
+                        android:textColorLink="@android:color/white"
+                        android:textCursorDrawable="@null"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/fragment_signup_password_confirm_text_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="32dp"
+                    android:layout_marginTop="8dp"
+                    android:theme="@style/TextLabel"
+                    app:errorTextAppearance="@style/TextLayoutErrorText">
+
+                    <EditText
+                        android:id="@+id/fragment_signup_password_confirm_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@android:color/white"
+                        android:hint="@string/enter_password_again"
+                        android:inputType="textPassword"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@android:color/white"
+                        android:textColorLink="@android:color/white"
+                        android:textCursorDrawable="@null"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/fragment_signup_phone_text_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="32dp"
+                    android:layout_marginTop="8dp"
+                    android:theme="@style/TextLabel"
+                    app:errorTextAppearance="@style/TextLayoutErrorText">
+
+                    <EditText
+                        android:id="@+id/fragment_signup_phone_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@android:color/white"
+                        android:hint="@string/enter_phone"
+                        android:inputType="phone"
                         android:textColor="@android:color/white"
                         android:textColorHint="@android:color/white"
                         android:textColorLink="@android:color/white"
@@ -120,33 +171,11 @@
                     android:paddingLeft="64dp"
                     android:paddingRight="64dp"
                     android:shadowColor="@android:color/white"
-                    android:text="@string/signin"
+                    android:text="@string/signup"
                     android:textColor="@android:color/white"
                     android:textSize="16sp"/>
 
-                <TextView
-                    android:id="@+id/fragment_signin_signup_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/dont_have_account"
-                    android:textColor="@android:color/white"/>
-
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/fragment_signin_problem_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="#651FFF"
-                android:gravity="center"
-                android:padding="24dp"
-                android:text="@string/problem_text"
-                android:textColor="@android:color/white"
-                android:textSize="12sp"
-                />
-
         </LinearLayout>
     </ScrollView>
 
