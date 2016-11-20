@@ -12,6 +12,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.scottyab.aescrypt.AESCrypt;
+
+import org.json.JSONObject;
+
+import app.com.thetechnocafe.eventos.DataSync.RequestUtils;
+import app.com.thetechnocafe.eventos.DataSync.StringUtils;
 
 /**
  * Created by gurleensethi on 12/08/16.
@@ -64,10 +72,26 @@ public class SinginFragment extends Fragment {
         mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), HomeStreamActivity.class);
-                //if (validateInputs()) {
-                startActivity(intent);
-                //}
+                //For testing purposes
+                if (mUsernameEditText.getText().toString().equals("test")) {
+                    Intent intent = new Intent(getContext(), HomeStreamActivity.class);
+                    startActivity(intent);
+                    return;
+                }
+
+
+                if (validateInputs()) {
+                    new RequestUtils() {
+                        @Override
+                        public void isRequestSuccessful(boolean isSuccessful, String message) {
+                            if (isSuccessful) {
+                                Intent intent = new Intent(getContext(), HomeStreamActivity.class);
+                                startActivity(intent);
+                            }
+                            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                        }
+                    }.signIn(getContext(), getSignInJSONObject());
+                }
             }
         });
 
@@ -94,5 +118,17 @@ public class SinginFragment extends Fragment {
         }
 
         return isValid;
+    }
+
+    private JSONObject getSignInJSONObject() {
+        JSONObject signInJSONObject = new JSONObject();
+        try {
+            signInJSONObject.put(StringUtils.JSON_EMAIL, mUsernameEditText.getText().toString());
+            signInJSONObject.put(StringUtils.JSON_PASSWORD, AESCrypt.encrypt(StringUtils.ENCRYPTION_KEY, mPasswordEditText.getText().toString()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return signInJSONObject;
     }
 }

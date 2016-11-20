@@ -14,6 +14,7 @@ public abstract class RequestUtils {
     private static final String SERVER_ADDRESS = "http://192.168.43.55:8080";
     private static final String LINK_EVENT_REQUEST = SERVER_ADDRESS + "/api/events";
     private static final String SIGN_UP_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/signup";
+    private static final String SIGN_IN_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/login";
 
     public abstract void isRequestSuccessful(boolean isSuccessful, String message);
 
@@ -63,6 +64,35 @@ public abstract class RequestUtils {
     public void signUp(Context context, final JSONObject jsonObject) {
         //Create new json object request
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, SIGN_UP_REQUEST_ADDRESS, jsonObject, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getString(StringUtils.JSON_STATUS).equals(StringUtils.JSON_SUCCESS)) {
+                        isRequestSuccessful(true, response.getString(StringUtils.JSON_DATA));
+                    } else {
+                        isRequestSuccessful(false, response.getString(StringUtils.JSON_DATA));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                isRequestSuccessful(false, error.toString());
+            }
+        });
+
+        //Add request to queue
+        VolleyQueue.getInstance(context).getRequestQueue().add(request);
+    }
+
+    /**
+     * Sign in request
+     */
+    public void signIn(Context context, JSONObject jsonObject) {
+        //Create new json object request
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, SIGN_IN_REQUEST_ADDRESS, jsonObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {

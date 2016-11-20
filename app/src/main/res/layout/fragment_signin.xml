@@ -77,8 +77,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/white"
-                        android:hint="@string/username"
-                        android:inputType="number"
+                        android:hint="@string/email"
+                        android:inputType="textEmailAddress"
                         android:textColor="@android:color/white"
                         android:textColorHint="@android:color/white"
                         android:textColorLink="@android:color/white"
@@ -144,8 +144,7 @@
                 android:padding="24dp"
                 android:text="@string/problem_text"
                 android:textColor="@android:color/white"
-                android:textSize="12sp"
-                />
+                android:textSize="12sp"/>
 
         </LinearLayout>
     </ScrollView>
