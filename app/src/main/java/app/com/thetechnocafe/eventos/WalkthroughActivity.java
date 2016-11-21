@@ -2,23 +2,15 @@ package app.com.thetechnocafe.eventos;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.AnimationDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.viewpagerindicator.CirclePageIndicator;
+
+import app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils;
 
 public class WalkthroughActivity extends AppCompatActivity {
 
@@ -36,7 +28,14 @@ public class WalkthroughActivity extends AppCompatActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         previouslyStarted = prefs.getBoolean(getString(R.string.prefs_previously_started), false);
         if (previouslyStarted) {
-            startActivity(intent);
+            //If is logged in, send to home screen
+            if (SharedPreferencesUtils.getLoginState(getApplicationContext())) {
+                //Send to home screen
+                Intent homeIntent = new Intent(getApplicationContext(), HomeStreamActivity.class);
+                startActivity(homeIntent);
+            } else {
+                startActivity(intent);
+            }
         }
 
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
