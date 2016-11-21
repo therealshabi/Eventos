@@ -361,6 +361,34 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
+     * Delete a particular event from database
+     */
+    public void deleteEvent(String id) {
+        //Get the data base
+        SQLiteDatabase database = getWritableDatabase();
+
+        //SQL Query
+        String eventDeleteQuery = "DELETE FROM " + EVENTS_TABLE +
+                " WHERE " + EVENT_COLUMN_ID + " = " + "'" + id + "'";
+
+        //SQL Query
+        String contactDeleteQuery = "DELETE FROM " + CONTACTS_TABLE +
+                " WHERE " + CONTACTS_EVENT_ID + " = " + "'" + id + "'";
+
+        //SQL Query
+        String linksDeleteQuery = "DELETE FROM " + LINKS_TABLE +
+                " WHERE " + LINKS_EVENT_ID + " = " + "'" + id + "'";
+
+        //Execute queries
+        database.execSQL(eventDeleteQuery);
+        database.execSQL(contactDeleteQuery);
+        database.execSQL(linksDeleteQuery);
+
+        //Close database
+        database.close();
+    }
+
+    /**
      * Remove all the events in the database
      */
     public void removeAllEventsFromDB() {
@@ -376,5 +404,41 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         database.execSQL(deleteEventsSQL);
         database.execSQL(deleteContactsSQL);
         database.execSQL(deleteLinksSQL);
+
+        //Close database
+        database.close();
+    }
+
+    /**
+     * Remove the events from database that are not in the stream
+     */
+    public void removeSpecificEventsFromDB(List<String> list) {
+        //Get the data base
+        SQLiteDatabase database = getReadableDatabase();
+
+        //SQL query to get all the event id's in database
+        String eventIdSQL = "SELECT " + EVENT_COLUMN_ID + " FROM " + EVENTS_TABLE;
+
+        //Empty id list
+        List<String> mDatabaseIDList = new ArrayList<>();
+
+        //Execute query
+        Cursor cursor = database.rawQuery(eventIdSQL, null);
+
+        //Iterate and add to list
+        while (cursor.moveToNext()) {
+            mDatabaseIDList.add(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_ID)));
+        }
+
+        //Close database and cursor
+        cursor.close();
+        database.close();
+
+        //Delete all the events that are not in the network list
+        for (String eventID : mDatabaseIDList) {
+            if (!list.contains(eventID)) {
+                deleteEvent(eventID);
+            }
+        }
     }
 }

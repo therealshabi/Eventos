@@ -11,7 +11,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
 import app.com.thetechnocafe.eventos.Models.ContactsModel;
@@ -60,6 +62,9 @@ public abstract class DataSynchronizer {
                             //Get the database object
                             mEventsDatabaseHelper = new EventsDatabaseHelper(context);
 
+                            //Delete all the events that have been delete from server
+                            List<String> idList = new ArrayList<>();
+
                             //Retrieve data from JSON object
                             JSONArray eventsJSONArray = response.getJSONArray(JSON_DATA);
 
@@ -73,6 +78,9 @@ public abstract class DataSynchronizer {
 
                                 //Insert the details into event object
                                 if (insertEventDetails(event, eventJSONobject)) {
+                                    //Add id to list
+                                    idList.add(event.getId());
+
                                     //Check if events already is in database
                                     //Insert the event into database
                                     if (!mEventsDatabaseHelper.doesEventAlreadyExists(event.getId())) {
@@ -106,6 +114,9 @@ public abstract class DataSynchronizer {
                                     }
                                 }
                             }
+
+                            //Check for redundant events
+                            mEventsDatabaseHelper.removeSpecificEventsFromDB(idList);
 
                             //Notify sync successful
                             onDataSynchronized(true);
