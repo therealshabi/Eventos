@@ -54,6 +54,8 @@ public class HomeStreamFragment extends Fragment {
     private RecyclerAdapter mEventRecyclerAdapter;
     private EventsDatabaseHelper mDatabaseHelper;
     private DataSynchronizer mDataSynchronizer;
+    private TextView mNavigationHeaderEmailTextView;
+
 
     public static HomeStreamFragment getInstance() {
         return new HomeStreamFragment();
@@ -75,6 +77,7 @@ public class HomeStreamFragment extends Fragment {
         mNavigationView = (NavigationView) view.findViewById(R.id.fragment_home_stream_navigation_view);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fragment_home_stream_swipe_refresh);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.home_stream_recycler_view);
+        mNavigationHeaderEmailTextView = (TextView) mNavigationView.getHeaderView(0).findViewById(R.id.header_drawer_logged_in_email_text_view);
 
         //Set up the toolbar
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_home_stream_toolbar);
@@ -162,6 +165,9 @@ public class HomeStreamFragment extends Fragment {
 
         //Assign the database helper
         mDatabaseHelper = new EventsDatabaseHelper(getContext());
+
+        //Set the username
+        mNavigationHeaderEmailTextView.setText(SharedPreferencesUtils.getUsername(getContext()));
 
         //Set up recycler view
         setUpAndNotifyRecyclerView();

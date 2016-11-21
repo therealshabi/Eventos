@@ -11,7 +11,33 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="@color/colorPrimary"
-        android:orientation="vertical">
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/header_drawer_circle_image_view"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_user"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/logged_in_as"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/header_drawer_logged_in_email_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:text="sarusethi@rocketmail.com"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:gravity="center"/>
 
     </LinearLayout>
 
