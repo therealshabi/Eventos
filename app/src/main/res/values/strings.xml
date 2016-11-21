@@ -73,8 +73,8 @@
     <string name="link_name">Name</string>
     <string name="photo_text">Upload photo or provide a link</string>
     <string-array name="guidelines">
-        <item>Title word length should be 5-10 words</item>
-        <item>Description should be between 30-50 words. Use this field to describe about the event/hub, don\'t add any unnecessary info here.</item>
+        <item>Title word length should be 5–10 words</item>
+        <item>Description should be between 30–50 words. Use this field to describe about the event/hub, don\'t add any unnecessary info here.</item>
         <item>Requirements should me mentioned clearly to the point. If you don\'t have any requirements you can provide your own message, if left empty \'No requirements for this event\' will be shown.</item>
         <item>Venue should contain just the label of the venue. You can add multiple venues by separating them by commas.</item>
         <item>If you add a link to your submission forum, give a proper name. Adding malicious/unrelated links will lead to deletion of the event and the submitter might get blocked. If no link is added \'No submission forum for this event\' will be shown.</item>
@@ -114,4 +114,5 @@
     <string name="dont_have_account">Don\'t have an account? Sign up</string>
     <string name="email">EMAIL</string>
     <string name="logged_in_as">Logged in as</string>
+    <string name="nothingInFavourites">Nothing in Favourites!</string>
 </resources>

@@ -22,9 +22,7 @@ import android.widget.TextView;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
-import org.joda.time.LocalDate;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -52,6 +50,8 @@ public class FavouriteActivity extends AppCompatActivity {
     public String tempId;
     private RecyclerView recyclerView;
     private FavouriteAdapter adapter;
+    private TextView noFavFoundText;
+    private ImageView noFavFoundImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +59,9 @@ public class FavouriteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_favourite_list);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         favouriteList = new ArrayList<>();
+
+        noFavFoundImage = (ImageView) findViewById(R.id.noFavFoundImage);
+        noFavFoundText = (TextView) findViewById(R.id.noFavFoundText);
 
         adapter = new FavouriteAdapter(this, favouriteList);
 
@@ -104,6 +107,9 @@ public class FavouriteActivity extends AppCompatActivity {
                 R.drawable.sports};
 
         SQLiteDatabase database = openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+        noFavFoundImage.setVisibility(View.GONE);
+        noFavFoundText.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
 
         //Create new EventsModel list
         List<EventsModel> eventsList = new ArrayList<>();
@@ -114,25 +120,32 @@ public class FavouriteActivity extends AppCompatActivity {
         //Run the query and obtain cursor
         Cursor cursor = database.rawQuery(sql, null);
 
-        //Extract the values while looping over cursor
-        while (cursor.moveToNext()) {
-            EventsModel event = new EventsModel();
-            String newSql = "SELECT * FROM " + EVENTS_TABLE + " where " + EVENT_COLUMN_ID + " = \"" + cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_ID)) + "\";";
-            Cursor curse = database.rawQuery(newSql, null);
-            curse.moveToFirst();
-            event.setId(curse.getString(curse.getColumnIndex(EVENT_COLUMN_ID)));
-            event.setVenue(curse.getString(curse.getColumnIndex(EVENT_COLUMN_VENUE)));
-            event.setDate(new Date(curse.getString(curse.getColumnIndex(EVENT_COLUMN_DATE))));
-            event.setAvatarId(curse.getInt(curse.getColumnIndex(EVENT_COLUMN_AVATAR_ID)));
-            event.setImage(curse.getString(curse.getColumnIndex(EVENT_COLUMN_IMAGE)));
-            event.setTitle(curse.getString(curse.getColumnIndex(EVENT_COLUMN_TITLE)));
-            event.setDescription(curse.getString(curse.getColumnIndex(EVENT_COLUMN_DESCRIPTION)));
-            //Add event to list
-            eventsList.add(event);
-            curse.close();
+        if (cursor != null && cursor.getCount() > 0) {
+            //Extract the values while looping over cursor
+            while (cursor.moveToNext()) {
+                EventsModel event = new EventsModel();
+                String newSql = "SELECT * FROM " + EVENTS_TABLE + " where " + EVENT_COLUMN_ID + " = \"" + cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_ID)) + "\";";
+                Cursor curse = database.rawQuery(newSql, null);
+                if (curse != null && curse.getCount() > 0) {
+                    curse.moveToFirst();
+                    event.setId(curse.getString(curse.getColumnIndex(EVENT_COLUMN_ID)));
+                    event.setVenue(curse.getString(curse.getColumnIndex(EVENT_COLUMN_VENUE)));
+                    event.setDate(new Date(curse.getString(curse.getColumnIndex(EVENT_COLUMN_DATE))));
+                    event.setAvatarId(curse.getInt(curse.getColumnIndex(EVENT_COLUMN_AVATAR_ID)));
+                    event.setImage(curse.getString(curse.getColumnIndex(EVENT_COLUMN_IMAGE)));
+                    event.setTitle(curse.getString(curse.getColumnIndex(EVENT_COLUMN_TITLE)));
+                    event.setDescription(curse.getString(curse.getColumnIndex(EVENT_COLUMN_DESCRIPTION)));
+                    //Add event to list
+                    eventsList.add(event);
+                    curse.close();
+                }
+            }
         }
+
+
         //Close cursor after use
         cursor.close();
+
 
         int i = 0;
         while (i < eventsList.size()) {
@@ -155,6 +168,12 @@ public class FavouriteActivity extends AppCompatActivity {
             Favourite fav = new Favourite(id, title, daysLeft, Venue, covers[i % 5], time);
             favouriteList.add(fav);
             i++;
+        }
+
+        if (eventsList.size() == 0) {
+            noFavFoundImage.setVisibility(View.VISIBLE);
+            noFavFoundText.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
         }
 
 
@@ -212,6 +231,9 @@ public class FavouriteActivity extends AppCompatActivity {
                     .setAction("UNDO", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            noFavFoundImage.setVisibility(View.GONE);
+                            noFavFoundText.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
                             EventsDatabaseHelper mDatabaseHelper = new EventsDatabaseHelper(getBaseContext());
                             EventsModel favEventModel = mDatabaseHelper.getEvent(tempId);
 
@@ -226,6 +248,11 @@ public class FavouriteActivity extends AppCompatActivity {
                     });
 
             snackbar.show();
+            if (favouriteList.size() == 0) {
+                noFavFoundImage.setVisibility(View.VISIBLE);
+                noFavFoundText.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
+            }
         }
 
         @Override
