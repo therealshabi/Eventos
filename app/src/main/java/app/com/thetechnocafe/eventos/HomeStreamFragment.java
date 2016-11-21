@@ -115,6 +115,9 @@ public class HomeStreamFragment extends Fragment {
                         //Change login state
                         SharedPreferencesUtils.setLoginState(getContext(), false);
 
+                        //Clear all data from database
+                        mDatabaseHelper.removeAllEventsFromDB();
+
                         //Send to login screen
                         Intent intent = new Intent(getContext(), SigninActivity.class);
                         startActivity(intent);
