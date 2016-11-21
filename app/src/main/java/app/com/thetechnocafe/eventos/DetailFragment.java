@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -44,6 +45,7 @@ public class DetailFragment extends Fragment {
     private EventsDatabaseHelper mEventsDatabaseHelper;
     private TextView mNoContactsTextView;
     private TextView mNoLinksTextView;
+    private FloatingActionButton mShareFloatingButton;
 
     public static DetailFragment getInstance(String id) {
         //Create bundle
@@ -78,6 +80,7 @@ public class DetailFragment extends Fragment {
         mContactsContainer = (LinearLayout) view.findViewById(R.id.fragment_detail_contacts_container);
         mNoContactsTextView = (TextView) view.findViewById(R.id.fragment_detail_no_contacts_text);
         mNoLinksTextView = (TextView) view.findViewById(R.id.fragment_detail_forums_text_no_links);
+        mShareFloatingButton = (FloatingActionButton) view.findViewById(R.id.fragment_detail_image_share);
 
         //Retrieve id from fragment arguments
         EVENT_ID = getArguments().getString(EVENT_ID_TAG, null);
@@ -124,6 +127,17 @@ public class DetailFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), CommentsActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        mShareFloatingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "Hey there! Attend, " + mEvent.getTitle() + " on " + mEvent.getDate() + " at " + mEvent.getVenue());
+                shareIntent.setType("text/plain");
+                startActivity(shareIntent);
             }
         });
     }
