@@ -33,6 +33,8 @@
         <activity android:name=".WebViewActivity"/>
         <activity android:name=".SignUpActvity">
         </activity>
+        <activity android:name=".CalendarViewActivity">
+        </activity>
     </application>
 
 </manifest>

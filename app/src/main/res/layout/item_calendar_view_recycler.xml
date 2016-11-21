@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:layout_margin="4dp"
+    android:orientation="horizontal">
+
+    <View
+        android:layout_width="8dp"
+        android:layout_height="match_parent"
+        android:background="@color/colorAccent"/>
+
+    <TextView
+        android:id="@+id/item_calendar_view_recycler_time_text_view"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:gravity="center"
+        android:text="8:00 PM"
+        android:textColor="@color/colorAccent"
+        android:textSize="24sp"/>
+
+    <View
+        android:layout_width="0.1dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:id="@+id/item_calendar_view_recycler_title_text_view"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="7"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center"
+        android:text="This is a long title of an event"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp"/>
+
+</LinearLayout>

@@ -124,6 +124,12 @@ public class HomeStreamFragment extends Fragment {
                         //Send to login screen
                         Intent intent = new Intent(getContext(), SigninActivity.class);
                         startActivity(intent);
+                        break;
+                    }
+                    case R.id.menu_calendar_view: {
+                        Intent intent = new Intent(getContext(), CalendarViewActivity.class);
+                        startActivity(intent);
+                        break;
                     }
                 }
                 mDrawerLayout.closeDrawer(GravityCompat.START);
