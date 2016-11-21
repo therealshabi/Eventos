@@ -18,8 +18,11 @@ import com.scottyab.aescrypt.AESCrypt;
 
 import org.json.JSONObject;
 
+import java.security.GeneralSecurityException;
+
 import app.com.thetechnocafe.eventos.DataSync.RequestUtils;
 import app.com.thetechnocafe.eventos.DataSync.StringUtils;
+import app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils;
 
 /**
  * Created by gurleensethi on 12/08/16.
@@ -85,6 +88,15 @@ public class SinginFragment extends Fragment {
                         @Override
                         public void isRequestSuccessful(boolean isSuccessful, String message) {
                             if (isSuccessful) {
+                                //Save username and password in shared preferences (save encrypted password)
+                                try {
+                                    SharedPreferencesUtils.setUsername(getContext(), mUsernameEditText.getText().toString());
+                                    SharedPreferencesUtils.setPassword(getContext(), AESCrypt.encrypt(StringUtils.ENCRYPTION_KEY, mPasswordEditText.getText().toString()));
+                                } catch (GeneralSecurityException e) {
+                                    e.printStackTrace();
+                                }
+
+                                //Go to Home fragment
                                 Intent intent = new Intent(getContext(), HomeStreamActivity.class);
                                 startActivity(intent);
                             }
