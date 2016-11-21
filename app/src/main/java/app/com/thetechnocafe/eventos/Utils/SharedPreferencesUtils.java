@@ -11,7 +11,7 @@ public class SharedPreferencesUtils {
     private static final String SHARED_PREFERENCES_FILE = "preferences";
     private static final String SHARED_PREFERENCES_USERNAME = "username";
     private static final String SHARED_PREFERENCES_PASSWORD = "password";
-
+    private static final String SHARED_PREFERENCES_LOGIN_STATE = "login_state";
 
     /**
      * Change the username in sharedpreferences
@@ -63,5 +63,29 @@ public class SharedPreferencesUtils {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
 
         return sharedPreferences.getString(SHARED_PREFERENCES_PASSWORD, null);
+    }
+
+    /**
+     * Set login state in shared preferences
+     */
+    public static void setLoginState(Context context, boolean isLoggedIn) {
+        //Get shared preferences file
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+
+        //Get editor
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        //Add value to editor
+        editor.putBoolean(SHARED_PREFERENCES_LOGIN_STATE, isLoggedIn);
+    }
+
+    /**
+     * Get login state from shared preferences
+     */
+    public static boolean getLoginState(Context context) {
+        //Get shared preferences file
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+
+        return sharedPreferences.getBoolean(SHARED_PREFERENCES_LOGIN_STATE, false);
     }
 }
