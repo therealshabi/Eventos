@@ -38,6 +38,7 @@ import app.com.thetechnocafe.eventos.DataSync.StringUtils;
 import app.com.thetechnocafe.eventos.Dialogs.DialogDatePicker;
 import app.com.thetechnocafe.eventos.Dialogs.DialogTimePicker;
 import app.com.thetechnocafe.eventos.Dialogs.LoadingDialog;
+import app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils;
 
 /**
  * Created by gurleensethi on 20/08/16.
@@ -344,6 +345,7 @@ public class AddEventFragment extends Fragment {
             object.put(StringUtils.JSON_IMAGE, mImageEditText.getText().toString());
             object.put(StringUtils.JSON_AVATAR_ID, 0);
             object.put(StringUtils.JSON_REQUIREMENTS, mRequirementsEditText.getText().toString());
+            object.put(StringUtils.SUBMITTED_BY, SharedPreferencesUtils.getUsername(getContext()));
 
             //Get links list
             JSONArray links = getLinksList();
