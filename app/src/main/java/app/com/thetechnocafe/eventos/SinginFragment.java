@@ -88,7 +88,7 @@ public class SinginFragment extends Fragment {
                         @Override
                         public void isRequestSuccessful(boolean isSuccessful, String message) {
                             if (isSuccessful) {
-                                //Save username and password in shared preferences (save encrypted password)
+                                //Save username and password in shared preferences (save encrypted password), save login state
                                 try {
                                     SharedPreferencesUtils.setUsername(getContext(), mUsernameEditText.getText().toString());
                                     SharedPreferencesUtils.setPassword(getContext(), AESCrypt.encrypt(StringUtils.ENCRYPTION_KEY, mPasswordEditText.getText().toString()));

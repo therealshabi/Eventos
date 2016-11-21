@@ -37,6 +37,7 @@ import java.util.List;
 import app.com.thetechnocafe.eventos.DataSync.DataSynchronizer;
 import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
 import app.com.thetechnocafe.eventos.Models.EventsModel;
+import app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils;
 
 public class HomeStreamFragment extends Fragment {
 
@@ -107,6 +108,15 @@ public class HomeStreamFragment extends Fragment {
                     }
                     case R.id.menu_outside_event: {
                         Intent intent = new Intent(getContext(), OutsideEventActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+                    case R.id.menu_sign_out: {
+                        //Change login state
+                        SharedPreferencesUtils.setLoginState(getContext(), false);
+
+                        //Send to login screen
+                        Intent intent = new Intent(getContext(), SigninActivity.class);
                         startActivity(intent);
                     }
                 }
