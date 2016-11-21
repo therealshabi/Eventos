@@ -92,6 +92,7 @@ public class SinginFragment extends Fragment {
                                 try {
                                     SharedPreferencesUtils.setUsername(getContext(), mUsernameEditText.getText().toString());
                                     SharedPreferencesUtils.setPassword(getContext(), AESCrypt.encrypt(StringUtils.ENCRYPTION_KEY, mPasswordEditText.getText().toString()));
+                                    SharedPreferencesUtils.setLoginState(getContext(), true);
                                 } catch (GeneralSecurityException e) {
                                     e.printStackTrace();
                                 }
