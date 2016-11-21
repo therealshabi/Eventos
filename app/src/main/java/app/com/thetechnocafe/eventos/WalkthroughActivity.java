@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.viewpagerindicator.CirclePageIndicator;
@@ -24,16 +25,18 @@ public class WalkthroughActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_walkthrough);
 
-        Intent intent = new Intent(WalkthroughActivity.this, SigninActivity.class);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         previouslyStarted = prefs.getBoolean(getString(R.string.prefs_previously_started), false);
         if (previouslyStarted) {
             //If is logged in, send to home screen
             if (SharedPreferencesUtils.getLoginState(getApplicationContext())) {
                 //Send to home screen
-                Intent homeIntent = new Intent(getApplicationContext(), HomeStreamActivity.class);
+                Log.d("WALK", "Sending to home");
+                Intent homeIntent = new Intent(WalkthroughActivity.this, HomeStreamActivity.class);
                 startActivity(homeIntent);
             } else {
+                Log.d("WALK", "Sending to login" + SharedPreferencesUtils.getLoginState(getApplicationContext()));
+                Intent intent = new Intent(WalkthroughActivity.this, SigninActivity.class);
                 startActivity(intent);
             }
         }

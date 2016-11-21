@@ -100,6 +100,9 @@ public class SinginFragment extends Fragment {
                                 //Go to Home fragment
                                 Intent intent = new Intent(getContext(), HomeStreamActivity.class);
                                 startActivity(intent);
+
+                                //Finish the activity
+                                getActivity().finish();
                             }
                             Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
                         }

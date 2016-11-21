@@ -77,6 +77,8 @@ public class SharedPreferencesUtils {
 
         //Add value to editor
         editor.putBoolean(SHARED_PREFERENCES_LOGIN_STATE, isLoggedIn);
+
+        editor.commit();
     }
 
     /**
