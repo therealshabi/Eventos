@@ -389,7 +389,6 @@ public class AddEventFragment extends Fragment {
         return jsonArray;
     }
 
-
     private JSONArray getContactsList() {
         JSONArray jsonArray = new JSONArray();
 
@@ -419,5 +418,7 @@ public class AddEventFragment extends Fragment {
 
         return jsonArray;
     }
+
+
 
 }

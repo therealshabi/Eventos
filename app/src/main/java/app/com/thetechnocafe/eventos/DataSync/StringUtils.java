@@ -30,4 +30,5 @@ public class StringUtils {
     public static final String JSON_EMAIL = "email";
     public static final String JSON_PHONE = "phone";
     public static final String SUBMITTED_BY = "submitted_by";
+    public static final String JSON_EVENT_DATE = "event_date";
 }
