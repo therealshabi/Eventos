@@ -30,7 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import app.com.thetechnocafe.eventos.DataSync.RequestUtils;
@@ -58,8 +58,6 @@ public class AddEventFragment extends Fragment {
     private LinearLayout mLinkContainer;
     private TextView mDateText;
     private TextView mTimeText;
-    private Date mEventDate;
-    private Date mEventDateTime;
     private TextView mAddCategoryButton;
     private Button mSubmitButton;
     private RequestUtils mRequestUtils;
@@ -69,6 +67,7 @@ public class AddEventFragment extends Fragment {
     private EditText mImageEditText;
     private EditText mVenueEditText;
     private LoadingDialog mLoadingDialog;
+    private Calendar mCalendar;
 
     public static AddEventFragment getInstance() {
         return new AddEventFragment();
@@ -100,13 +99,14 @@ public class AddEventFragment extends Fragment {
         mImageEditText = (EditText) view.findViewById(R.id.fragment_add_event_image_link);
         mRequirementsEditText = (EditText) view.findViewById(R.id.fragment_add_event_requirement);
 
+        //Get calendar
+        mCalendar = GregorianCalendar.getInstance();
+
         //Set up date and text
-        mEventDate = new GregorianCalendar().getTime();
-        setDateText(mEventDate);
+        setDateText(mCalendar);
 
         //Set up time text
-        mEventDateTime = new GregorianCalendar().getTime();
-        setTimeText(mEventDateTime);
+        setTimeText(mCalendar);
 
         //Set up the toolbar
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_add_event_toolbar);
@@ -187,7 +187,7 @@ public class AddEventFragment extends Fragment {
         mDateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogDatePicker dialogDatePicker = DialogDatePicker.getInstance(mEventDate);
+                DialogDatePicker dialogDatePicker = DialogDatePicker.getInstance(mCalendar);
                 dialogDatePicker.setTargetFragment(AddEventFragment.this, DATE_PICKER_CODE);
                 dialogDatePicker.show(getFragmentManager(), DATE_PICKER_TAG);
             }
@@ -197,7 +197,7 @@ public class AddEventFragment extends Fragment {
         mTimeText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogTimePicker dialogTimePicker = DialogTimePicker.getInstance(mEventDateTime);
+                DialogTimePicker dialogTimePicker = DialogTimePicker.getInstance(mCalendar);
                 dialogTimePicker.setTargetFragment(AddEventFragment.this, TIME_PICKER_CODE);
                 dialogTimePicker.show(getFragmentManager(), TIME_PICKER_TAG);
             }
@@ -274,26 +274,26 @@ public class AddEventFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == DATE_PICKER_CODE && data != null) {
-                mEventDate = DialogDatePicker.getDate(data);
-                setDateText(mEventDate);
+                DialogDatePicker.getDate(data, mCalendar);
+                setDateText(mCalendar);
             } else if (requestCode == TIME_PICKER_CODE && data != null) {
-                mEventDateTime = DialogTimePicker.getTime(data);
-                setTimeText(mEventDateTime);
+                DialogTimePicker.getTime(data, mCalendar);
+                setTimeText(mCalendar);
             }
         }
     }
 
     //Function to set the date text
-    private void setDateText(Date date) {
+    private void setDateText(Calendar calendar) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy");
-        String dateText = simpleDateFormat.format(date);
+        String dateText = simpleDateFormat.format(calendar.getTime());
         mDateText.setText(dateText);
     }
 
     //Function to set time text
-    private void setTimeText(Date date) {
+    private void setTimeText(Calendar calendar) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm");
-        String timeText = simpleDateFormat.format(date);
+        String timeText = simpleDateFormat.format(calendar.getTime());
         mTimeText.setText(timeText);
     }
 
@@ -346,6 +346,7 @@ public class AddEventFragment extends Fragment {
             object.put(StringUtils.JSON_AVATAR_ID, 0);
             object.put(StringUtils.JSON_REQUIREMENTS, mRequirementsEditText.getText().toString());
             object.put(StringUtils.SUBMITTED_BY, SharedPreferencesUtils.getUsername(getContext()));
+            object.put(StringUtils.JSON_EVENT_DATE, getDateInLong());
 
             //Get links list
             JSONArray links = getLinksList();
@@ -419,6 +420,14 @@ public class AddEventFragment extends Fragment {
         return jsonArray;
     }
 
+    /**
+     * Calculate the date from the two dates
+     */
+    private long getDateInLong() {
+        Calendar calendar = GregorianCalendar.getInstance();
 
+        calendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH), mCalendar.get(Calendar.HOUR_OF_DAY), mCalendar.get(Calendar.MINUTE));
 
+        return calendar.getTimeInMillis();
+    }
 }

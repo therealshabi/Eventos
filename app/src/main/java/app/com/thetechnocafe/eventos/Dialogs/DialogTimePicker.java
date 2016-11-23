@@ -10,8 +10,6 @@ import android.support.v4.app.DialogFragment;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 
 /**
@@ -21,9 +19,9 @@ public class DialogTimePicker extends DialogFragment implements TimePickerDialog
 
     private static final String TAG_HOUR = "hour";
     private static final String TAG_MINUTE = "minute";
-    private static Date mSelectedDate;
+    private static Calendar mSelectedDate;
 
-    public static DialogTimePicker getInstance(Date date) {
+    public static DialogTimePicker getInstance(Calendar date) {
         DialogTimePicker dialogTimePicker = new DialogTimePicker();
         mSelectedDate = date;
         return dialogTimePicker;
@@ -33,7 +31,7 @@ public class DialogTimePicker extends DialogFragment implements TimePickerDialog
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(mSelectedDate);
+        calendar.setTime(mSelectedDate.getTime());
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
         TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), this, hour, minute, android.text.format.DateFormat.is24HourFormat(getContext()));
@@ -48,10 +46,9 @@ public class DialogTimePicker extends DialogFragment implements TimePickerDialog
         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
     }
 
-    public static Date getTime(Intent intent) {
-        GregorianCalendar calendar = new GregorianCalendar();
+    public static Calendar getTime(Intent intent, Calendar calendar) {
         calendar.set(Calendar.HOUR, intent.getIntExtra(TAG_HOUR, 0));
         calendar.set(Calendar.MINUTE, intent.getIntExtra(TAG_MINUTE, 0));
-        return calendar.getTime();
+        return calendar;
     }
 }

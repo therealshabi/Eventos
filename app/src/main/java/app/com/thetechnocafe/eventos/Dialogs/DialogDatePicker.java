@@ -10,8 +10,6 @@ import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * Created by gurleensethi on 22/08/16.
@@ -22,9 +20,9 @@ public class DialogDatePicker extends DialogFragment implements DatePickerDialog
     private static final String DATE_MONTH_TAG = "datemonth";
     private static final String DATE_DAY_TAG = "dateday";
     private static final String DATE_YEAR_TAG = "dateyear";
-    private static Date mSelectedDate;
+    private static Calendar mSelectedDate;
 
-    public static DialogDatePicker getInstance(Date date) {
+    public static DialogDatePicker getInstance(Calendar date) {
         DialogDatePicker dialogDatePicker = new DialogDatePicker();
         mSelectedDate = date;
         return dialogDatePicker;
@@ -34,7 +32,7 @@ public class DialogDatePicker extends DialogFragment implements DatePickerDialog
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(mSelectedDate);
+        calendar.setTime(calendar.getTime());
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         int month = calendar.get(Calendar.MONTH);
         int year = calendar.get(Calendar.YEAR);
@@ -51,10 +49,9 @@ public class DialogDatePicker extends DialogFragment implements DatePickerDialog
         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
     }
 
-    public static Date getDate(Intent intent) {
-        GregorianCalendar calendar = new GregorianCalendar();
-        calendar.setTime(mSelectedDate);
+    public static Calendar getDate(Intent intent, Calendar calendar) {
+        calendar.setTime(mSelectedDate.getTime());
         calendar.set(intent.getIntExtra(DATE_YEAR_TAG, 0), intent.getIntExtra(DATE_MONTH_TAG, 0), intent.getIntExtra(DATE_DAY_TAG, 0));
-        return calendar.getTime();
+        return calendar;
     }
 }
