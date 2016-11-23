@@ -31,4 +31,7 @@ public class StringUtils {
     public static final String JSON_PHONE = "phone";
     public static final String SUBMITTED_BY = "submitted_by";
     public static final String JSON_EVENT_DATE = "event_date";
+    public static final String CLOUDINARY_API_KEY = "543423442984164";
+    public static final String CLOUDINARY_API_SECRET = "WLd_22Wdc8DwofbRSMG59uYSr8s";
+    public static final String CLOUDINARY_CLOUD_NAME = "dob0p6iyg";
 }
