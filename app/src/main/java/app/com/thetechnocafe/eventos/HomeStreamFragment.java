@@ -37,6 +37,7 @@ import java.util.List;
 import app.com.thetechnocafe.eventos.DataSync.DataSynchronizer;
 import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
 import app.com.thetechnocafe.eventos.Models.EventsModel;
+import app.com.thetechnocafe.eventos.Utils.DateUtils;
 import app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils;
 
 public class HomeStreamFragment extends Fragment {
@@ -287,7 +288,7 @@ public class HomeStreamFragment extends Fragment {
             }
 
             //Set appropriate data
-            mDateText.setText(event.getDate().toString());
+            mDateText.setText(DateUtils.getFormattedDate(event.getDate()));
             mTitleText.setText(event.getTitle());
             mLikeButton.setOnLikeListener(new OnLikeListener() {
                 String id = event.getId();

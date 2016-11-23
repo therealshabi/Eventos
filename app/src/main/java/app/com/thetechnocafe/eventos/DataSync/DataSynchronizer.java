@@ -154,10 +154,10 @@ public abstract class DataSynchronizer {
             event.setVenue(object.getString(JSON_EVENT_VENUE));
             event.setId(object.getString(JSON_EVENT_ID));
             event.setAvatarId(object.getInt(JSON_EVENT_AVATAR_ID));
-            event.setDate(new Date());
+            event.setDate(new Date(object.getLong(StringUtils.JSON_DATE)));
             event.setRequirements(object.getString(JSON_EVENT_REQUIREMENTS));
         } catch (JSONException e) {
-            //Bad event data
+            e.printStackTrace();
             return false;
         }
         return true;

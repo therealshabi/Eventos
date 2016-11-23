@@ -23,6 +23,7 @@ import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
 import app.com.thetechnocafe.eventos.Models.ContactsModel;
 import app.com.thetechnocafe.eventos.Models.EventsModel;
 import app.com.thetechnocafe.eventos.Models.LinksModel;
+import app.com.thetechnocafe.eventos.Utils.DateUtils;
 
 
 /**
@@ -256,7 +257,7 @@ public class DetailFragment extends Fragment {
 
         mTitleTextView.setText(mEvent.getTitle());
         mDescriptionTextView.setText(mEvent.getDescription());
-        mDateTextView.setText(mEvent.getDate().toString());
+        mDateTextView.setText(DateUtils.getFormattedDate(mEvent.getDate()));
         mVenueTextView.setText(mEvent.getVenue());
         //Check if requirements exits
         if (mEvent.getRequirements() != null && !mEvent.getRequirements().isEmpty()) {

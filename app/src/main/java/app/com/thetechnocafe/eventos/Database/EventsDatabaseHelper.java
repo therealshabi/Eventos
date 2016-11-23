@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -110,9 +112,8 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(EVENT_COLUMN_DESCRIPTION, event.getDescription());
         contentValues.put(EVENT_COLUMN_VENUE, event.getVenue());
         contentValues.put(EVENT_COLUMN_IMAGE, event.getImage());
-        contentValues.put(EVENT_COLUMN_DATE, event.getDate().toString());
+        contentValues.put(EVENT_COLUMN_DATE, String.valueOf(event.getDate().getTime()));
         contentValues.put(EVENT_COLUMN_REQUIREMENTS, event.getRequirements());
-
 
         database.insert(EVENTS_TABLE, null, contentValues);
     }
@@ -148,7 +149,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
 
             event.setId(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_ID)));
             event.setVenue(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_VENUE)));
-            event.setDate(new Date(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_DATE))));
+            event.setDate(new Date(Long.parseLong(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_DATE)))));
             event.setAvatarId(cursor.getInt(cursor.getColumnIndex(EVENT_COLUMN_AVATAR_ID)));
             event.setImage(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_IMAGE)));
             event.setTitle(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_TITLE)));
@@ -159,6 +160,20 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         }
         //Close cursor after use
         cursor.close();
+
+        //Sort event list
+        Collections.sort(eventsList, new Comparator<EventsModel>() {
+            @Override
+            public int compare(EventsModel eventsModel, EventsModel t1) {
+                if (eventsModel.getDate().getTime() > t1.getDate().getTime()) {
+                    return 1;
+                } else if (eventsModel.getDate().getTime() == t1.getDate().getTime()) {
+                    return 0;
+                } else {
+                    return -1;
+                }
+            }
+        });
 
         return eventsList;
     }
@@ -190,7 +205,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
             eventsModel.setImage(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_IMAGE)));
             eventsModel.setVenue(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_VENUE)));
             eventsModel.setRequirements(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_REQUIREMENTS)));
-            eventsModel.setDate(new Date());
+            eventsModel.setDate(new Date(Long.parseLong(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_DATE)))));
         }
 
         //Close the cursor
