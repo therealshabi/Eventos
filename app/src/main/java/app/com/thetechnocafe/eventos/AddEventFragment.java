@@ -303,12 +303,12 @@ public class AddEventFragment extends Fragment {
         boolean isValid = true;
 
         //Validate form
-        if (mTitleEditText.getText().toString().length() < 15) {
+        if (mTitleEditText.getText().toString().length() < 5) {
             //Check title
             mTitleEditText.requestFocus();
             errorString = getString(R.string.form_error_title);
             isValid = false;
-        } else if (mDescriptionEditText.getText().toString().length() < 50) {
+        } else if (mDescriptionEditText.getText().toString().length() < 30) {
             //Check description
             mDescriptionEditText.requestFocus();
             errorString = getString(R.string.form_error_description);
