@@ -99,7 +99,7 @@ public class SignUpActvity extends AppCompatActivity {
             object.put(StringUtils.JSON_EMAIL, mEmailEditText.getText().toString());
             object.put(StringUtils.JSON_PASSWORD, EncryptionUtils.encryptPassword(mPasswordExitText.getText().toString()));
             object.put(StringUtils.JSON_PHONE, mPhoneEditText.getText().toString());
-            object.put(StringUtils.JOSN_FULL_NAME, mFullNameEditText.getText().toString());
+            object.put(StringUtils.JSON_FULL_NAME, mFullNameEditText.getText().toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }

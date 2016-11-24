@@ -6,6 +6,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,6 +18,7 @@ public abstract class RequestUtils {
     private static final String LINK_EVENT_REQUEST = SERVER_ADDRESS + "/api/events";
     private static final String SIGN_UP_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/signup";
     private static final String SIGN_IN_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/login";
+    private static final String UPDATE_ACCOUNT_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/user/update";
 
     public abstract void isRequestSuccessful(boolean isSuccessful, String message);
 
@@ -101,7 +103,7 @@ public abstract class RequestUtils {
                     if (response.getString(StringUtils.JSON_STATUS).equals(StringUtils.JSON_SUCCESS)) {
                         isRequestSuccessful(true, response.getString(StringUtils.JSON_DATA));
                         JSONObject object = response.getJSONArray(StringUtils.JSON_DATA).getJSONObject(0);
-                        SharedPreferencesUtils.setFullName(context, object.getString(StringUtils.JOSN_FULL_NAME));
+                        SharedPreferencesUtils.setFullName(context, object.getString(StringUtils.JSON_FULL_NAME));
                         SharedPreferencesUtils.setPassword(context, object.getString(StringUtils.JSON_PASSWORD));
                         SharedPreferencesUtils.setUsername(context, object.getString(StringUtils.JSON_EMAIL));
                         SharedPreferencesUtils.setPhoneNumber(context, object.getString(StringUtils.JSON_PHONE));
@@ -121,6 +123,36 @@ public abstract class RequestUtils {
         });
 
         //Add request to queue
+        VolleyQueue.getInstance(context).getRequestQueue().add(request);
+    }
+
+    /**
+     * Update user account details
+     */
+    public void updateAccountDetails(Context context, JSONObject object) {
+        //Create new json request
+        JsonRequest request = new JsonObjectRequest(Request.Method.PUT, UPDATE_ACCOUNT_REQUEST_ADDRESS, object, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getString(StringUtils.JSON_STATUS).equals(StringUtils.JSON_SUCCESS)) {
+                        isRequestSuccessful(true, response.getString(StringUtils.JSON_DATA));
+                    } else {
+                        isRequestSuccessful(false, response.getString(StringUtils.JSON_DATA));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    isRequestSuccessful(false, null);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        //Add to volley queue
         VolleyQueue.getInstance(context).getRequestQueue().add(request);
     }
 }

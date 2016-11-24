@@ -122,4 +122,9 @@
     <string name="new_password">New Password</string>
     <string name="mobile_number">Mobile Number</string>
     <string name="update">Update</string>
+    <string name="old_password_match">Old password doesn\'t match</string>
+    <string name="password_empty">New Password cannot be empty</string>
+    <string name="account_update_success">Account Details Updated</string>
+    <string name="account_update_fail">Unable to update detials</string>
+    <string name="updating_account_details">Updating Account Details...</string>
 </resources>
