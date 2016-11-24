@@ -34,4 +34,5 @@ public class StringUtils {
     public static final String CLOUDINARY_API_KEY = "543423442984164";
     public static final String CLOUDINARY_API_SECRET = "WLd_22Wdc8DwofbRSMG59uYSr8s";
     public static final String CLOUDINARY_CLOUD_NAME = "dob0p6iyg";
+    public static final String JOSN_FULL_NAME = "full_name";
 }

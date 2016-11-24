@@ -63,6 +63,31 @@
                 android:orientation="vertical">
 
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/fragment_signup_full_name_text_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="32dp"
+                    android:layout_marginTop="12dp"
+                    android:theme="@style/TextLabel"
+                    app:errorTextAppearance="@style/TextLayoutErrorText">
+
+                    <EditText
+                        android:id="@+id/fragment_signup_full_name_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@android:color/white"
+                        android:hint="@string/full_name"
+                        android:inputType="textEmailAddress"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@android:color/white"
+                        android:textColorLink="@android:color/white"
+                        android:textCursorDrawable="@null"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
                     android:id="@+id/fragment_signup_username_text_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
