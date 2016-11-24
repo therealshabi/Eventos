@@ -12,13 +12,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -100,11 +101,6 @@ public class FavouriteActivity extends AppCompatActivity {
 
 
     public void prepareFavourites() {
-        int[] covers = new int[]{
-                R.drawable.concert,
-                R.drawable.calendar,
-                R.drawable.dj,
-                R.drawable.sports};
 
         SQLiteDatabase database = openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
         noFavFoundImage.setVisibility(View.GONE);
@@ -153,19 +149,15 @@ public class FavouriteActivity extends AppCompatActivity {
             String id = temp.getId();
             String title = temp.getTitle();
             String Venue = temp.getVenue();
-            String time = "" + temp.getDate().getHours();
-            time += ":" + temp.getDate().getMinutes() + " hrs";
-            /*
-            *  It's Wrong Update it with the correct code
-            * */
-            Log.d("Day", "" + temp.getDate().getDay());
-            Log.d("Month", "" + temp.getDate().getMonth());
-            Log.d("Year", "" + temp.getDate().getYear());
-            DateTime start = new DateTime();
-            String date = "" + temp.getDate().getYear() + "-" + temp.getDate().getMonth() + "-" + temp.getDate().getDay();
-            String daysLeft = "" + Days.daysBetween(DateTime.parse(date), start).getDays() + " Days Left";
 
-            Favourite fav = new Favourite(id, title, daysLeft, Venue, covers[i % 5], time);
+            String time = "" + String.format("%02d", temp.getDate().getHours()) + ":" + String.format("%02d", temp.getDate().getMinutes()) + " hrs";
+            DateTime date = new DateTime(temp.getDate());
+            DateTime current = new DateTime(new Date());
+
+            String daysLeft = "" + Math.abs(Days.daysBetween(date.toLocalDate(), current.toLocalDate()).getDays()) + " days left";
+
+            String image = temp.getImage();
+            Favourite fav = new Favourite(id, title, daysLeft, Venue, image, time);
             favouriteList.add(fav);
             i++;
         }
@@ -277,8 +269,10 @@ public class FavouriteActivity extends AppCompatActivity {
             holder.mDaysLeft.setText(favourite.getDaystogo());
             holder.mVenue.setText(favourite.getLocation());
             holder.mTime.setText(favourite.getTime());
-            holder.thumbnail.setImageResource(favourite.getThumbnail());
             holder.mFavEvent = favourite;
+            Picasso.with(getBaseContext())
+                    .load(holder.mFavEvent.getThumbnail())
+                    .into(holder.thumbnail);
         }
 
         public int getItemCount() {
@@ -322,9 +316,9 @@ public class FavouriteActivity extends AppCompatActivity {
         public String daystogo;
         public String location;
         public String time;
-        public int thumbnail;
+        public String thumbnail;
 
-        public Favourite(String id, String title, String daystogo, String location, int thumbnail, String time) {
+        public Favourite(String id, String title, String daystogo, String location, String thumbnail, String time) {
             this.id = id;
             this.title = title;
             this.daystogo = daystogo;
@@ -369,11 +363,11 @@ public class FavouriteActivity extends AppCompatActivity {
             this.time = time;
         }
 
-        public int getThumbnail() {
+        public String getThumbnail() {
             return thumbnail;
         }
 
-        public void setThumbnail(int thumbnail)
+        public void setThumbnail(String thumbnail)
 
         {
             this.thumbnail = thumbnail;

@@ -31,6 +31,8 @@ import app.com.thetechnocafe.eventos.Utils.DateUtils;
  */
 public class DetailFragment extends Fragment {
 
+    private static final String EVENT_ID_TAG = "eventid";
+    private static String EVENT_ID;
     private ViewFlipper mRecentComments;
     private LinearLayout mLinkContainer;
     private LinearLayout mContactsContainer;
@@ -40,13 +42,12 @@ public class DetailFragment extends Fragment {
     private TextView mDateTextView;
     private TextView mVenueTextView;
     private TextView mRequirementsTextView;
-    private static final String EVENT_ID_TAG = "eventid";
-    private static String EVENT_ID;
     private EventsModel mEvent;
     private EventsDatabaseHelper mEventsDatabaseHelper;
     private TextView mNoContactsTextView;
     private TextView mNoLinksTextView;
     private FloatingActionButton mShareFloatingButton;
+    private TextView mTimeTextView;
 
     public static DetailFragment getInstance(String id) {
         //Create bundle
@@ -73,6 +74,7 @@ public class DetailFragment extends Fragment {
         mTitleTextView = (TextView) view.findViewById(R.id.fragment_detail_text_view_title);
         mDescriptionTextView = (TextView) view.findViewById(R.id.fragment_detail_text_view_description);
         mDateTextView = (TextView) view.findViewById(R.id.fragment_detail_text_view_date);
+        mTimeTextView = (TextView) view.findViewById(R.id.fragment_detail_text_view_time);
         mVenueTextView = (TextView) view.findViewById(R.id.fragment_detail_text_view_venue);
         mRequirementsTextView = (TextView) view.findViewById(R.id.fragment_detail_requirement_text);
         mRecentComments = (ViewFlipper) view.findViewById(R.id.fragment_detail_comment_container);
@@ -258,6 +260,7 @@ public class DetailFragment extends Fragment {
         mTitleTextView.setText(mEvent.getTitle());
         mDescriptionTextView.setText(mEvent.getDescription());
         mDateTextView.setText(DateUtils.getFormattedDate(mEvent.getDate()));
+        mTimeTextView.setText(DateUtils.convertToTime(mEvent.getDate()));
         mVenueTextView.setText(mEvent.getVenue());
         //Check if requirements exits
         if (mEvent.getRequirements() != null && !mEvent.getRequirements().isEmpty()) {

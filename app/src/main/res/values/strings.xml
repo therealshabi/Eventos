@@ -27,7 +27,7 @@
     <string name="menu_add_your_event">Add/Track your event</string>
     <string name="menu_about">About</string>
     <string name="menu_sign_out">Sign Out</string>
-    <string name="menu_calendar">Calendar View</string>
+    <string name="menu_calendar">Events Calendar View</string>
     <string name="menu_outside_events">Outside Events</string>
     <string name="username_error">Enter valid enrollment no</string>
     <string name="password_error">Enter valid password</string>

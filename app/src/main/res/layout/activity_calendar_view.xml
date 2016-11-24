@@ -36,7 +36,7 @@
             android:id="@+id/calendar_view_calendar"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5">
+            android:layout_weight="0.8">
 
         </CalendarView>
 

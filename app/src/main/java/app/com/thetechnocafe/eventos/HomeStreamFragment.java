@@ -1,6 +1,7 @@
 package app.com.thetechnocafe.eventos;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -117,15 +119,31 @@ public class HomeStreamFragment extends Fragment {
                         break;
                     }
                     case R.id.menu_sign_out: {
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setMessage("Are you sure you want to Sign Out?").setCancelable(true).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                SharedPreferencesUtils.setLoginState(getContext(), false);
+
+                                //Clear all data from database
+                                mDatabaseHelper.removeAllEventsFromDB();
+
+                                //Send to login screen
+                                Intent intent = new Intent(getContext(), SigninActivity.class);
+                                startActivity(intent);
+                            }
+                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+
+                        AlertDialog alert = builder.create();
+                        alert.show();
                         //Change login state
-                        SharedPreferencesUtils.setLoginState(getContext(), false);
 
-                        //Clear all data from database
-                        mDatabaseHelper.removeAllEventsFromDB();
-
-                        //Send to login screen
-                        Intent intent = new Intent(getContext(), SigninActivity.class);
-                        startActivity(intent);
                         break;
                     }
                     case R.id.menu_calendar_view: {
