@@ -11,13 +11,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
+import app.com.thetechnocafe.eventos.Models.EventsModel;
+import app.com.thetechnocafe.eventos.Utils.DateUtils;
 
 public class CalendarViewActivity extends AppCompatActivity {
 
     private CalendarView mCalendarView;
     private RecyclerView mCalendarRecyclerView;
     private CalendarRecyclerAdapter mCalendarRecyclerAdapter;
+    private EventsDatabaseHelper mDatabaseHelper;
+    private List<EventsModel> mEventsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +36,8 @@ public class CalendarViewActivity extends AppCompatActivity {
 
         mCalendarView = (CalendarView) findViewById(R.id.calendar_view_calendar);
         mCalendarRecyclerView = (RecyclerView) findViewById(R.id.calendar_view_recycler_view);
+
+        mDatabaseHelper = new EventsDatabaseHelper(getApplicationContext());
 
         //Set up toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.fragment_add_track_event_toolbar);
@@ -36,16 +48,49 @@ public class CalendarViewActivity extends AppCompatActivity {
         }
 
         setUpOnClickListeners();
-        setUpOrRefreshRecyclerView();
+        setUpInitialList();
     }
 
     private void setUpOnClickListeners() {
         mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                Toast.makeText(getApplicationContext(), "Date changed", Toast.LENGTH_SHORT).show();
+                Calendar calendar = GregorianCalendar.getInstance();
+
+                //Set start dat time
+                calendar.set(year, month, dayOfMonth, 0, 0);
+                long startDayTime = calendar.getTimeInMillis();
+
+                //Set end day time
+                calendar.set(year, month, dayOfMonth + 1, 0, 0);
+                long endDayTime = calendar.getTimeInMillis();
+
+                //Get list from database
+                mEventsList = mDatabaseHelper.getEventsOnADay(startDayTime, endDayTime);
+
+                setUpOrRefreshRecyclerView();
             }
         });
+    }
+
+    private void setUpInitialList() {
+        Calendar calendar = GregorianCalendar.getInstance();
+
+        //Set start dat time
+        calendar.setTime(new Date());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        long startDayTime = calendar.getTimeInMillis();
+
+        //Set end day time
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        long endDayTime = calendar.getTimeInMillis();
+
+        //Get list from database
+        mEventsList = mDatabaseHelper.getEventsOnADay(startDayTime, endDayTime);
+
+        setUpOrRefreshRecyclerView();
     }
 
     //Set up or refresh recycler view
@@ -69,15 +114,16 @@ public class CalendarViewActivity extends AppCompatActivity {
             private TextView mTitleTextView;
             private TextView mTimeTextView;
 
-            public CalendarViewHolder(View view) {
+            CalendarViewHolder(View view) {
                 super(view);
 
-                mTimeTextView = (TextView) findViewById(R.id.item_calendar_view_recycler_time_text_view);
-                mTitleTextView = (TextView) findViewById(R.id.item_calendar_view_recycler_title_text_view);
+                mTimeTextView = (TextView) view.findViewById(R.id.item_calendar_view_recycler_time_text_view);
+                mTitleTextView = (TextView) view.findViewById(R.id.item_calendar_view_recycler_title_text_view);
             }
 
-            public void bindData(int position) {
-
+            void bindData(int position) {
+                mTitleTextView.setText(mEventsList.get(position).getTitle());
+                mTimeTextView.setText(DateUtils.convertToTime(mEventsList.get(position).getDate()));
             }
         }
 
@@ -94,7 +140,7 @@ public class CalendarViewActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return 5;
+            return mEventsList.size();
         }
     }
 
@@ -107,5 +153,11 @@ public class CalendarViewActivity extends AppCompatActivity {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mDatabaseHelper.close();
     }
 }

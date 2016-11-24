@@ -15,4 +15,12 @@ public class DateUtils {
         SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy - hh:mm");
         return format.format(date);
     }
+
+    /**
+     * Convert date to time format ( 8:00 pm)
+     */
+    public static String convertToTime(Date date) {
+        SimpleDateFormat format = new SimpleDateFormat("hh:mm aa");
+        return format.format(date);
+    }
 }
