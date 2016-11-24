@@ -456,4 +456,43 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
             }
         }
     }
+
+    /**
+     * Get list of events on a particular day
+     */
+    public List<EventsModel> getEventsOnADay(long dayStart, long dayEnd) {
+        //Get Database
+        SQLiteDatabase database = getReadableDatabase();
+
+        //Create new EventsModel list
+        List<EventsModel> eventsList = new ArrayList<>();
+
+        //Set up the query
+        String sql = "SELECT * FROM " + EVENTS_TABLE;
+
+        //Run the query and obtain cursor
+        Cursor cursor = database.rawQuery(sql, null);
+
+        //Extract the values while looping over cursor
+        while (cursor.moveToNext()) {
+            EventsModel event = new EventsModel();
+
+            event.setId(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_ID)));
+            event.setVenue(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_VENUE)));
+            event.setDate(new Date(Long.parseLong(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_DATE)))));
+            event.setAvatarId(cursor.getInt(cursor.getColumnIndex(EVENT_COLUMN_AVATAR_ID)));
+            event.setImage(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_IMAGE)));
+            event.setTitle(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_TITLE)));
+            event.setDescription(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_DESCRIPTION)));
+
+
+            if (event.getDate().getTime() > dayStart && event.getDate().getTime() < dayEnd) {
+                eventsList.add(event);
+            }
+        }
+        //Close cursor after use
+        cursor.close();
+
+        return eventsList;
+    }
 }
