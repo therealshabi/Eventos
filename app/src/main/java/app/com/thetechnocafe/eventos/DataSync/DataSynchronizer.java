@@ -22,7 +22,7 @@ import app.com.thetechnocafe.eventos.Models.LinksModel;
 
 public abstract class DataSynchronizer {
     private static final String TAG = "DataSynchronizer";
-    private static final String LINK_EVENT_REQUEST = "http://192.168.43.55:8080/api/events";
+    private static final String LINK_EVENT_REQUEST = "http://192.168.43.56:8080/api/events";
     //String related to json data fetched
     private static final String JSON_STATUS = "status";
     private static final String JSON_DATA = "data";

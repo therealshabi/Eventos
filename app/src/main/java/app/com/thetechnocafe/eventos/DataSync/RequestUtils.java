@@ -10,8 +10,10 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils;
+
 public abstract class RequestUtils {
-    private static final String SERVER_ADDRESS = "http://192.168.43.55:8080";
+    private static final String SERVER_ADDRESS = "http://192.168.43.56:8080";
     private static final String LINK_EVENT_REQUEST = SERVER_ADDRESS + "/api/events";
     private static final String SIGN_UP_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/signup";
     private static final String SIGN_IN_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/login";
@@ -90,7 +92,7 @@ public abstract class RequestUtils {
     /**
      * Sign in request
      */
-    public void signIn(Context context, JSONObject jsonObject) {
+    public void signIn(final Context context, JSONObject jsonObject) {
         //Create new json object request
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, SIGN_IN_REQUEST_ADDRESS, jsonObject, new Response.Listener<JSONObject>() {
             @Override
@@ -98,6 +100,12 @@ public abstract class RequestUtils {
                 try {
                     if (response.getString(StringUtils.JSON_STATUS).equals(StringUtils.JSON_SUCCESS)) {
                         isRequestSuccessful(true, response.getString(StringUtils.JSON_DATA));
+                        JSONObject object = response.getJSONArray(StringUtils.JSON_DATA).getJSONObject(0);
+                        SharedPreferencesUtils.setFullName(context, object.getString(StringUtils.JOSN_FULL_NAME));
+                        SharedPreferencesUtils.setPassword(context, object.getString(StringUtils.JSON_PASSWORD));
+                        SharedPreferencesUtils.setUsername(context, object.getString(StringUtils.JSON_EMAIL));
+                        SharedPreferencesUtils.setPhoneNumber(context, object.getString(StringUtils.JSON_PHONE));
+
                     } else {
                         isRequestSuccessful(false, response.getString(StringUtils.JSON_DATA));
                     }
