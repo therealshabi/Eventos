@@ -399,7 +399,7 @@ public class AddEventFragment extends Fragment {
 
             object.put(StringUtils.JSON_IMAGE, mImageEditText.getText().toString());
             object.put(StringUtils.JSON_AVATAR_ID, 0);
-            object.put(StringUtils.JSON_REQUIREMENTS, mRequirementsEditText.getText().toString());
+            object.put(StringUtils.JSON_REQUIREMENTS, mCloudinaryImageURL);
             object.put(StringUtils.SUBMITTED_BY, SharedPreferencesUtils.getUsername(getContext()));
             object.put(StringUtils.JSON_EVENT_DATE, getDateInLong());
 

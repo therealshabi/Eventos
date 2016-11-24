@@ -130,7 +130,7 @@ public class FavouriteActivity extends AppCompatActivity {
                     curse.moveToFirst();
                     event.setId(curse.getString(curse.getColumnIndex(EVENT_COLUMN_ID)));
                     event.setVenue(curse.getString(curse.getColumnIndex(EVENT_COLUMN_VENUE)));
-                    event.setDate(new Date(curse.getString(curse.getColumnIndex(EVENT_COLUMN_DATE))));
+                    event.setDate(new Date(curse.getLong(curse.getColumnIndex(EVENT_COLUMN_DATE))));
                     event.setAvatarId(curse.getInt(curse.getColumnIndex(EVENT_COLUMN_AVATAR_ID)));
                     event.setImage(curse.getString(curse.getColumnIndex(EVENT_COLUMN_IMAGE)));
                     event.setTitle(curse.getString(curse.getColumnIndex(EVENT_COLUMN_TITLE)));

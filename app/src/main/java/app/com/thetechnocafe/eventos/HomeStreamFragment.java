@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.like.LikeButton;
 import com.like.OnLikeListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
 import java.util.List;
@@ -254,6 +255,7 @@ public class HomeStreamFragment extends Fragment {
             mLikeButton = (LikeButton) itemView.findViewById(R.id.home_stream_recycler_view_like_button);
             mTitleText = (TextView) itemView.findViewById(R.id.home_stream_recycler_view_item_title_text);
             mDateText = (TextView) itemView.findViewById(R.id.home_stream_recycler_view_item_date_text);
+            mImageView = (ImageView) itemView.findViewById(R.id.home_stream_recycler_view_item_image);
         }
 
         @Override
@@ -277,6 +279,13 @@ public class HomeStreamFragment extends Fragment {
         void bindData(final EventsModel event) {
             mEvent = event;
 
+            //Set appropriate data
+            mDateText.setText(DateUtils.getFormattedDate(event.getDate()));
+            mTitleText.setText(event.getTitle());
+            Picasso.with(getContext())
+                    .load(mEvent.getImage())
+                    .into(mImageView);
+
             /*
             To check whether if event is in favourite list then like button should be setLiked else not
              */
@@ -286,10 +295,6 @@ public class HomeStreamFragment extends Fragment {
             } else {
                 mLikeButton.setLiked(Boolean.FALSE);
             }
-
-            //Set appropriate data
-            mDateText.setText(DateUtils.getFormattedDate(event.getDate()));
-            mTitleText.setText(event.getTitle());
             mLikeButton.setOnLikeListener(new OnLikeListener() {
                 String id = event.getId();
                 EventsModel favEventModel = mDatabaseHelper.getEvent(id);
