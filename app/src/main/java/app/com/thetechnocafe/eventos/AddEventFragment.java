@@ -1,11 +1,21 @@
 package app.com.thetechnocafe.eventos;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -25,13 +35,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import app.com.thetechnocafe.eventos.DataSync.RequestUtils;
 import app.com.thetechnocafe.eventos.DataSync.StringUtils;
@@ -50,6 +68,10 @@ public class AddEventFragment extends Fragment {
     private static final String GUIDELINES_TAG = "guidlines";
     private static final int DATE_PICKER_CODE = 1;
     private static final int TIME_PICKER_CODE = 2;
+    private static final int GALLERY_IMAGE_PICK_REQUEST_CODE = 3;
+    private static Bitmap mImageToUpload;
+    private static String mImageToUploadName;
+    private static String mCloudinaryImageURL = "default";
 
     private TextView mInfoText;
     private ImageButton mAddContactImageButton;
@@ -68,6 +90,7 @@ public class AddEventFragment extends Fragment {
     private EditText mVenueEditText;
     private LoadingDialog mLoadingDialog;
     private Calendar mCalendar;
+    private ImageButton mPhotoUploadImageButton;
 
     public static AddEventFragment getInstance() {
         return new AddEventFragment();
@@ -98,6 +121,7 @@ public class AddEventFragment extends Fragment {
         mVenueEditText = (EditText) view.findViewById(R.id.fragment_add_event_venue);
         mImageEditText = (EditText) view.findViewById(R.id.fragment_add_event_image_link);
         mRequirementsEditText = (EditText) view.findViewById(R.id.fragment_add_event_requirement);
+        mPhotoUploadImageButton = (ImageButton) view.findViewById(R.id.fragment_add_event_add_image_button);
 
         //Get calendar
         mCalendar = GregorianCalendar.getInstance();
@@ -212,10 +236,28 @@ public class AddEventFragment extends Fragment {
                     mLoadingDialog = LoadingDialog.getInstance(getString(R.string.submitting_form));
                     mLoadingDialog.show(getFragmentManager(), "");
 
-                    JSONObject object = getJSONObjectFromFormData();
-                    mRequestUtils.submitForumToServer(getContext(), object);
-
+                    if (mImageToUpload != null) {
+                        new ImageUploadAsyncTask().execute();
+                    } else {
+                        JSONObject object = getJSONObjectFromFormData();
+                        mRequestUtils.submitForumToServer(getContext(), object);
+                    }
                 }
+            }
+        });
+
+        //Set up on click listeners for photo upload
+        mPhotoUploadImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+                    if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) !=
+                            PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+                    }
+                }
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, GALLERY_IMAGE_PICK_REQUEST_CODE);
             }
         });
     }
@@ -279,6 +321,18 @@ public class AddEventFragment extends Fragment {
             } else if (requestCode == TIME_PICKER_CODE && data != null) {
                 DialogTimePicker.getTime(data, mCalendar);
                 setTimeText(mCalendar);
+            } else if (requestCode == GALLERY_IMAGE_PICK_REQUEST_CODE && data != null) {
+                Uri selectedImage = data.getData();
+                String projection[] = new String[]{MediaStore.Images.Media.DATA};
+                Cursor cursor = getActivity().getContentResolver().query(selectedImage, projection, null, null, null);
+                cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(projection[0]);
+                String picturePath = cursor.getString(columnIndex);
+                cursor.close();
+                mImageToUpload = BitmapFactory.decodeFile(picturePath);
+                File file = new File(picturePath);
+                mImageToUploadName = file.getName();
+                mImageEditText.setText(mImageToUploadName);
             }
         }
     }
@@ -342,6 +396,7 @@ public class AddEventFragment extends Fragment {
             object.put(StringUtils.JSON_TITLE, mTitleEditText.getText().toString());
             object.put(StringUtils.JSON_DESCRIPTION, mDescriptionEditText.getText().toString());
             object.put(StringUtils.JSON_VENUE, mVenueEditText.getText().toString());
+
             object.put(StringUtils.JSON_IMAGE, mImageEditText.getText().toString());
             object.put(StringUtils.JSON_AVATAR_ID, 0);
             object.put(StringUtils.JSON_REQUIREMENTS, mRequirementsEditText.getText().toString());
@@ -365,7 +420,7 @@ public class AddEventFragment extends Fragment {
     private JSONArray getLinksList() {
         JSONArray jsonArray = new JSONArray();
 
-        //Traverse the childs
+        //Traverse the child's
         for (int count = 0; count < mLinkContainer.getChildCount(); count++) {
             View view = mLinkContainer.getChildAt(count);
 
@@ -429,5 +484,41 @@ public class AddEventFragment extends Fragment {
         calendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH), mCalendar.get(Calendar.HOUR_OF_DAY), mCalendar.get(Calendar.MINUTE));
 
         return calendar.getTimeInMillis();
+    }
+
+    class ImageUploadAsyncTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Map<String, String> config = new HashMap<>();
+            config.put("cloud_name", StringUtils.CLOUDINARY_CLOUD_NAME);
+            config.put("api_key", StringUtils.CLOUDINARY_API_KEY);
+            config.put("api_secret", StringUtils.CLOUDINARY_API_SECRET);
+            final Cloudinary cloudinary = new Cloudinary(config);
+
+            try {
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                mImageToUpload.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
+                byte[] imageBytes = byteArrayOutputStream.toByteArray();
+                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(imageBytes);
+                Map uploadResult = cloudinary.uploader().upload(byteArrayInputStream, ObjectUtils.emptyMap());
+                mCloudinaryImageURL = uploadResult.get("url").toString();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            mImageEditText.setText(mCloudinaryImageURL);
+            JSONObject object = getJSONObjectFromFormData();
+            mRequestUtils.submitForumToServer(getContext(), object);
+        }
     }
 }
