@@ -20,6 +20,7 @@ public abstract class RequestUtils {
     private static final String SIGN_IN_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/login";
     private static final String UPDATE_ACCOUNT_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/user/update";
     private static final String GET_SUBMITTED_EVENTS_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/submitted-events";
+    private static final String SUBMIT_COMMENT_REQUEST_ADDRESS = "/api/events/comment";
 
     public abstract void isRequestSuccessful(boolean isSuccessful, String message);
 
@@ -169,7 +170,7 @@ public abstract class RequestUtils {
             e.printStackTrace();
         }
 
-        JsonRequest request = new JsonObjectRequest(Request.Method.POST, GET_SUBMITTED_EVENTS_REQUEST_ADDRESS, object, new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, GET_SUBMITTED_EVENTS_REQUEST_ADDRESS, object, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -187,7 +188,36 @@ public abstract class RequestUtils {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                isRequestSuccessful(false, null);
+            }
+        });
 
+        //Add to volley queue
+        VolleyQueue.getInstance(context).getRequestQueue().add(request);
+    }
+
+    /**
+     * Submite a comment for a particular event
+     */
+    public void submitCommentForEvent(Context context, JSONObject object) {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, SUBMIT_COMMENT_REQUEST_ADDRESS, object, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getString(StringUtils.JSON_STATUS).equals(StringUtils.JSON_SUCCESS)) {
+                        isRequestSuccessful(true, response.getString(StringUtils.JSON_DATA));
+                    } else {
+                        isRequestSuccessful(false, response.getString(StringUtils.JSON_DATA));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    isRequestSuccessful(false, null);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                isRequestSuccessful(false, null);
             }
         });
 

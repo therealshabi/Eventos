@@ -561,6 +561,9 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
             list.add(model);
         }
 
+        //Close cursor
+        cursor.close();
+
         //Close database
         database.close();
 
