@@ -234,6 +234,7 @@
                         android:inputType="textShortMessage|textMultiLine"/>
 
                     <ImageButton
+                        android:id="@+id/fragment_detail_submit_comment_image_button"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:layout_gravity="bottom"
@@ -286,8 +287,14 @@
                     android:textOff="@string/interested_event_off"
                     android:textOn="@string/interested_event_on"/>
 
-            </LinearLayout>
+                <ImageView
+                    android:id="@+id/fragment_detail_event_image_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:layout_marginBottom="16dp"/>
 
+            </LinearLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

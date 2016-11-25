@@ -151,6 +151,11 @@ public class HomeStreamFragment extends Fragment {
                         startActivity(intent);
                         break;
                     }
+                    case R.id.menu_edit_account: {
+                        Intent intent = new Intent(getContext(), EditAccountActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
                 }
                 mDrawerLayout.closeDrawer(GravityCompat.START);
 

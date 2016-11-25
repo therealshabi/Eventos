@@ -13,17 +13,32 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Date;
 import java.util.List;
 
+import app.com.thetechnocafe.eventos.DataSync.RequestUtils;
+import app.com.thetechnocafe.eventos.DataSync.StringUtils;
 import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
+import app.com.thetechnocafe.eventos.Dialogs.LoadingDialog;
+import app.com.thetechnocafe.eventos.Models.CommentsModel;
 import app.com.thetechnocafe.eventos.Models.ContactsModel;
 import app.com.thetechnocafe.eventos.Models.EventsModel;
 import app.com.thetechnocafe.eventos.Models.LinksModel;
 import app.com.thetechnocafe.eventos.Utils.DateUtils;
+import app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils;
 
 
 /**
@@ -42,12 +57,19 @@ public class DetailFragment extends Fragment {
     private TextView mDateTextView;
     private TextView mVenueTextView;
     private TextView mRequirementsTextView;
+    private static final String EVENT_ID_TAG = "eventid";
+    private static final String LOADING_DIALOG_TAG = "loading_dialog_tag";
+    private static String EVENT_ID;
     private EventsModel mEvent;
     private EventsDatabaseHelper mEventsDatabaseHelper;
     private TextView mNoContactsTextView;
     private TextView mNoLinksTextView;
     private FloatingActionButton mShareFloatingButton;
     private TextView mTimeTextView;
+    private ImageButton mSubmitCommentImageButton;
+    private EditText mCommentEditText;
+    private List<CommentsModel> mCommentsModelsList;
+    private ImageView mEventImageView;
 
     public static DetailFragment getInstance(String id) {
         //Create bundle
@@ -84,6 +106,9 @@ public class DetailFragment extends Fragment {
         mNoContactsTextView = (TextView) view.findViewById(R.id.fragment_detail_no_contacts_text);
         mNoLinksTextView = (TextView) view.findViewById(R.id.fragment_detail_forums_text_no_links);
         mShareFloatingButton = (FloatingActionButton) view.findViewById(R.id.fragment_detail_image_share);
+        mCommentEditText = (EditText) view.findViewById(R.id.fragment_detail_comment_edit_text);
+        mSubmitCommentImageButton = (ImageButton) view.findViewById(R.id.fragment_detail_submit_comment_image_button);
+        mEventImageView = (ImageView) view.findViewById(R.id.fragment_detail_event_image_view);
 
         //Retrieve id from fragment arguments
         EVENT_ID = getArguments().getString(EVENT_ID_TAG, null);
@@ -129,6 +154,7 @@ public class DetailFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), CommentsActivity.class);
+                intent.putExtra(CommentsActivity.EVENT_ID_TAG, EVENT_ID);
                 startActivity(intent);
             }
         });
@@ -141,6 +167,15 @@ public class DetailFragment extends Fragment {
                 shareIntent.putExtra(Intent.EXTRA_TEXT, "Hey there! Attend, " + mEvent.getTitle() + " on " + mEvent.getDate() + " at " + mEvent.getVenue());
                 shareIntent.setType("text/plain");
                 startActivity(shareIntent);
+            }
+        });
+
+        mSubmitCommentImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isCommentValid()) {
+                    submitComment();
+                }
             }
         });
     }
@@ -231,20 +266,35 @@ public class DetailFragment extends Fragment {
     }
 
     private void addRecentComments() {
-        for (int i = 0; i < 3; i++) {
+        mCommentsModelsList = mEventsDatabaseHelper.getCommentsList(EVENT_ID);
+
+        //Remove the current items in view flipper
+        mRecentComments.removeAllViews();
+
+        int countSize = mCommentsModelsList.size() > 3 ? 3 : mCommentsModelsList.size();
+
+        //Check if no comments
+        if (countSize == 0) {
+            mShowMoreCommentsText.setText(R.string.no_comments);
+            mShowMoreCommentsText.setEnabled(false);
+        }
+
+        for (int i = 0; i < countSize; i++) {
             View view = LayoutInflater.from(getContext()).inflate(R.layout.comment_recent_item, null);
-            TextView textView = (TextView) view.findViewById(R.id.comment_recent_item_comment);
-            if (i == 0) {
-                textView.setText("Nice event");
-            } else if (i == 1) {
-                textView.setText("Good");
-            }
+            TextView commentTextView = (TextView) view.findViewById(R.id.comment_recent_item_comment);
+            TextView timeTextView = (TextView) view.findViewById(R.id.comment_recent_item_date);
+            TextView fromTextView = (TextView) view.findViewById(R.id.comment_recent_item_id);
+
+            commentTextView.setText(mCommentsModelsList.get(i).getComment());
+            timeTextView.setText(DateUtils.getFormattedDate(new Date(mCommentsModelsList.get(i).getTime())));
+            fromTextView.setText(mCommentsModelsList.get(i).getFrom());
             mRecentComments.addView(view, i);
         }
 
         //Change animation
         mRecentComments.setOutAnimation(getContext(), R.anim.slide_out_left);
         mRecentComments.setInAnimation(getContext(), R.anim.slide_in_right);
+
         //Start the view flipper
         mRecentComments.startFlipping();
     }
@@ -262,6 +312,11 @@ public class DetailFragment extends Fragment {
         mDateTextView.setText(DateUtils.getFormattedDate(mEvent.getDate()));
         mTimeTextView.setText(DateUtils.convertToTime(mEvent.getDate()));
         mVenueTextView.setText(mEvent.getVenue());
+
+        Picasso.with(getContext())
+                .load(mEvent.getImage())
+                .into(mEventImageView);
+
         //Check if requirements exits
         if (mEvent.getRequirements() != null && !mEvent.getRequirements().isEmpty()) {
             mRequirementsTextView.setText(mEvent.getRequirements());
@@ -278,5 +333,59 @@ public class DetailFragment extends Fragment {
 
         //Close database
         mEventsDatabaseHelper.close();
+    }
+
+    /**
+     * Check if comment is valid
+     */
+    private boolean isCommentValid() {
+        if (mCommentEditText.getText().toString().equals("")) {
+            mCommentEditText.requestFocus();
+            mCommentEditText.setError(getString(R.string.comment_empty));
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Convert the comment details to JSONObject
+     */
+    private JSONObject getCommentDetails() {
+        JSONObject object = new JSONObject();
+        try {
+            object.put(StringUtils.JSON_COMMENT, mCommentEditText.getText().toString());
+            object.put(StringUtils.JSON_TIME, new Date().getTime());
+            object.put(StringUtils.JSON_FROM, SharedPreferencesUtils.getFullName(getContext()));
+            object.put(StringUtils.JSON_EVENT_ID, EVENT_ID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return object;
+    }
+
+    /**
+     * Submit comment to server
+     */
+    private void submitComment() {
+        //Start progress dialog
+        final LoadingDialog loadingDialog = LoadingDialog.getInstance(getString(R.string.submitting_comment));
+        loadingDialog.show(getFragmentManager(), LOADING_DIALOG_TAG);
+
+        new RequestUtils() {
+            @Override
+            public void isRequestSuccessful(boolean isSuccessful, String message) {
+                //Stop the dialog
+                loadingDialog.dismiss();
+
+                //Check for result
+                if (isSuccessful) {
+                    Toast.makeText(getContext(), R.string.comment_added_success, Toast.LENGTH_SHORT).show();
+                    mCommentEditText.setText("");
+                } else {
+                    Toast.makeText(getContext(), R.string.comment_add_fail, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }.submitCommentForEvent(getContext(), getCommentDetails());
     }
 }

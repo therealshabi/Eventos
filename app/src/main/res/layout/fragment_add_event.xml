@@ -346,8 +346,7 @@
                 android:clickable="true"
                 android:foreground="@drawable/ripple"
                 android:text="@string/submit"
-                android:textColor="@android:color/white"
-                />
+                android:textColor="@android:color/white"/>
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

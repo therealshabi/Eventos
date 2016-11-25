@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import app.com.thetechnocafe.eventos.Models.CommentsModel;
 import app.com.thetechnocafe.eventos.Models.ContactsModel;
 import app.com.thetechnocafe.eventos.Models.EventsModel;
 import app.com.thetechnocafe.eventos.Models.LinksModel;
@@ -52,6 +53,12 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
     private static final String USER_ADDED_EVENTS = "UserAddedEvents";
     private static final String USER_ADDED_EVENTS_USER_NAME = "user_name";  //User Email Id
     private static final String USER_ADDED_EVENTS_ID = "event_id";
+    private static final String COMMENTS_TABLE = "comments";
+    private static final String COMMENTS_COLUMN_COMMENT = "comment";
+    private static final String COMMENTS_COLUMN_TIME = "time";
+    private static final String COMMENTS_COLUMN_FROM = "user";
+    private static final String COMMENTS_COLUMN_EVENT_ID = "event_id";
+
 
     public EventsDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
@@ -94,11 +101,18 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
                 "PRIMARY KEY ( " + USER_ADDED_EVENTS_USER_NAME + " , " + USER_ADDED_EVENTS_ID + " )" +
                 ");";
 
+        String commentsTableSQL = "CREATE TABLE " + COMMENTS_TABLE + " (" +
+                COMMENTS_COLUMN_COMMENT + " VARCHAR, " +
+                COMMENTS_COLUMN_TIME + " VARCHAR, " +
+                COMMENTS_COLUMN_EVENT_ID + " VARCHAR, " +
+                COMMENTS_COLUMN_FROM + " VARCHAR);";
+
         //Run the queries to create tables
         db.execSQL(eventsTableSQL);
         db.execSQL(contactsTableSQL);
         db.execSQL(linksTableSQL);
         db.execSQL(favEventsTableSQL);
+        db.execSQL(commentsTableSQL);
         db.execSQL(userAddedEventsSQL);
     }
 
@@ -518,5 +532,85 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return eventsList;
+    }
+
+    /**
+     * Insert a new Comment
+     */
+    public void insertNewComment(CommentsModel commentsModel) {
+        //Get Database
+        SQLiteDatabase database = getReadableDatabase();
+
+        //Create content values
+        ContentValues contentValues = new ContentValues();
+
+        //Add values
+        contentValues.put(COMMENTS_COLUMN_COMMENT, commentsModel.getComment());
+        contentValues.put(COMMENTS_COLUMN_EVENT_ID, commentsModel.getEventID());
+        contentValues.put(COMMENTS_COLUMN_TIME, String.valueOf(commentsModel.getTime()));
+        contentValues.put(COMMENTS_COLUMN_FROM, commentsModel.getFrom());
+
+        //Insert into db
+        database.insert(COMMENTS_TABLE, null, contentValues);
+
+        //Close database
+        database.close();
+    }
+
+    /**
+     * Get a list of all the comments related to a particular event
+     */
+    public List<CommentsModel> getCommentsList(String eventId) {
+        //Get Database
+        SQLiteDatabase database = getReadableDatabase();
+
+        //Create a new list
+        List<CommentsModel> list = new ArrayList<>();
+
+        //Select query
+        String commentsSQL = "SELECT * FROM " + COMMENTS_TABLE + " WHERE " + COMMENTS_COLUMN_EVENT_ID + " = " + "'" + eventId + "'";
+
+        //Run the query and get cursor
+        Cursor cursor = database.rawQuery(commentsSQL, null);
+
+        //Iterate cursor and return the list
+        while (cursor.moveToNext()) {
+            CommentsModel model = new CommentsModel();
+
+            model.setComment(cursor.getString(cursor.getColumnIndex(COMMENTS_COLUMN_COMMENT)));
+            model.setTime(Long.parseLong(cursor.getString(cursor.getColumnIndex(COMMENTS_COLUMN_TIME))));
+            model.setFrom(cursor.getString(cursor.getColumnIndex(COMMENTS_COLUMN_FROM)));
+            model.setEventID(eventId);
+
+            list.add(model);
+        }
+
+        //Close cursor
+        cursor.close();
+
+        //Close database
+        database.close();
+
+        return list;
+    }
+
+    /**
+     * Update the comments for a specified event
+     */
+    public void updateComments(List<CommentsModel> list, String eventId) {
+        //Get Database
+        SQLiteDatabase database = getReadableDatabase();
+
+        //Delete SQL for existing comments
+        String deleteSQL = "DELETE FROM " + COMMENTS_TABLE + " WHERE " + COMMENTS_COLUMN_EVENT_ID + " = " + "'" + eventId + "'";
+
+        database.execSQL(deleteSQL);
+
+        //Close database
+        database.close();
+
+        for (CommentsModel model : list) {
+            insertNewComment(model);
+        }
     }
 }

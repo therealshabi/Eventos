@@ -22,6 +22,7 @@ public class SignUpActvity extends AppCompatActivity {
     private EditText mPasswordConfirmEditText;
     private EditText mPhoneEditText;
     private Button mSignUpButton;
+    private EditText mFullNameEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class SignUpActvity extends AppCompatActivity {
         mPasswordConfirmEditText = (EditText) findViewById(R.id.fragment_signup_password_confirm_edit_text);
         mPhoneEditText = (EditText) findViewById(R.id.fragment_signup_phone_edit_text);
         mSignUpButton = (Button) findViewById(R.id.fragment_signup_button);
+        mFullNameEditText = (EditText) findViewById(R.id.fragment_signup_full_name_edit_text);
 
         setUpOnClickListeners();
     }
@@ -47,6 +49,7 @@ public class SignUpActvity extends AppCompatActivity {
                         @Override
                         public void isRequestSuccessful(boolean isSuccessful, String message) {
                             Toast.makeText(SignUpActvity.this, message, Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                     }.signUp(
                             SignUpActvity.this,
@@ -60,6 +63,10 @@ public class SignUpActvity extends AppCompatActivity {
 
     //Validate form
     private boolean validateForm() {
+        if (mFullNameEditText.getText().toString().equals("")) {
+            mFullNameEditText.requestFocus();
+            return false;
+        }
         if (mEmailEditText.getText().toString().equals("")) {
             mEmailEditText.requestFocus();
             return false;
@@ -92,6 +99,7 @@ public class SignUpActvity extends AppCompatActivity {
             object.put(StringUtils.JSON_EMAIL, mEmailEditText.getText().toString());
             object.put(StringUtils.JSON_PASSWORD, EncryptionUtils.encryptPassword(mPasswordExitText.getText().toString()));
             object.put(StringUtils.JSON_PHONE, mPhoneEditText.getText().toString());
+            object.put(StringUtils.JSON_FULL_NAME, mFullNameEditText.getText().toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }

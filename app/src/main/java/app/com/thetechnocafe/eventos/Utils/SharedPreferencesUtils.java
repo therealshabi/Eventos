@@ -12,6 +12,8 @@ public class SharedPreferencesUtils {
     private static final String SHARED_PREFERENCES_USERNAME = "username";
     private static final String SHARED_PREFERENCES_PASSWORD = "password";
     private static final String SHARED_PREFERENCES_LOGIN_STATE = "login_state";
+    private static final String SHARED_PREFERENCES_FULL_NAME = "full_name";
+    private static final String SHARED_PREFERENCES_PHONE_NUMBER = "phone_number";
 
     /**
      * Change the username in sharedpreferences
@@ -89,5 +91,57 @@ public class SharedPreferencesUtils {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
 
         return sharedPreferences.getBoolean(SHARED_PREFERENCES_LOGIN_STATE, false);
+    }
+
+    /**
+     * Set full name in shared preferences
+     */
+    public static void setFullName(Context context, String fullName) {
+        //Get shared preferences file
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+
+        //Get editor
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        //Add value to editor
+        editor.putString(SHARED_PREFERENCES_FULL_NAME, fullName);
+
+        editor.commit();
+    }
+
+    /**
+     * Get full name from shared preferences
+     */
+    public static String getFullName(Context context) {
+        //Get shared preferences file
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+
+        return sharedPreferences.getString(SHARED_PREFERENCES_FULL_NAME, null);
+    }
+
+    /**
+     * Set login state in shared preferences
+     */
+    public static void setPhoneNumber(Context context, String phoneNumber) {
+        //Get shared preferences file
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+
+        //Get editor
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        //Add value to editor
+        editor.putString(SHARED_PREFERENCES_PHONE_NUMBER, phoneNumber);
+
+        editor.commit();
+    }
+
+    /**
+     * Get login state from shared preferences
+     */
+    public static String getPhoneNumber(Context context) {
+        //Get shared preferences file
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+
+        return sharedPreferences.getString(SHARED_PREFERENCES_PHONE_NUMBER, null);
     }
 }
