@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/colorPrimary"
-                android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/rating_image"
-        android:layout_width="wrap_content"
-        android:layout_height="250dp"
-        android:layout_marginTop="52dp"
-        android:src="@drawable/customer"/>
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        android:src="@drawable/customer" />
 
     <TextView
         android:id="@+id/walkthrough_text_one"
@@ -19,13 +20,12 @@
         android:layout_below="@id/rating_image"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="56dp"
         android:fontFamily="sans-serif-light"
         android:text="@string/walkthrough_text_feature_part_one"
         android:textAlignment="center"
         android:textColor="@android:color/white"
-        android:textSize="20sp"/>
-
+        android:textSize="20sp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -38,12 +38,12 @@
         android:text="@string/walkthrough_text_feature_part_two"
         android:textAlignment="center"
         android:textColor="@android:color/white"
-        android:textSize="20sp"/>
+        android:textSize="20sp" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="52dp"
-        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
         android:layout_marginTop="536dp"
         android:background="@color/colorPrimaryDark">
 
@@ -51,14 +51,14 @@
             android:id="@+id/skip4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
             android:clickable="true"
             android:foreground="@drawable/ripple"
             android:padding="8dp"
             android:text="SKIP"
-            android:textColor="@android:color/white"
-            />
+            android:textColor="@android:color/white" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

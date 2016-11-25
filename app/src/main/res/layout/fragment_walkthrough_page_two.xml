@@ -1,38 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/colorPrimary"
-                android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical">
 
 
     <ImageView
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:id="@+id/eye"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:src="@drawable/tracking"/>
+        android:layout_marginTop="60dp"
+        android:src="@drawable/tracking" />
 
     <TextView
         android:id="@+id/text_walkthrough_page_two"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/eye"
         android:layout_marginBottom="92dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="40dp"
         android:fontFamily="sans-serif-light"
         android:text="@string/walkthrough_text"
         android:textAlignment="center"
         android:textColor="@android:color/white"
-        android:textSize="20sp"/>
+        android:textSize="20sp" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="52dp"
-        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
         android:layout_marginTop="536dp"
         android:background="@color/colorPrimaryDark">
 
@@ -40,14 +41,14 @@
             android:id="@+id/skip2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
             android:clickable="true"
             android:foreground="@drawable/ripple"
             android:padding="8dp"
             android:text="SKIP"
-            android:textColor="@android:color/white"
-            />
+            android:textColor="@android:color/white" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

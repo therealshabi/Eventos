@@ -170,7 +170,7 @@ public class AddEventFragment extends Fragment {
                     Toast.makeText(getContext(), getString(R.string.submission_success), Toast.LENGTH_LONG).show();
                     String username = SharedPreferencesUtils.getUsername(getContext());
                  //   mDatabaseHelper.insertNewUserAddedEvent("",username);
-                    startActivity(new Intent(getActivity(),HomeStreamFragment.class));
+                    startActivity(new Intent(getActivity(), HomeStreamActivity.class));
                     getActivity().finish();
                 } else {
                     //Notify user about error

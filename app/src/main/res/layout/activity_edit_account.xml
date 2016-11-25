@@ -135,7 +135,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
-                android:text="@string/new_password"
+                android:text="@string/confirm_new_password"
                 android:textColor="@color/colorAccent"/>
 
             <EditText

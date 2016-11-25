@@ -47,6 +47,7 @@ import app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils;
 public class DetailFragment extends Fragment {
 
     private static final String EVENT_ID_TAG = "eventid";
+    private static final String LOADING_DIALOG_TAG = "loading_dialog_tag";
     private static String EVENT_ID;
     private ViewFlipper mRecentComments;
     private LinearLayout mLinkContainer;
@@ -57,9 +58,6 @@ public class DetailFragment extends Fragment {
     private TextView mDateTextView;
     private TextView mVenueTextView;
     private TextView mRequirementsTextView;
-    private static final String EVENT_ID_TAG = "eventid";
-    private static final String LOADING_DIALOG_TAG = "loading_dialog_tag";
-    private static String EVENT_ID;
     private EventsModel mEvent;
     private EventsDatabaseHelper mEventsDatabaseHelper;
     private TextView mNoContactsTextView;

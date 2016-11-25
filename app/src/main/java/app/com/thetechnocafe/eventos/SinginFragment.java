@@ -1,6 +1,7 @@
 package app.com.thetechnocafe.eventos;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,9 +26,8 @@ import app.com.thetechnocafe.eventos.DataSync.RequestUtils;
 import app.com.thetechnocafe.eventos.DataSync.StringUtils;
 import app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils;
 
-/**
- * Created by gurleensethi on 12/08/16.
- */
+import static app.com.thetechnocafe.eventos.R.string.email;
+
 public class SinginFragment extends Fragment {
     private TextView mProblemTextView;
     private Button mSignInButton;
@@ -65,9 +66,52 @@ public class SinginFragment extends Fragment {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.problem_dialog, null);
+
+                TextView cancel = (TextView) dialogView.findViewById(R.id.problem_dialog_cancel);
+                final EditText fullName = (EditText) dialogView.findViewById(R.id.problem_dialog_full_name);
+                final EditText emailId = (EditText) dialogView.findViewById(R.id.problem_dialog_email);
+                final EditText additionalComments = (EditText) dialogView.findViewById(R.id.problem_dialog_comments);
+                TextView send = (TextView) dialogView.findViewById(R.id.problem_dialog_send);
+
                 builder.setView(dialogView);
-                AlertDialog alertDialog = builder.create();
+                final AlertDialog alertDialog = builder.create();
                 alertDialog.show();
+
+                //Cancel The Problem Logging IN Dialog Box
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
+
+                send.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //Validation
+                        if (fullName.getText().toString().equals("")) {
+                            Toast.makeText(getContext(), "Please Enter Valid Full Name!", Toast.LENGTH_LONG).show();
+                            fullName.requestFocus();
+                        } else if (emailId.getText().toString().equals("")) {
+                            Toast.makeText(getContext(), "Please Enter Valid Email Id!", Toast.LENGTH_LONG).show();
+                            emailId.requestFocus();
+                        } else {
+
+                            Intent email = new Intent(Intent.ACTION_SEND);
+                            email.setData(Uri.parse("mailto:"));
+                            email.putExtra(Intent.EXTRA_EMAIL, new String[]{"shahbaz.h97@hotmail.com"});
+                            email.putExtra(Intent.EXTRA_SUBJECT, "Problem Logging In by " + fullName.getText().toString());
+                            email.putExtra(Intent.EXTRA_TEXT, "Hey I can't log in please help." + "\n" +
+                                    "My E-Mail Id is " + emailId.getText().toString() + "\n" + "\nAdditional Comments :-\n" + additionalComments.getText().toString());
+                            email.setType("message/rfc822");
+                            startActivity(Intent.createChooser(email, "Choose an Email client :"));
+                        }
+                    }
+                });
+
+
+
+
             }
         });
 
