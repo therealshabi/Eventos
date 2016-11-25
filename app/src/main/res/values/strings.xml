@@ -127,4 +127,8 @@
     <string name="account_update_success">Account Details Updated</string>
     <string name="account_update_fail">Unable to update detials</string>
     <string name="updating_account_details">Updating Account Details...</string>
+    <string name="comment_empty">Comment cannot be empty</string>
+    <string name="submitting_comment">Submitting your comment...</string>
+    <string name="comment_added_success">Comment added successfully</string>
+    <string name="comment_add_fail">Failed to add comment</string>
 </resources>

@@ -14,13 +14,13 @@ import org.json.JSONObject;
 import app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils;
 
 public abstract class RequestUtils {
-    private static final String SERVER_ADDRESS = "http://192.168.43.56:8080";
+    private static final String SERVER_ADDRESS = "http://192.168.43.55:8080";
     private static final String LINK_EVENT_REQUEST = SERVER_ADDRESS + "/api/events";
     private static final String SIGN_UP_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/signup";
     private static final String SIGN_IN_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/login";
     private static final String UPDATE_ACCOUNT_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/user/update";
     private static final String GET_SUBMITTED_EVENTS_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/submitted-events";
-    private static final String SUBMIT_COMMENT_REQUEST_ADDRESS = "/api/events/comment";
+    private static final String SUBMIT_COMMENT_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/events/comment";
 
     public abstract void isRequestSuccessful(boolean isSuccessful, String message);
 

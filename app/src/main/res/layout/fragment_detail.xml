@@ -234,6 +234,7 @@
                         android:inputType="textShortMessage|textMultiLine"/>
 
                     <ImageButton
+                        android:id="@+id/fragment_detail_submit_comment_image_button"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:layout_gravity="bottom"
