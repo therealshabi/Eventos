@@ -396,10 +396,9 @@ public class AddEventFragment extends Fragment {
             object.put(StringUtils.JSON_TITLE, mTitleEditText.getText().toString());
             object.put(StringUtils.JSON_DESCRIPTION, mDescriptionEditText.getText().toString());
             object.put(StringUtils.JSON_VENUE, mVenueEditText.getText().toString());
-
             object.put(StringUtils.JSON_IMAGE, mImageEditText.getText().toString());
             object.put(StringUtils.JSON_AVATAR_ID, 0);
-            object.put(StringUtils.JSON_REQUIREMENTS, mCloudinaryImageURL);
+            object.put(StringUtils.JSON_REQUIREMENTS, mRequirementsEditText);
             object.put(StringUtils.SUBMITTED_BY, SharedPreferencesUtils.getUsername(getContext()));
             object.put(StringUtils.JSON_EVENT_DATE, getDateInLong());
 

@@ -25,9 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/fragment_comments_recycler_view"
@@ -36,6 +34,14 @@
             android:layout_weight="0.9">
 
         </android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/fragment_comments_no_comments_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:text="@string/no_comments_found"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,10 +52,10 @@
                 android:id="@+id/fragment_detail_comment_edit_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:layout_weight="0.9"
                 android:hint="@string/comment_hint"
-                android:inputType="textShortMessage|textMultiLine"
-                android:layout_gravity="bottom"/>
+                android:inputType="textShortMessage|textMultiLine"/>
 
             <ImageButton
                 android:layout_width="48dp"

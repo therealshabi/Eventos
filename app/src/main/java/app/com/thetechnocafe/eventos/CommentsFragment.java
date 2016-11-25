@@ -13,6 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Date;
+import java.util.List;
+
+import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
+import app.com.thetechnocafe.eventos.Models.CommentsModel;
+import app.com.thetechnocafe.eventos.Utils.DateUtils;
+
 /**
  * Created by gurleensethi on 20/08/16.
  */
@@ -20,9 +27,18 @@ public class CommentsFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private CommentAdapter mCommentAdapter;
+    private List<CommentsModel> mCommentsModelList;
+    private EventsDatabaseHelper mDatabaseHelper;
+    private static final String EVENT_ID_TAG = "event_tag";
+    private static final String EVENT_ID = "event_id";
+    private TextView mNoCommentsTextView;
 
-    public static CommentsFragment getInstance() {
-        return new CommentsFragment();
+    public static CommentsFragment getInstance(String eventID) {
+        CommentsFragment fragment = new CommentsFragment();
+        Bundle args = new Bundle();
+        args.putString(EVENT_ID_TAG, eventID);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -37,11 +53,7 @@ public class CommentsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_comments, container, false);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_comments_recycler_view);
-
-        //Set up the recycler view
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mCommentAdapter = new CommentAdapter();
-        mRecyclerView.setAdapter(mCommentAdapter);
+        mNoCommentsTextView = (TextView) view.findViewById(R.id.fragment_comments_no_comments_text_view);
 
         //Set up the toolbar
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_comments_toolbar);
@@ -53,7 +65,28 @@ public class CommentsFragment extends Fragment {
             activity.getSupportActionBar().setTitle(getString(R.string.comments));
         }
 
+        mDatabaseHelper = new EventsDatabaseHelper(getContext());
+        mCommentsModelList = mDatabaseHelper.getCommentsList(getArguments().getString(EVENT_ID_TAG));
+
+        setUpOrRefershRecyclerView();
+
         return view;
+    }
+
+    private void setUpOrRefershRecyclerView() {
+        if(mCommentAdapter == null) {
+            //Set up the recycler view
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            mCommentAdapter = new CommentAdapter();
+            mRecyclerView.setAdapter(mCommentAdapter);
+        } else {
+            mCommentAdapter.notifyDataSetChanged();
+        }
+
+        if(mCommentsModelList.size() == 0) {
+            mNoCommentsTextView.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -81,8 +114,10 @@ public class CommentsFragment extends Fragment {
             mCommentText = (TextView) view.findViewById(R.id.comment_recent_item_comment);
         }
 
-        public void bindData() {
-
+        public void bindData(int position) {
+            mIdText.setText(mCommentsModelList.get(position).getFrom());
+            mDateText.setText(DateUtils.getFormattedDate(new Date(mCommentsModelList.get(position).getTime())));
+            mCommentText.setText(mCommentsModelList.get(position).getComment());
         }
     }
 
@@ -91,18 +126,18 @@ public class CommentsFragment extends Fragment {
 
         @Override
         public CommentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.comment_recent_item, parent, false);
+            View view = LayoutInflater.from(getContext()).inflate(R.layout.comment_item, parent, false);
             return new CommentViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(CommentViewHolder holder, int position) {
-
+            holder.bindData(position);
         }
 
         @Override
         public int getItemCount() {
-            return 10;
+            return mCommentsModelList.size();
         }
     }
 }

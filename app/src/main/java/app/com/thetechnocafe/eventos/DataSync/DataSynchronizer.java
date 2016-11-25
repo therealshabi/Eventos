@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
+import app.com.thetechnocafe.eventos.Models.CommentsModel;
 import app.com.thetechnocafe.eventos.Models.ContactsModel;
 import app.com.thetechnocafe.eventos.Models.EventsModel;
 import app.com.thetechnocafe.eventos.Models.LinksModel;
@@ -80,6 +81,25 @@ public abstract class DataSynchronizer {
                                 if (insertEventDetails(event, eventJSONobject)) {
                                     //Add id to list
                                     idList.add(event.getId());
+
+                                    //Create a list of comments
+                                    List<CommentsModel> list = new ArrayList<>();
+
+                                    //Insert comments into comment database
+                                    JSONArray commentsJSONArray = eventJSONobject.getJSONArray(StringUtils.JSON_COMMENTS);
+                                    for (int count = 0; count < commentsJSONArray.length(); count++) {
+                                        CommentsModel model = new CommentsModel();
+
+                                        model.setEventID(event.getId());
+                                        model.setTime(commentsJSONArray.getJSONObject(count).getLong(StringUtils.JSON_TIME));
+                                        model.setFrom(commentsJSONArray.getJSONObject(count).getString(StringUtils.JSON_FROM));
+                                        model.setComment(commentsJSONArray.getJSONObject(count).getString(StringUtils.JSON_COMMENT));
+
+                                        list.add(model);
+                                    }
+
+                                    //Insert into database
+                                    mEventsDatabaseHelper.updateComments(list, event.getId());
 
                                     //Check if events already is in database
                                     //Insert the event into database

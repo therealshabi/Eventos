@@ -7,6 +7,8 @@ import android.os.Bundle;
 
 public class CommentsActivity extends AppCompatActivity {
 
+    public static final String EVENT_ID_TAG = "event_tag";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,7 +18,7 @@ public class CommentsActivity extends AppCompatActivity {
         Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_comments_container);
 
         if (fragment == null) {
-            fragment = CommentsFragment.getInstance();
+            fragment = CommentsFragment.getInstance(getIntent().getStringExtra(EVENT_ID_TAG));
             fragmentManager.beginTransaction().add(R.id.fragment_comments_container, fragment).commit();
         }
     }

@@ -53,7 +53,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
     private static final String COMMENTS_TABLE = "comments";
     private static final String COMMENTS_COLUMN_COMMENT = "comment";
     private static final String COMMENTS_COLUMN_TIME = "time";
-    private static final String COMMENTS_COLUMN_FROM = "from";
+    private static final String COMMENTS_COLUMN_FROM = "user";
     private static final String COMMENTS_COLUMN_EVENT_ID = "event_id";
 
 
@@ -568,5 +568,25 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         database.close();
 
         return list;
+    }
+
+    /**
+     * Update the comments for a specified event
+     */
+    public void updateComments(List<CommentsModel> list, String eventId) {
+        //Get Database
+        SQLiteDatabase database = getReadableDatabase();
+
+        //Delete SQL for existing comments
+        String deleteSQL = "DELETE FROM " + COMMENTS_TABLE + " WHERE " + COMMENTS_COLUMN_EVENT_ID + " = " + "'" + eventId + "'";
+
+        database.execSQL(deleteSQL);
+
+        //Close database
+        database.close();
+
+        for (CommentsModel model : list) {
+            insertNewComment(model);
+        }
     }
 }
