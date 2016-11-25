@@ -19,6 +19,7 @@ public abstract class RequestUtils {
     private static final String SIGN_UP_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/signup";
     private static final String SIGN_IN_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/login";
     private static final String UPDATE_ACCOUNT_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/user/update";
+    private static final String GET_SUBMITTED_EVENTS_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/submitted-events";
 
     public abstract void isRequestSuccessful(boolean isSuccessful, String message);
 
@@ -137,6 +138,44 @@ public abstract class RequestUtils {
                 try {
                     if (response.getString(StringUtils.JSON_STATUS).equals(StringUtils.JSON_SUCCESS)) {
                         isRequestSuccessful(true, response.getString(StringUtils.JSON_DATA));
+                    } else {
+                        isRequestSuccessful(false, response.getString(StringUtils.JSON_DATA));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    isRequestSuccessful(false, null);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        //Add to volley queue
+        VolleyQueue.getInstance(context).getRequestQueue().add(request);
+    }
+
+    /**
+     * Get all the events submitted by the specified user
+     */
+    public void getSubmittedEvents(Context context, String email) {
+        //Create a JSON Object
+        JSONObject object = new JSONObject();
+        try {
+            object.put(StringUtils.SUBMITTED_BY, email);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonRequest request = new JsonObjectRequest(Request.Method.POST, GET_SUBMITTED_EVENTS_REQUEST_ADDRESS, object, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getString(StringUtils.JSON_STATUS).equals(StringUtils.JSON_SUCCESS)) {
+                        isRequestSuccessful(true, response.getString(StringUtils.JSON_DATA));
+                        //TODO: DO THE STORAGE AND ANYTHING ELSE HERE
                     } else {
                         isRequestSuccessful(false, response.getString(StringUtils.JSON_DATA));
                     }
