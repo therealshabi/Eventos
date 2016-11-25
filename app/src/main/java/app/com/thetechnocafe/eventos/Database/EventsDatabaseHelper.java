@@ -49,6 +49,12 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
     private static final String FAV_EVENTS_TABLE = "FavEvents";
     private static final String FAV_EVENT_COLUMN_ID = "id";
 
+    private static final String COMMENTS_TABLE = "comments";
+    private static final String COMMENTS_COLUMN_COMMENT = "comment";
+    private static final String COMMENTS_COLUMN_TIME = "time";
+    private static final String COMMENTS_COLUMN_FROM = "from";
+    private static final String COMMENTS_COLUMN_EVENT_ID = "event_id";
+
 
     public EventsDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
@@ -85,11 +91,18 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
                 LINKS_ADDRESS + " VARCHAR" +
                 ");";
 
+        String commentsTableSQL = "CREATE TABLE " + COMMENTS_TABLE + " (" +
+                COMMENTS_COLUMN_COMMENT + " VARCHAR, " +
+                COMMENTS_COLUMN_TIME + " VARCHAR, " +
+                COMMENTS_COLUMN_EVENT_ID + " VARCHAR, " +
+                COMMENTS_COLUMN_FROM + " VARCHAR);";
+
         //Run the queries to create tables
         db.execSQL(eventsTableSQL);
         db.execSQL(contactsTableSQL);
         db.execSQL(linksTableSQL);
         db.execSQL(favEventsTableSQL);
+        db.execSQL(commentsTableSQL);
     }
 
     @Override
@@ -495,4 +508,6 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
 
         return eventsList;
     }
+
+
 }
