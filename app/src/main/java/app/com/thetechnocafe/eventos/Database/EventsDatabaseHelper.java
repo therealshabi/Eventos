@@ -49,6 +49,9 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
     private static final String FAV_EVENTS_TABLE = "FavEvents";
     private static final String FAV_EVENT_COLUMN_ID = "id";
 
+    private static final String USER_ADDED_EVENTS = "UserAddedEvents";
+    private static final String USER_ADDED_EVENTS_USER_NAME = "user_name";  //User Email Id
+    private static final String USER_ADDED_EVENTS_ID = "event_id";
 
     public EventsDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
@@ -85,11 +88,18 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
                 LINKS_ADDRESS + " VARCHAR" +
                 ");";
 
+        String userAddedEventsSQL = "CREATE TABLE " + USER_ADDED_EVENTS + " (" +
+                USER_ADDED_EVENTS_USER_NAME + " VARCHAR, " +
+                USER_ADDED_EVENTS_ID + " VARCHAR, " +
+                "PRIMARY KEY ( " + USER_ADDED_EVENTS_USER_NAME + " , " + USER_ADDED_EVENTS_ID + " )" +
+                ");";
+
         //Run the queries to create tables
         db.execSQL(eventsTableSQL);
         db.execSQL(contactsTableSQL);
         db.execSQL(linksTableSQL);
         db.execSQL(favEventsTableSQL);
+        db.execSQL(userAddedEventsSQL);
     }
 
     @Override
@@ -124,6 +134,18 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(FAV_EVENT_COLUMN_ID, event.getId());
 
         database.insert(FAV_EVENTS_TABLE, null, contentValues);
+    }
+
+    public void insertNewUserAddedEvent(EventsModel event, String username) {
+        //Get database
+        SQLiteDatabase database = getWritableDatabase();
+
+        //Create content values and add data
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(USER_ADDED_EVENTS_ID, event.getId());
+        contentValues.put(USER_ADDED_EVENTS_USER_NAME, username);
+
+        database.insert(USER_ADDED_EVENTS, null, contentValues);
     }
 
     /**
@@ -414,11 +436,13 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         String deleteEventsSQL = "DELETE FROM " + EVENTS_TABLE;
         String deleteContactsSQL = "DELETE FROM " + CONTACTS_TABLE;
         String deleteLinksSQL = "DELETE FROM " + LINKS_TABLE;
+        String deleteFavEventsSQL = "DELETE FROM " + FAV_EVENTS_TABLE;
 
         //Execute queries
         database.execSQL(deleteEventsSQL);
         database.execSQL(deleteContactsSQL);
         database.execSQL(deleteLinksSQL);
+        database.execSQL(deleteFavEventsSQL);
 
         //Close database
         database.close();

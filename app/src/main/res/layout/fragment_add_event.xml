@@ -323,7 +323,6 @@
                     android:layout_weight="0.8"
                     android:background="@android:color/transparent"
                     android:clickable="true"
-                    android:foreground="@drawable/ripple"
                     android:gravity="center"
                     android:text="@string/select_avatar"
                     android:textSize="16sp" />

@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +54,7 @@ import java.util.Map;
 
 import app.com.thetechnocafe.eventos.DataSync.RequestUtils;
 import app.com.thetechnocafe.eventos.DataSync.StringUtils;
+import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
 import app.com.thetechnocafe.eventos.Dialogs.DialogDatePicker;
 import app.com.thetechnocafe.eventos.Dialogs.DialogTimePicker;
 import app.com.thetechnocafe.eventos.Dialogs.LoadingDialog;
@@ -91,6 +93,10 @@ public class AddEventFragment extends Fragment {
     private LoadingDialog mLoadingDialog;
     private Calendar mCalendar;
     private ImageButton mPhotoUploadImageButton;
+    private ImageView mAddCategoryImageButton;
+
+    private EventsDatabaseHelper mDatabaseHelper;
+
 
     public static AddEventFragment getInstance() {
         return new AddEventFragment();
@@ -122,9 +128,11 @@ public class AddEventFragment extends Fragment {
         mImageEditText = (EditText) view.findViewById(R.id.fragment_add_event_image_link);
         mRequirementsEditText = (EditText) view.findViewById(R.id.fragment_add_event_requirement);
         mPhotoUploadImageButton = (ImageButton) view.findViewById(R.id.fragment_add_event_add_image_button);
+        mAddCategoryImageButton = (ImageView) view.findViewById(R.id.fragment_add_event_avatar_image);
 
         //Get calendar
         mCalendar = GregorianCalendar.getInstance();
+        mDatabaseHelper = new EventsDatabaseHelper(getContext());
 
         //Set up date and text
         setDateText(mCalendar);
@@ -160,6 +168,9 @@ public class AddEventFragment extends Fragment {
                 if (isSuccessful) {
                     //Show Toast message and finish the activity
                     Toast.makeText(getContext(), getString(R.string.submission_success), Toast.LENGTH_LONG).show();
+                    String username = SharedPreferencesUtils.getUsername(getContext());
+                 //   mDatabaseHelper.insertNewUserAddedEvent("",username);
+                    startActivity(new Intent(getActivity(),HomeStreamFragment.class));
                     getActivity().finish();
                 } else {
                     //Notify user about error
