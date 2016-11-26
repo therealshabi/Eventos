@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -40,6 +41,8 @@ import app.com.thetechnocafe.eventos.Models.LinksModel;
 import app.com.thetechnocafe.eventos.Utils.DateUtils;
 import app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils;
 
+import static app.com.thetechnocafe.eventos.R.style.RatingBar;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,6 +51,7 @@ public class DetailFragment extends Fragment {
 
     private static final String EVENT_ID_TAG = "eventid";
     private static final String LOADING_DIALOG_TAG = "loading_dialog_tag";
+    public static String thisEventId;
     private static String EVENT_ID;
     private ViewFlipper mRecentComments;
     private LinearLayout mLinkContainer;
@@ -68,11 +72,14 @@ public class DetailFragment extends Fragment {
     private EditText mCommentEditText;
     private List<CommentsModel> mCommentsModelsList;
     private ImageView mEventImageView;
+    private RatingBar mRatingBar;
 
     public static DetailFragment getInstance(String id) {
         //Create bundle
         Bundle args = new Bundle();
         args.putString(EVENT_ID_TAG, id);
+
+        thisEventId = id;
 
         //Set arguments
         DetailFragment fragment = new DetailFragment();
@@ -107,6 +114,7 @@ public class DetailFragment extends Fragment {
         mCommentEditText = (EditText) view.findViewById(R.id.fragment_detail_comment_edit_text);
         mSubmitCommentImageButton = (ImageButton) view.findViewById(R.id.fragment_detail_submit_comment_image_button);
         mEventImageView = (ImageView) view.findViewById(R.id.fragment_detail_event_image_view);
+        mRatingBar = (RatingBar) view.findViewById(R.id.fragment_detail_rating_bar);
 
         //Retrieve id from fragment arguments
         EVENT_ID = getArguments().getString(EVENT_ID_TAG, null);
@@ -145,6 +153,7 @@ public class DetailFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+
     //Set onClick listeners for various views
     private void setOnClickListeners() {
         //Set up show more comments
@@ -176,6 +185,14 @@ public class DetailFragment extends Fragment {
                 }
             }
         });
+
+        mRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                submitRating((int) rating);
+            }
+        });
+
     }
 
     //Add contacts in the contacts container
@@ -362,6 +379,18 @@ public class DetailFragment extends Fragment {
         return object;
     }
 
+    private JSONObject getRatingJSON(int rating) {
+        JSONObject object = new JSONObject();
+        try {
+            object.put(StringUtils.JSON_RATING, rating);
+            object.put(StringUtils.JSON_USER_ID, SharedPreferencesUtils.getUsername(getContext()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return object;
+    }
+
     /**
      * Submit comment to server
      */
@@ -385,5 +414,19 @@ public class DetailFragment extends Fragment {
                 }
             }
         }.submitCommentForEvent(getContext(), getCommentDetails());
+    }
+
+    private void submitRating(int rating) {
+        new RequestUtils() {
+
+            @Override
+            public void isRequestSuccessful(boolean isSuccessful, String message) {
+                if (isSuccessful) {
+                    Toast.makeText(getContext(), "Event Rated Successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Failed Rating Event", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }.setRateEventRequestPost(getContext(), getRatingJSON(rating), thisEventId);
     }
 }

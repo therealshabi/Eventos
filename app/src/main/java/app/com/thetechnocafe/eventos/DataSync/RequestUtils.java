@@ -21,6 +21,7 @@ public abstract class RequestUtils {
     private static final String UPDATE_ACCOUNT_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/user/update";
     private static final String GET_SUBMITTED_EVENTS_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/submitted-events";
     private static final String SUBMIT_COMMENT_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/events/comment";
+    private static final String RATE_EVENT_REQUEST_POST = SERVER_ADDRESS + "/api/events/rating/";
 
     public abstract void isRequestSuccessful(boolean isSuccessful, String message);
 
@@ -215,6 +216,34 @@ public abstract class RequestUtils {
                 }
             }
         }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                isRequestSuccessful(false, null);
+            }
+        });
+
+        //Add to volley queue
+        VolleyQueue.getInstance(context).getRequestQueue().add(request);
+    }
+
+    //Submit Rating for a particular Event
+    public void setRateEventRequestPost(Context context, JSONObject object, String id) {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, RATE_EVENT_REQUEST_POST + id, object, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getString(StringUtils.JSON_STATUS).equals(StringUtils.JSON_SUCCESS)) {
+                        isRequestSuccessful(true, response.getString(StringUtils.JSON_DATA));
+                    } else {
+                        isRequestSuccessful(false, response.getString(StringUtils.JSON_DATA));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    isRequestSuccessful(false, null);
+                }
+            }
+        }, new Response.ErrorListener() {
+
             @Override
             public void onErrorResponse(VolleyError error) {
                 isRequestSuccessful(false, null);
