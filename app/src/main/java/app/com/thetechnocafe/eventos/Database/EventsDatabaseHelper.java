@@ -35,6 +35,8 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
     private static final String EVENT_COLUMN_AVATAR_ID = "avatar_id";
     private static final String EVENT_COLUMN_IMAGE = "image";
     private static final String EVENT_COLUMN_REQUIREMENTS = "requirements";
+    private static final String EVENT_COLOUMN_SUBMITTED_BY = "submitted_by";
+    private static final String EVENT_COLOUMN_VERIFIED = "verified";
 
     private static final String CONTACTS_TABLE = "event_contacts";
     private static final String CONTACTS_EVENT_ID = "event_id";
@@ -50,9 +52,6 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
     private static final String FAV_EVENTS_TABLE = "FavEvents";
     private static final String FAV_EVENT_COLUMN_ID = "id";
 
-    private static final String USER_ADDED_EVENTS = "UserAddedEvents";
-    private static final String USER_ADDED_EVENTS_USER_NAME = "user_name";  //User Email Id
-    private static final String USER_ADDED_EVENTS_ID = "event_id";
     private static final String COMMENTS_TABLE = "comments";
     private static final String COMMENTS_COLUMN_COMMENT = "comment";
     private static final String COMMENTS_COLUMN_TIME = "time";
@@ -75,7 +74,9 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
                 EVENT_COLUMN_VENUE + " VARCHAR, " +
                 EVENT_COLUMN_AVATAR_ID + " INTEGER, " +
                 EVENT_COLUMN_IMAGE + " VARCHAR, " +
-                EVENT_COLUMN_REQUIREMENTS + " VARCHAR " +
+                EVENT_COLUMN_REQUIREMENTS + " VARCHAR ," +
+                EVENT_COLOUMN_SUBMITTED_BY + " VARCHAR ," +
+                EVENT_COLOUMN_VERIFIED + " INTEGER DEFAULT 0" +
                 ");";
 
         String favEventsTableSQL = "CREATE TABLE " + FAV_EVENTS_TABLE + " (" +
@@ -95,12 +96,6 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
                 LINKS_ADDRESS + " VARCHAR" +
                 ");";
 
-        String userAddedEventsSQL = "CREATE TABLE " + USER_ADDED_EVENTS + " (" +
-                USER_ADDED_EVENTS_USER_NAME + " VARCHAR, " +
-                USER_ADDED_EVENTS_ID + " VARCHAR, " +
-                "PRIMARY KEY ( " + USER_ADDED_EVENTS_USER_NAME + " , " + USER_ADDED_EVENTS_ID + " )" +
-                ");";
-
         String commentsTableSQL = "CREATE TABLE " + COMMENTS_TABLE + " (" +
                 COMMENTS_COLUMN_COMMENT + " VARCHAR, " +
                 COMMENTS_COLUMN_TIME + " VARCHAR, " +
@@ -113,7 +108,6 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(linksTableSQL);
         db.execSQL(favEventsTableSQL);
         db.execSQL(commentsTableSQL);
-        db.execSQL(userAddedEventsSQL);
     }
 
     @Override
@@ -138,6 +132,12 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(EVENT_COLUMN_IMAGE, event.getImage());
         contentValues.put(EVENT_COLUMN_DATE, String.valueOf(event.getDate().getTime()));
         contentValues.put(EVENT_COLUMN_REQUIREMENTS, event.getRequirements());
+        contentValues.put(EVENT_COLOUMN_SUBMITTED_BY, event.getSubmittedBy());
+        if (event.getVerified() == true) {
+            contentValues.put(EVENT_COLOUMN_VERIFIED, 1);
+        } else {
+            contentValues.put(EVENT_COLOUMN_VERIFIED, 0);
+        }
 
         database.insert(EVENTS_TABLE, null, contentValues);
     }
@@ -148,18 +148,6 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(FAV_EVENT_COLUMN_ID, event.getId());
 
         database.insert(FAV_EVENTS_TABLE, null, contentValues);
-    }
-
-    public void insertNewUserAddedEvent(EventsModel event, String username) {
-        //Get database
-        SQLiteDatabase database = getWritableDatabase();
-
-        //Create content values and add data
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(USER_ADDED_EVENTS_ID, event.getId());
-        contentValues.put(USER_ADDED_EVENTS_USER_NAME, username);
-
-        database.insert(USER_ADDED_EVENTS, null, contentValues);
     }
 
     /**
@@ -190,6 +178,13 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
             event.setImage(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_IMAGE)));
             event.setTitle(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_TITLE)));
             event.setDescription(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_DESCRIPTION)));
+            event.setSubmittedBy(cursor.getString(cursor.getColumnIndex(EVENT_COLOUMN_SUBMITTED_BY)));
+
+            if (cursor.getInt(cursor.getColumnIndex(EVENT_COLOUMN_VERIFIED)) == 0) {
+                event.setVerified(false);
+            } else {
+                event.setVerified(true);
+            }
 
             //Add event to list
             eventsList.add(event);
@@ -242,6 +237,12 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
             eventsModel.setVenue(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_VENUE)));
             eventsModel.setRequirements(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_REQUIREMENTS)));
             eventsModel.setDate(new Date(Long.parseLong(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_DATE)))));
+            eventsModel.setSubmittedBy(cursor.getString(cursor.getColumnIndex(EVENT_COLOUMN_SUBMITTED_BY)));
+            if (cursor.getInt(cursor.getColumnIndex(EVENT_COLOUMN_VERIFIED)) == 0) {
+                eventsModel.setVerified(false);
+            } else {
+                eventsModel.setVerified(true);
+            }
         }
 
         //Close the cursor
@@ -522,6 +523,12 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
             event.setImage(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_IMAGE)));
             event.setTitle(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_TITLE)));
             event.setDescription(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_DESCRIPTION)));
+            event.setSubmittedBy(cursor.getString(cursor.getColumnIndex(EVENT_COLOUMN_SUBMITTED_BY)));
+            if (cursor.getInt(cursor.getColumnIndex(EVENT_COLOUMN_VERIFIED)) == 0) {
+                event.setVerified(false);
+            } else {
+                event.setVerified(true);
+            }
 
 
             if (event.getDate().getTime() > dayStart && event.getDate().getTime() < dayEnd) {

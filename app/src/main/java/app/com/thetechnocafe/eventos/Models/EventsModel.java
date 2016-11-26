@@ -16,6 +16,8 @@ public class EventsModel {
     private int avatar_id;
     private String image;
     private String requirements;
+    private String submittedBy;
+    private Boolean verified;
 
     public int getAvatarId() {
         return avatar_id;
@@ -87,5 +89,21 @@ public class EventsModel {
 
     public void setAvatar_id(int avatar_id) {
         this.avatar_id = avatar_id;
+    }
+
+    public String getSubmittedBy() {
+        return submittedBy;
+    }
+
+    public void setSubmittedBy(String submittedBy) {
+        this.submittedBy = submittedBy;
+    }
+
+    public Boolean getVerified() {
+        return verified;
+    }
+
+    public void setVerified(Boolean verified) {
+        this.verified = verified;
     }
 }

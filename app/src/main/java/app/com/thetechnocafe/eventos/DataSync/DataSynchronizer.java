@@ -37,6 +37,10 @@ public abstract class DataSynchronizer {
     private static final String JSON_EVENT_AVATAR_ID = "avatar_id";
     private static final String JSON_EVENT_ID = "_id";
     private static final String JSON_EVENT_REQUIREMENTS = "requirements";
+    private static final String JSON_EVENT_VERIFIED = "verified";
+
+    private static final String JSON_EVENT_SUBMIITED_BY = "submitted_by";
+
     private EventsDatabaseHelper mEventsDatabaseHelper;
 
     /**
@@ -176,6 +180,8 @@ public abstract class DataSynchronizer {
             event.setAvatarId(object.getInt(JSON_EVENT_AVATAR_ID));
             event.setDate(new Date(object.getLong(StringUtils.JSON_DATE)));
             event.setRequirements(object.getString(JSON_EVENT_REQUIREMENTS));
+            event.setSubmittedBy(object.getString(JSON_EVENT_SUBMIITED_BY));
+            event.setVerified(object.getBoolean(JSON_EVENT_VERIFIED));
         } catch (JSONException e) {
             e.printStackTrace();
             return false;

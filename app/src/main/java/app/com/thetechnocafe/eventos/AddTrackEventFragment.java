@@ -1,15 +1,14 @@
 package app.com.thetechnocafe.eventos;
 
+import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,16 +17,34 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+import app.com.thetechnocafe.eventos.DataSync.DataSynchronizer;
+import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
+import app.com.thetechnocafe.eventos.Models.EventsModel;
+import app.com.thetechnocafe.eventos.Utils.DateUtils;
+import app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils;
 
 /**
  * Created by gurleensethi on 20/08/16.
  */
 public class AddTrackEventFragment extends Fragment {
 
+    private static final int GRID_SIZE = 2;
     private FloatingActionButton mAddNewEventActionButton;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private static final int GRID_SIZE = 2;
+    private DataSynchronizer mDataSynchronizer;
+    private List<EventsModel> mEventsList;
+    private List<EventsModel> mUserAddedEventsList;
+    private EventAdapter mEventRecyclerAdapter;
+    private EventsDatabaseHelper mDatabaseHelper;
+
 
     public static AddTrackEventFragment getInstance() {
         return new AddTrackEventFragment();
@@ -66,20 +83,48 @@ public class AddTrackEventFragment extends Fragment {
             activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back);
         }
 
-        //Set up recycler view
+        mDatabaseHelper = new EventsDatabaseHelper(getContext());
+
+        setUpAndNotifyRecyclerView();
+       /* //Set up recycler view
         EventAdapter adapter = new EventAdapter();
         if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), GRID_SIZE));
         } else {
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         }
-        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setAdapter(adapter);*/
+
 
         //Set up swipe refresh layout
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+       /* mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 new OrganisedEventDataFetcher().execute();
+            }
+        });*/
+
+        mDataSynchronizer = new DataSynchronizer() {
+            @Override
+            public void onDataSynchronized(boolean isSyncSuccessful) {
+                if (isSyncSuccessful) {
+                    setUpAndNotifyRecyclerView();
+                } else {
+                    //Notify user on sync failed
+                    if (isAdded()) {
+                    }
+                }
+                //Stop the Swipe refresh layout
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        };
+
+        //Set up on swipe refresh layout
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //Send request to synchronize data
+                mDataSynchronizer.fetchEventsFromNetwork(getContext());
             }
         });
 
@@ -97,32 +142,85 @@ public class AddTrackEventFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    //Recycler view holder
-    class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        private ImageView mVerifiedImage;
+    private void setUpAndNotifyRecyclerView() {
+        //if (mEventRecyclerAdapter == null) {
+        //Get the events list from database
+        mEventsList = mDatabaseHelper.getEventsList();
+        mUserAddedEventsList = new ArrayList<>();
 
-        EventViewHolder(View view) {
+        for (int i = 0; i < mEventsList.size(); i++) {
+            if (mEventsList.get(i).getSubmittedBy().equals(SharedPreferencesUtils.getUsername(getContext()))) {
+                mUserAddedEventsList.add(mEventsList.get(i));
+            }
+        }
+
+        //Create the adapter
+        mEventRecyclerAdapter = new EventAdapter(mUserAddedEventsList, getContext());
+
+        //Set the recycler view with adapter and layout manager
+        mRecyclerView.setAdapter(mEventRecyclerAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+     /*   } else {
+            //If new data is loaded
+            mEventRecyclerAdapter.setUpdatedList(mDatabaseHelper.getEventsList());
+            mEventRecyclerAdapter.notifyDataSetChanged();
+        }*/
+    }
+
+    //Recycler view holder
+    class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        ImageView mVerifiedImage;
+        TextView mEventTitle;
+        TextView mSubmittedOn;
+        TextView mRating;
+        TextView mNumOfPeopleAttending;
+        CardView mCardView;
+
+
+        public EventViewHolder(View view) {
             super(view);
             view.setOnClickListener(this);
             mVerifiedImage = (ImageView) view.findViewById(R.id.track_event_item_submitted_verified);
+            mEventTitle = (TextView) view.findViewById(R.id.track_event_item_title);
+            mSubmittedOn = (TextView) view.findViewById(R.id.track_event_item_submitted_on);
+            mRating = (TextView) view.findViewById(R.id.track_event_item_people_rating);
+            mNumOfPeopleAttending = (TextView) view.findViewById(R.id.track_event_item_people_attending);
+            mCardView = (CardView) view.findViewById(R.id.add_track_event_item_card_view);
         }
 
-        public void bindData(int position) {
-            if (position % 2 == 0) {
+        public void bindData(final EventsModel event) {
+            //Toast.makeText(getContext(),"Hello "+event.getSubmittedBy(),Toast.LENGTH_LONG).show();
+            mCardView.setVisibility(View.VISIBLE);
+            mEventTitle.setText(event.getTitle());
+            mSubmittedOn.setText("" + DateUtils.getFormattedDate(new Date()));
+            mRating.setText("" + 4);
+            mNumOfPeopleAttending.setText("6");
+
+            if (event.getVerified() == true) {
                 mVerifiedImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_dot_verified));
             }
+
+
         }
 
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(getContext(), TrackEventActivity.class);
             startActivity(intent);
-            getActivity().overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+            getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
     }
 
     //Recycler view adapter
     class EventAdapter extends RecyclerView.Adapter<EventViewHolder> {
+        List<EventsModel> list = Collections.emptyList();
+        Context context;
+
+        public EventAdapter(List<EventsModel> list, Context context) {
+            this.list = list;
+            this.context = context;
+        }
+
         @Override
         public EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(getContext()).inflate(R.layout.add_track_event_item, parent, false);
@@ -131,43 +229,13 @@ public class AddTrackEventFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(EventViewHolder holder, int position) {
-            holder.bindData(position);
+            holder.bindData(list.get(position));
         }
 
         @Override
         public int getItemCount() {
-            return 4;
+            return list.size();
         }
     }
 
-    class OrganisedEventDataFetcher extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            Thread thread = new Thread() {
-                @Override
-                public void run() {
-                    super.run();
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-            thread.run();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
-    }
 }
