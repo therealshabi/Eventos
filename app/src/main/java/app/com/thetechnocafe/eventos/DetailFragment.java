@@ -41,8 +41,6 @@ import app.com.thetechnocafe.eventos.Models.LinksModel;
 import app.com.thetechnocafe.eventos.Utils.DateUtils;
 import app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils;
 
-import static app.com.thetechnocafe.eventos.R.style.RatingBar;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -190,6 +188,7 @@ public class DetailFragment extends Fragment {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 submitRating((int) rating);
+                SharedPreferencesUtils.setRating(getContext(), thisEventId, (int) rating);
             }
         });
 
@@ -327,6 +326,7 @@ public class DetailFragment extends Fragment {
         mDateTextView.setText(DateUtils.getFormattedDate(mEvent.getDate()));
         mTimeTextView.setText(DateUtils.convertToTime(mEvent.getDate()));
         mVenueTextView.setText(mEvent.getVenue());
+        mRatingBar.setRating(SharedPreferencesUtils.getRating(getContext(), thisEventId));
 
         Picasso.with(getContext())
                 .load(mEvent.getImage())

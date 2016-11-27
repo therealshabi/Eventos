@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
+import app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils;
+
 public class HomeStreamActivity extends AppCompatActivity {
 
     boolean LikeBtnStatus;
@@ -14,6 +16,9 @@ public class HomeStreamActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_stream);
 
+        if(!SharedPreferencesUtils.getLoginState(getBaseContext())){
+            finish();
+        }
         // getIntent().getBooleanExtra("likeBtnStatus", LikeBtnStatus);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -26,4 +31,9 @@ public class HomeStreamActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

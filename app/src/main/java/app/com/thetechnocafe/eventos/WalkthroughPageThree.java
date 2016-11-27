@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils;
+
 /**
  * Created by shahbaz on 25/8/16.
  */
@@ -38,16 +40,17 @@ public class WalkthroughPageThree extends Fragment {
 
             @Override
             public void onClick(View v) {
-                boolean previouslyStarted;
-                Intent intent = new Intent(getActivity(), SigninActivity.class);
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-                previouslyStarted = prefs.getBoolean(getString(R.string.prefs_previously_started), false);
-                if (!previouslyStarted) {
-                    SharedPreferences.Editor edit = prefs.edit();
-                    edit.putBoolean(getString(R.string.prefs_previously_started), Boolean.TRUE);
-                    edit.commit();
+                SharedPreferencesUtils.setSharedPreferencsWalkthroughState(getContext());
+                if(SharedPreferencesUtils.getLoginState(getContext())) {
+                    Intent intent = new Intent(getActivity(), HomeStreamActivity.class);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
-                startActivity(intent);
+                else{
+                    Intent intent = new Intent(getActivity(),SigninActivity.class);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
             }
         });
 

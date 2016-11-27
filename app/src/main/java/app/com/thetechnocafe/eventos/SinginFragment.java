@@ -140,6 +140,8 @@ public class SinginFragment extends Fragment {
                                     e.printStackTrace();
                                 }
 
+                                Toast.makeText(getContext(), "Login Successful", Toast.LENGTH_SHORT).show();
+
                                 //Go to Home fragment
                                 Intent intent = new Intent(getContext(), HomeStreamActivity.class);
                                 startActivity(intent);
@@ -147,7 +149,9 @@ public class SinginFragment extends Fragment {
                                 //Finish the activity
                                 getActivity().finish();
                             }
-                            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                            else{
+                                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }.signIn(getContext(), getSignInJSONObject());
                 }

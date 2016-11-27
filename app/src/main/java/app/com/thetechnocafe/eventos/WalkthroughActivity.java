@@ -25,7 +25,27 @@ public class WalkthroughActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_walkthrough);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean checkState;
+        checkState = SharedPreferencesUtils.getSharedPreferencsWalkthroughState(getBaseContext());
+        if(checkState){
+            //If is logged in, send to home screen
+            if (SharedPreferencesUtils.getLoginState(getApplicationContext())) {
+                //Send to home screen
+                Log.d("WALK", "Sending to home");
+                SharedPreferencesUtils.setSharedPreferencsWalkthroughState(getBaseContext());
+                Intent homeIntent = new Intent(WalkthroughActivity.this, HomeStreamActivity.class);
+                startActivity(homeIntent);
+                finish();
+            } else {
+                Log.d("WALK", "Sending to login" + SharedPreferencesUtils.getLoginState(getApplicationContext()));
+                SharedPreferencesUtils.setSharedPreferencsWalkthroughState(getBaseContext());
+                Intent intent = new Intent(WalkthroughActivity.this, SigninActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }
+
+       /* SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         previouslyStarted = prefs.getBoolean(getString(R.string.prefs_previously_started), false);
         if (previouslyStarted) {
             //If is logged in, send to home screen
@@ -39,7 +59,7 @@ public class WalkthroughActivity extends AppCompatActivity {
                 Intent intent = new Intent(WalkthroughActivity.this, SigninActivity.class);
                 startActivity(intent);
             }
-        }
+        }*/
 
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -52,6 +72,22 @@ public class WalkthroughActivity extends AppCompatActivity {
         CirclePageIndicator viewIndicator = (CirclePageIndicator) findViewById(R.id.titles);
         viewIndicator.setViewPager(mViewPager);
 
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if(SharedPreferencesUtils.getSharedPreferencsWalkthroughState(getBaseContext())){
+            finish();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(SharedPreferencesUtils.getSharedPreferencsWalkthroughState(getBaseContext())){
+            finish();
+        }
     }
 }
 

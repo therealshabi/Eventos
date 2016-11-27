@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
+import app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils;
+
 public class SigninActivity extends AppCompatActivity {
 
     @Override
@@ -22,7 +24,17 @@ public class SigninActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        if(SharedPreferencesUtils.getLoginState(getBaseContext())){
+            finish();
+        }
+    }
+
+    @Override
     public void onBackPressed() {
-        moveTaskToBack(true);
+        super.onBackPressed();
+        if(!SharedPreferencesUtils.getLoginState(getBaseContext()))
+        finish();
     }
 }

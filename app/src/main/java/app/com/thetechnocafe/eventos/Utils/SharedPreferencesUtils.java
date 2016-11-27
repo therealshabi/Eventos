@@ -14,6 +14,7 @@ public class SharedPreferencesUtils {
     private static final String SHARED_PREFERENCES_LOGIN_STATE = "login_state";
     private static final String SHARED_PREFERENCES_FULL_NAME = "full_name";
     private static final String SHARED_PREFERENCES_PHONE_NUMBER = "phone_number";
+    private static final String SHARED_PREFERENCS_WALKTHROUGH_STATE = "walk_through";
 
     /**
      * Change the username in sharedpreferences
@@ -143,5 +144,29 @@ public class SharedPreferencesUtils {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
 
         return sharedPreferences.getString(SHARED_PREFERENCES_PHONE_NUMBER, null);
+    }
+
+    public static void setRating(Context context, String eventId, int rating) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(eventId, rating);
+        editor.commit();
+    }
+
+    public static int getRating(Context context, String eventId) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(eventId, 0);
+    }
+
+    public static void setSharedPreferencsWalkthroughState(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SHARED_PREFERENCS_WALKTHROUGH_STATE, true);
+        editor.commit();
+    }
+
+    public static boolean getSharedPreferencsWalkthroughState(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(SHARED_PREFERENCS_WALKTHROUGH_STATE, false);
     }
 }

@@ -108,6 +108,11 @@
     <string name="enter_password">PASSWORD</string>
     <string name="enter_password_again">ENTER PASSWORD AGAIN</string>
     <string name="password_match_error">Passwords don\'t match</string>
+    <string name="full_name_error">Invalid name</string>
+    <string name="full_name_empty">Name cannot be left empty</string>
+    <string name="signup_password_empty">Password cannot be left blank</string>
+    <string name="phone_number_empty_error">Phone number cannot be left blank</string>
+    <string name="email_empty_error">Email cannot be left blank</string>
     <string name="enter_email">EMAIL</string>
     <string name="enter_phone">ENTER PHONE NUMBER</string>
     <string name="signup">Sign Up</string>
@@ -115,7 +120,7 @@
     <string name="email">EMAIL</string>
     <string name="logged_in_as">Logged in as</string>
     <string name="nothingInFavourites">Nothing in Favourites!</string>
-    <string name="full_name">Full Name</string>
+    <string name="full_name">FULL NAME</string>
     <string name="edit_account">Edit Account</string>
     <string name="change_password">Change Password</string>
     <string name="old_password">Old Password</string>
