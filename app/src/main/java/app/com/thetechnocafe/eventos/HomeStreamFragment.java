@@ -49,6 +49,7 @@ public class HomeStreamFragment extends Fragment {
     private static final String DATABASE_NAME = "eventos_database";
     private static final String EVENT_COLUMN_ID = "id";
     private static final String FAV_EVENTS_TABLE = "FavEvents";
+    private static final String SELECTED_RECYCLER_POSITION_TAG = "selectedrecyclerposition";
     public LikeButton mLikeButton;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
@@ -59,7 +60,7 @@ public class HomeStreamFragment extends Fragment {
     private EventsDatabaseHelper mDatabaseHelper;
     private DataSynchronizer mDataSynchronizer;
     private TextView mNavigationHeaderEmailTextView;
-
+    private int mSelectedRecyclerItemPosition = 0;
 
     public static HomeStreamFragment getInstance() {
         return new HomeStreamFragment();
@@ -261,7 +262,12 @@ public class HomeStreamFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        setUpAndNotifyRecyclerView();
+        mEventsList = mDatabaseHelper.getEventsList();
+        for (int count = 0; count < mEventsList.size(); count++) {
+            if (mEventRecyclerAdapter != null) {
+                mEventRecyclerAdapter.notifyItemChanged(count);
+            }
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -270,6 +276,7 @@ public class HomeStreamFragment extends Fragment {
         private TextView mDateText;
         private ImageView mImageView;
         private EventsModel mEvent;
+        private int mPosition;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -283,6 +290,7 @@ public class HomeStreamFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
+            mSelectedRecyclerItemPosition = mPosition;
             Intent intent = new Intent(getContext(), DetailActivity.class);
 
             //Add event id to intent
@@ -299,9 +307,8 @@ public class HomeStreamFragment extends Fragment {
             }
         }
 
-        void bindData(final EventsModel event) {
+        void bindData(int position, final EventsModel event) {
             mEvent = event;
-
             //Set appropriate data
             mDateText.setText(DateUtils.getFormattedDate(event.getDate()));
             mTitleText.setText(event.getTitle());
@@ -362,7 +369,7 @@ public class HomeStreamFragment extends Fragment {
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             //Pass the appropriate EventsModel object
-            holder.bindData(list.get(position));
+            holder.bindData(position, list.get(position));
         }
 
         @Override
@@ -375,7 +382,5 @@ public class HomeStreamFragment extends Fragment {
             list = updatedList;
         }
     }
-
-
 
 }
