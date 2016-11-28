@@ -408,6 +408,15 @@ public class DetailFragment extends Fragment {
                 //Check for result
                 if (isSuccessful) {
                     Toast.makeText(getContext(), R.string.comment_added_success, Toast.LENGTH_SHORT).show();
+
+                    //Insert into local database
+                    CommentsModel commentsModel = new CommentsModel();
+                    commentsModel.setEventID(EVENT_ID);
+                    commentsModel.setComment(mCommentEditText.getText().toString());
+                    commentsModel.setFrom(SharedPreferencesUtils.getFullName(getContext()));
+                    commentsModel.setTime(new Date().getTime());
+                    mEventsDatabaseHelper.insertNewComment(commentsModel);
+
                     mCommentEditText.setText("");
                 } else {
                     Toast.makeText(getContext(), R.string.comment_add_fail, Toast.LENGTH_SHORT).show();

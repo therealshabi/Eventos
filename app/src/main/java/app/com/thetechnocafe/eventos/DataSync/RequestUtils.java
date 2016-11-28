@@ -14,7 +14,7 @@ import org.json.JSONObject;
 import app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils;
 
 public abstract class RequestUtils {
-    private static final String SERVER_ADDRESS = "http://192.168.0.7:55555";
+    private static final String SERVER_ADDRESS = "http://192.168.43.55:8080";
     private static final String LINK_EVENT_REQUEST = SERVER_ADDRESS + "/api/events";
     private static final String SIGN_UP_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/signup";
     private static final String SIGN_IN_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/login";
