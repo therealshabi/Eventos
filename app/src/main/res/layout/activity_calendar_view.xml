@@ -35,16 +35,14 @@
         <CalendarView
             android:id="@+id/calendar_view_calendar"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.8">
+            android:layout_height="wrap_content">
 
         </CalendarView>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/calendar_view_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5">
+            android:layout_height="match_parent">
 
         </android.support.v7.widget.RecyclerView>
     </LinearLayout>
