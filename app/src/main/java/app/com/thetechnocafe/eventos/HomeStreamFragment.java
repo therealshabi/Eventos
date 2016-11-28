@@ -314,6 +314,7 @@ public class HomeStreamFragment extends Fragment {
             mTitleText.setText(event.getTitle());
             Picasso.with(getContext())
                     .load(mEvent.getImage())
+                    .resize(0, 800)
                     .into(mImageView);
 
             /*

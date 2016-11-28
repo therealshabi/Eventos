@@ -330,6 +330,7 @@ public class DetailFragment extends Fragment {
 
         Picasso.with(getContext())
                 .load(mEvent.getImage())
+                .resize(0, 960)
                 .into(mEventImageView);
 
         //Check if requirements exits
