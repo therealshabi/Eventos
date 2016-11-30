@@ -18,6 +18,7 @@ public class EventsModel {
     private String requirements;
     private String submittedBy;
     private Boolean verified;
+    private int numOfPeopleInterested;
 
     public int getAvatarId() {
         return avatar_id;
@@ -105,5 +106,13 @@ public class EventsModel {
 
     public void setVerified(Boolean verified) {
         this.verified = verified;
+    }
+
+    public int getNumOfPeopleInterested() {
+        return numOfPeopleInterested;
+    }
+
+    public void setNumOfPeopleInterested(int numOfPeopleInterested) {
+        this.numOfPeopleInterested = numOfPeopleInterested;
     }
 }

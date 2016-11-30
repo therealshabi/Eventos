@@ -43,6 +43,8 @@ public abstract class RequestUtils {
     private static final String JSON_EVENT_REQUIREMENTS = "requirements";
     private static final String JSON_EVENT_VERIFIED = "verified";
     private static final String JSON_EVENT_SUBMIITED_BY = "submitted_by";
+    private static final String JSON_EVENT_PEOPLE_INTERESTED = "people_interested";
+
     public EventsDatabaseHelper mEventsDatabaseHelper;
 
     public abstract void isRequestSuccessful(boolean isSuccessful, String message);
@@ -255,7 +257,7 @@ public abstract class RequestUtils {
 
                             if (!mEventsDatabaseHelper.doesSubmittedEventAlreadyExists(event.getId())) {
                                 mEventsDatabaseHelper.insertNewSubmittedEvent(event);
-                            } else if (event.getVerified() == true) {
+                            } else {
                                 mEventsDatabaseHelper.deleteFromSubmittedEvents(event.getId());
                                 mEventsDatabaseHelper.insertNewSubmittedEvent(event);
                             }
@@ -297,6 +299,7 @@ public abstract class RequestUtils {
             event.setRequirements(object.getString(JSON_EVENT_REQUIREMENTS));
             event.setSubmittedBy(object.getString(JSON_EVENT_SUBMIITED_BY));
             event.setVerified(object.getBoolean(JSON_EVENT_VERIFIED));
+            event.setNumOfPeopleInterested(object.getInt(JSON_EVENT_PEOPLE_INTERESTED));
         } catch (JSONException e) {
             e.printStackTrace();
             return false;

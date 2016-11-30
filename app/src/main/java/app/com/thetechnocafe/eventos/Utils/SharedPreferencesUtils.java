@@ -15,6 +15,7 @@ public class SharedPreferencesUtils {
     private static final String SHARED_PREFERENCES_FULL_NAME = "full_name";
     private static final String SHARED_PREFERENCES_PHONE_NUMBER = "phone_number";
     private static final String SHARED_PREFERENCS_WALKTHROUGH_STATE = "walk_through";
+    private static final String TOGGLE_STATE = "toggle_button_state";
 
     /**
      * Change the username in sharedpreferences
@@ -168,5 +169,18 @@ public class SharedPreferencesUtils {
     public static boolean getSharedPreferencsWalkthroughState(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean(SHARED_PREFERENCS_WALKTHROUGH_STATE, false);
+    }
+
+    //Toggle State of Event Attending or Not Attending
+    public static void setSharedPreferencesToggleState(Context context, String id, boolean state) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(id + TOGGLE_STATE, state);
+        editor.commit();
+    }
+
+    public static boolean getSharedPreferencesToggleState(Context context, String id) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(id + TOGGLE_STATE, false);
     }
 }

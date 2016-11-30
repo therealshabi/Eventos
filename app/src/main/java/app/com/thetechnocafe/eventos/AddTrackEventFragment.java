@@ -169,7 +169,7 @@ public class AddTrackEventFragment extends Fragment {
             mEventTitle.setText(event.getTitle());
             mSubmittedOn.setText("" + DateUtils.getFormattedDate(new Date()));
             mRating.setText("" + 4);
-            mNumOfPeopleAttending.setText("6");
+            mNumOfPeopleAttending.setText("" + event.getNumOfPeopleInterested());
 
             if (event.getVerified() == true) {
                 mVerifiedImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_dot_verified));

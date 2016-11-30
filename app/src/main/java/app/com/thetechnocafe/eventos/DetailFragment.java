@@ -76,6 +76,8 @@ public class DetailFragment extends Fragment {
     private RatingBar mRatingBar;
     private ToggleButton mInterestedButton;
 
+    private boolean state = false;
+
     public static DetailFragment getInstance(String id) {
         //Create bundle
         Bundle args = new Bundle();
@@ -122,8 +124,11 @@ public class DetailFragment extends Fragment {
         //Retrieve id from fragment arguments
         EVENT_ID = getArguments().getString(EVENT_ID_TAG, null);
         mEventsDatabaseHelper = new EventsDatabaseHelper(getContext());
-        mEvent = mEventsDatabaseHelper.getEvent(EVENT_ID);
+        mEvent = mEventsDatabaseHelper.getEvent(thisEventId);
 
+
+        //mRatingBar.setRating(0);
+        mInterestedButton.setChecked(false);
         //Add comments
         addRecentComments();
 
@@ -209,8 +214,11 @@ public class DetailFragment extends Fragment {
             public void onClick(View v) {
                 if (mInterestedButton.isChecked()) {
                     mRequestUtils.increaseDecreaseParticipationEvent(getContext(), thisEventId, 1);
+                    SharedPreferencesUtils.setSharedPreferencesToggleState(getContext(), thisEventId, true);
                 } else {
                     mRequestUtils.increaseDecreaseParticipationEvent(getContext(), thisEventId, -1);
+                    SharedPreferencesUtils.setSharedPreferencesToggleState(getContext(), thisEventId, false);
+
                 }
             }
         });
@@ -338,6 +346,7 @@ public class DetailFragment extends Fragment {
 
     //Update the UI with data
     private void updateUI() {
+
         //If event is null close the activity
         if (mEvent == null) {
             getActivity().finish();
@@ -349,7 +358,14 @@ public class DetailFragment extends Fragment {
         mDateTextView.setText(DateUtils.getFormattedDate(mEvent.getDate()));
         mTimeTextView.setText(DateUtils.convertToTime(mEvent.getDate()));
         mVenueTextView.setText(mEvent.getVenue());
-        mRatingBar.setRating(SharedPreferencesUtils.getRating(getContext(), thisEventId));
+        mRatingBar.setRating((float) SharedPreferencesUtils.getRating(getContext(), thisEventId));
+
+        state = SharedPreferencesUtils.getSharedPreferencesToggleState(getContext(), thisEventId);
+        if (state) {
+            mInterestedButton.setChecked(true);
+        } else {
+            mInterestedButton.setChecked(false);
+        }
 
         Picasso.with(getContext())
                 .load(mEvent.getImage())
@@ -461,5 +477,11 @@ public class DetailFragment extends Fragment {
                 }
             }
         }.setRateEventRequestPost(getContext(), getRatingJSON(rating), thisEventId);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
     }
 }

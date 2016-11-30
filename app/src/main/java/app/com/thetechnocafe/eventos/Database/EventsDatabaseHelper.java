@@ -37,6 +37,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
     private static final String EVENT_COLUMN_REQUIREMENTS = "requirements";
     private static final String EVENT_COLOUMN_SUBMITTED_BY = "submitted_by";
     private static final String EVENT_COLOUMN_VERIFIED = "verified";
+    private static final String EVENT_COLOUMN_PEOPLE_INTERESTED = "people_interested";
 
     private static final String CONTACTS_TABLE = "event_contacts";
     private static final String CONTACTS_EVENT_ID = "event_id";
@@ -69,6 +70,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
     private static final String SUBMITTED_EVENT_COLUMN_REQUIREMENTS = "requirements";
     private static final String SUBMITTED_EVENT_COLOUMN_SUBMITTED_BY = "submitted_by";
     private static final String SUBMITTED_EVENT_COLOUMN_VERIFIED = "verified";
+    private static final String SUBMITTED_EVENT_COLOUMN_PEOPLE_INTERESTED = "people_interested";
 
     public EventsDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
@@ -87,7 +89,8 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
                 EVENT_COLUMN_IMAGE + " VARCHAR, " +
                 EVENT_COLUMN_REQUIREMENTS + " VARCHAR ," +
                 EVENT_COLOUMN_SUBMITTED_BY + " VARCHAR ," +
-                EVENT_COLOUMN_VERIFIED + " INTEGER DEFAULT 0" +
+                EVENT_COLOUMN_VERIFIED + " INTEGER DEFAULT 0 ," +
+                EVENT_COLOUMN_PEOPLE_INTERESTED + " INTEGER " +
                 ");";
 
         String favEventsTableSQL = "CREATE TABLE " + FAV_EVENTS_TABLE + " (" +
@@ -123,7 +126,8 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
                 SUBMITTED_EVENT_COLUMN_IMAGE + " VARCHAR, " +
                 SUBMITTED_EVENT_COLUMN_REQUIREMENTS + " VARCHAR ," +
                 SUBMITTED_EVENT_COLOUMN_SUBMITTED_BY + " VARCHAR ," +
-                SUBMITTED_EVENT_COLOUMN_VERIFIED + " INTEGER DEFAULT 0" +
+                SUBMITTED_EVENT_COLOUMN_VERIFIED + " INTEGER DEFAULT 0 ," +
+                SUBMITTED_EVENT_COLOUMN_PEOPLE_INTERESTED + " INTEGER " +
                 ");";
 
         //Run the queries to create tables
@@ -158,6 +162,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(EVENT_COLUMN_DATE, String.valueOf(event.getDate().getTime()));
         contentValues.put(EVENT_COLUMN_REQUIREMENTS, event.getRequirements());
         contentValues.put(EVENT_COLOUMN_SUBMITTED_BY, event.getSubmittedBy());
+        contentValues.put(EVENT_COLOUMN_PEOPLE_INTERESTED, event.getNumOfPeopleInterested());
         if (event.getVerified() == true) {
             contentValues.put(EVENT_COLOUMN_VERIFIED, 1);
         } else {
@@ -187,6 +192,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(SUBMITTED_EVENT_COLUMN_DATE, String.valueOf(event.getDate().getTime()));
         contentValues.put(SUBMITTED_EVENT_COLUMN_REQUIREMENTS, event.getRequirements());
         contentValues.put(SUBMITTED_EVENT_COLOUMN_SUBMITTED_BY, event.getSubmittedBy());
+        contentValues.put(SUBMITTED_EVENT_COLOUMN_PEOPLE_INTERESTED, event.getNumOfPeopleInterested());
         if (event.getVerified() == true) {
             contentValues.put(SUBMITTED_EVENT_COLOUMN_VERIFIED, 1);
         } else {
@@ -233,6 +239,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
             event.setTitle(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_TITLE)));
             event.setDescription(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_DESCRIPTION)));
             event.setSubmittedBy(cursor.getString(cursor.getColumnIndex(EVENT_COLOUMN_SUBMITTED_BY)));
+            event.setNumOfPeopleInterested(cursor.getInt(cursor.getColumnIndex(EVENT_COLOUMN_PEOPLE_INTERESTED)));
 
             if (cursor.getInt(cursor.getColumnIndex(EVENT_COLOUMN_VERIFIED)) == 0) {
                 event.setVerified(false);
@@ -292,6 +299,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
             event.setTitle(cursor.getString(cursor.getColumnIndex(SUBMITTED_EVENT_COLUMN_TITLE)));
             event.setDescription(cursor.getString(cursor.getColumnIndex(SUBMITTED_EVENT_COLUMN_DESCRIPTION)));
             event.setSubmittedBy(cursor.getString(cursor.getColumnIndex(SUBMITTED_EVENT_COLOUMN_SUBMITTED_BY)));
+            event.setNumOfPeopleInterested(cursor.getInt(cursor.getColumnIndex(SUBMITTED_EVENT_COLOUMN_PEOPLE_INTERESTED)));
 
             if (cursor.getInt(cursor.getColumnIndex(SUBMITTED_EVENT_COLOUMN_VERIFIED)) == 0) {
                 event.setVerified(false);
@@ -352,6 +360,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
             eventsModel.setRequirements(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_REQUIREMENTS)));
             eventsModel.setDate(new Date(Long.parseLong(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_DATE)))));
             eventsModel.setSubmittedBy(cursor.getString(cursor.getColumnIndex(EVENT_COLOUMN_SUBMITTED_BY)));
+            eventsModel.setNumOfPeopleInterested(cursor.getInt(cursor.getColumnIndex(EVENT_COLOUMN_PEOPLE_INTERESTED)));
             if (cursor.getInt(cursor.getColumnIndex(EVENT_COLOUMN_VERIFIED)) == 0) {
                 eventsModel.setVerified(false);
             } else {
@@ -566,12 +575,14 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         String deleteContactsSQL = "DELETE FROM " + CONTACTS_TABLE;
         String deleteLinksSQL = "DELETE FROM " + LINKS_TABLE;
         String deleteFavEventsSQL = "DELETE FROM " + FAV_EVENTS_TABLE;
+        String deleteSubmittedEventsSQL = "DELETE FROM " + SUBMITTED_EVENTS_TABLE;
 
         //Execute queries
         database.execSQL(deleteEventsSQL);
         database.execSQL(deleteContactsSQL);
         database.execSQL(deleteLinksSQL);
         database.execSQL(deleteFavEventsSQL);
+        database.execSQL(deleteSubmittedEventsSQL);
 
         //Close database
         database.close();
@@ -638,6 +649,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
             event.setTitle(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_TITLE)));
             event.setDescription(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_DESCRIPTION)));
             event.setSubmittedBy(cursor.getString(cursor.getColumnIndex(EVENT_COLOUMN_SUBMITTED_BY)));
+            event.setNumOfPeopleInterested(cursor.getInt(cursor.getColumnIndex(EVENT_COLOUMN_PEOPLE_INTERESTED)));
             if (cursor.getInt(cursor.getColumnIndex(EVENT_COLOUMN_VERIFIED)) == 0) {
                 event.setVerified(false);
             } else {
