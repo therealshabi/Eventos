@@ -84,23 +84,6 @@ public class AddTrackEventFragment extends Fragment {
         mDatabaseHelper = new EventsDatabaseHelper(getContext());
 
         setUpAndNotifyRecyclerView();
-       /* //Set up recycler view
-        EventAdapter adapter = new EventAdapter();
-        if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), GRID_SIZE));
-        } else {
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        }
-        mRecyclerView.setAdapter(adapter);*/
-
-
-        //Set up swipe refresh layout
-       /* mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new OrganisedEventDataFetcher().execute();
-            }
-        });*/
 
         mRequestUtils = new RequestUtils() {
             @Override

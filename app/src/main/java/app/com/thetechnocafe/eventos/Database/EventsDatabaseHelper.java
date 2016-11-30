@@ -797,4 +797,18 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
             }
         }
     }
+
+    /**
+     * Delete from Submitted Events
+     */
+    public void deleteFromSubmittedEvents(String id) {
+        //Get the data base
+        SQLiteDatabase database = getWritableDatabase();
+
+        //SQL Query
+        String eventDeleteQuery = "DELETE FROM " + SUBMITTED_EVENTS_TABLE +
+                " WHERE " + SUBMITTED_EVENT_COLUMN_ID + " = " + "'" + id + "'";
+
+        database.execSQL(eventDeleteQuery);
+    }
 }

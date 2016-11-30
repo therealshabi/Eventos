@@ -223,6 +223,9 @@ public abstract class RequestUtils {
 
                             if (!mEventsDatabaseHelper.doesSubmittedEventAlreadyExists(event.getId())) {
                                 mEventsDatabaseHelper.insertNewSubmittedEvent(event);
+                            } else if (event.getVerified() == true) {
+                                mEventsDatabaseHelper.deleteFromSubmittedEvents(event.getId());
+                                mEventsDatabaseHelper.insertNewSubmittedEvent(event);
                             }
 
                             mEventsDatabaseHelper.removeSpecificSubmittedEventsFromDB(idList);
