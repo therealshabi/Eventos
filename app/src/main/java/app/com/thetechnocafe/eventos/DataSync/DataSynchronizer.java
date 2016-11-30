@@ -20,10 +20,11 @@ import app.com.thetechnocafe.eventos.Models.CommentsModel;
 import app.com.thetechnocafe.eventos.Models.ContactsModel;
 import app.com.thetechnocafe.eventos.Models.EventsModel;
 import app.com.thetechnocafe.eventos.Models.LinksModel;
+import app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils;
 
 public abstract class DataSynchronizer {
     private static final String TAG = "DataSynchronizer";
-    private static final String LINK_EVENT_REQUEST = "http://192.168.43.55:8080/api/events";
+    private static final String LINK_EVENT_REQUEST = "http://192.168.0.7:55555/api/events";
     //String related to json data fetched
     private static final String JSON_STATUS = "status";
     private static final String JSON_DATA = "data";
@@ -109,6 +110,13 @@ public abstract class DataSynchronizer {
                                     //Insert the event into database
                                     if (!mEventsDatabaseHelper.doesEventAlreadyExists(event.getId())) {
                                         mEventsDatabaseHelper.insertNewEvent(event);
+
+                                        if (event.getSubmittedBy().equals(SharedPreferencesUtils.getUsername(context))) {
+                                            if (!mEventsDatabaseHelper.doesSubmittedEventAlreadyExists(event.getId())) {
+                                                mEventsDatabaseHelper.insertNewSubmittedEvent(event);
+                                            }
+
+                                        }
 
                                         //Get the contacts
                                         JSONArray contactJSONArray = eventJSONobject.getJSONArray(StringUtils.JSON_CONTACTS);

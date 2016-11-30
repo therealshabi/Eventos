@@ -9,7 +9,7 @@ import android.support.v4.app.NotificationCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-public class MyFirebaseMessagingService extends FirebaseMessagingService {
+public class EventosFirebaseMessagingService extends FirebaseMessagingService {
     final static String TAG = "Notificas";
 
     @Override

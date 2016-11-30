@@ -19,12 +19,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import app.com.thetechnocafe.eventos.DataSync.DataSynchronizer;
+import app.com.thetechnocafe.eventos.DataSync.RequestUtils;
 import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
 import app.com.thetechnocafe.eventos.Models.EventsModel;
 import app.com.thetechnocafe.eventos.Utils.DateUtils;
@@ -39,9 +38,8 @@ public class AddTrackEventFragment extends Fragment {
     private FloatingActionButton mAddNewEventActionButton;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private DataSynchronizer mDataSynchronizer;
-    private List<EventsModel> mEventsList;
-    private List<EventsModel> mUserAddedEventsList;
+    private RequestUtils mRequestUtils;
+    private List<EventsModel> mSubmittedEventsList;
     private EventAdapter mEventRecyclerAdapter;
     private EventsDatabaseHelper mDatabaseHelper;
 
@@ -104,10 +102,10 @@ public class AddTrackEventFragment extends Fragment {
             }
         });*/
 
-        mDataSynchronizer = new DataSynchronizer() {
+        mRequestUtils = new RequestUtils() {
             @Override
-            public void onDataSynchronized(boolean isSyncSuccessful) {
-                if (isSyncSuccessful) {
+            public void isRequestSuccessful(boolean isSuccessful, String message) {
+                if (isSuccessful) {
                     setUpAndNotifyRecyclerView();
                 } else {
                     //Notify user on sync failed
@@ -124,7 +122,7 @@ public class AddTrackEventFragment extends Fragment {
             @Override
             public void onRefresh() {
                 //Send request to synchronize data
-                mDataSynchronizer.fetchEventsFromNetwork(getContext());
+                mRequestUtils.getSubmittedEvents(getContext(), SharedPreferencesUtils.getUsername(getContext()));
             }
         });
 
@@ -145,17 +143,11 @@ public class AddTrackEventFragment extends Fragment {
     private void setUpAndNotifyRecyclerView() {
         //if (mEventRecyclerAdapter == null) {
         //Get the events list from database
-        mEventsList = mDatabaseHelper.getEventsList();
-        mUserAddedEventsList = new ArrayList<>();
+        mSubmittedEventsList = mDatabaseHelper.getSubmittedEventsList();
 
-        for (int i = 0; i < mEventsList.size(); i++) {
-            if (mEventsList.get(i).getSubmittedBy().equals(SharedPreferencesUtils.getUsername(getContext()))) {
-                mUserAddedEventsList.add(mEventsList.get(i));
-            }
-        }
 
         //Create the adapter
-        mEventRecyclerAdapter = new EventAdapter(mUserAddedEventsList, getContext());
+        mEventRecyclerAdapter = new EventAdapter(mSubmittedEventsList, getContext());
 
         //Set the recycler view with adapter and layout manager
         mRecyclerView.setAdapter(mEventRecyclerAdapter);

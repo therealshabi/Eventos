@@ -58,6 +58,17 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
     private static final String COMMENTS_COLUMN_FROM = "user";
     private static final String COMMENTS_COLUMN_EVENT_ID = "event_id";
 
+    private static final String SUBMITTED_EVENTS_TABLE = "submitted_events";
+    private static final String SUBMITTED_EVENT_COLUMN_ID = "id";
+    private static final String SUBMITTED_EVENT_COLUMN_TITLE = "title";
+    private static final String SUBMITTED_EVENT_COLUMN_DESCRIPTION = "description";
+    private static final String SUBMITTED_EVENT_COLUMN_DATE = "date";
+    private static final String SUBMITTED_EVENT_COLUMN_VENUE = "venue";
+    private static final String SUBMITTED_EVENT_COLUMN_AVATAR_ID = "avatar_id";
+    private static final String SUBMITTED_EVENT_COLUMN_IMAGE = "image";
+    private static final String SUBMITTED_EVENT_COLUMN_REQUIREMENTS = "requirements";
+    private static final String SUBMITTED_EVENT_COLOUMN_SUBMITTED_BY = "submitted_by";
+    private static final String SUBMITTED_EVENT_COLOUMN_VERIFIED = "verified";
 
     public EventsDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
@@ -102,12 +113,26 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
                 COMMENTS_COLUMN_EVENT_ID + " VARCHAR, " +
                 COMMENTS_COLUMN_FROM + " VARCHAR);";
 
+        String submittedEventsTableSQL = "CREATE TABLE " + SUBMITTED_EVENTS_TABLE + " (" +
+                SUBMITTED_EVENT_COLUMN_ID + " VARCHAR PRIMARY KEY, " +
+                SUBMITTED_EVENT_COLUMN_TITLE + " VARCHAR, " +
+                SUBMITTED_EVENT_COLUMN_DESCRIPTION + " VARCHAR, " +
+                SUBMITTED_EVENT_COLUMN_DATE + " VARCHAR, " +
+                SUBMITTED_EVENT_COLUMN_VENUE + " VARCHAR, " +
+                SUBMITTED_EVENT_COLUMN_AVATAR_ID + " INTEGER, " +
+                SUBMITTED_EVENT_COLUMN_IMAGE + " VARCHAR, " +
+                SUBMITTED_EVENT_COLUMN_REQUIREMENTS + " VARCHAR ," +
+                SUBMITTED_EVENT_COLOUMN_SUBMITTED_BY + " VARCHAR ," +
+                SUBMITTED_EVENT_COLOUMN_VERIFIED + " INTEGER DEFAULT 0" +
+                ");";
+
         //Run the queries to create tables
         db.execSQL(eventsTableSQL);
         db.execSQL(contactsTableSQL);
         db.execSQL(linksTableSQL);
         db.execSQL(favEventsTableSQL);
         db.execSQL(commentsTableSQL);
+        db.execSQL(submittedEventsTableSQL);
     }
 
     @Override
@@ -140,6 +165,35 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         }
 
         database.insert(EVENTS_TABLE, null, contentValues);
+    }
+
+    /**
+     * Insert New Submitted Events By The User
+     *
+     * @param event
+     */
+
+    public void insertNewSubmittedEvent(EventsModel event) {
+        //Get database
+        SQLiteDatabase database = getWritableDatabase();
+
+        //Create content values and add data
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SUBMITTED_EVENT_COLUMN_ID, event.getId());
+        contentValues.put(SUBMITTED_EVENT_COLUMN_TITLE, event.getTitle());
+        contentValues.put(SUBMITTED_EVENT_COLUMN_DESCRIPTION, event.getDescription());
+        contentValues.put(SUBMITTED_EVENT_COLUMN_VENUE, event.getVenue());
+        contentValues.put(SUBMITTED_EVENT_COLUMN_IMAGE, event.getImage());
+        contentValues.put(SUBMITTED_EVENT_COLUMN_DATE, String.valueOf(event.getDate().getTime()));
+        contentValues.put(SUBMITTED_EVENT_COLUMN_REQUIREMENTS, event.getRequirements());
+        contentValues.put(SUBMITTED_EVENT_COLOUMN_SUBMITTED_BY, event.getSubmittedBy());
+        if (event.getVerified() == true) {
+            contentValues.put(SUBMITTED_EVENT_COLOUMN_VERIFIED, 1);
+        } else {
+            contentValues.put(SUBMITTED_EVENT_COLOUMN_VERIFIED, 0);
+        }
+
+        database.insert(SUBMITTED_EVENTS_TABLE, null, contentValues);
     }
 
     public void insertNewFavEvent(EventsModel event) {
@@ -208,6 +262,66 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
 
         return eventsList;
     }
+
+    /**
+     * Get a list of submitted events stores in the database
+     * Return a List of EventsModel objects
+     */
+    public List<EventsModel> getSubmittedEventsList() {
+        //Get Database
+        SQLiteDatabase database = getReadableDatabase();
+
+        //Create new EventsModel list
+        List<EventsModel> eventsList = new ArrayList<>();
+
+        //Set up the query
+        String sql = "SELECT * FROM " + SUBMITTED_EVENTS_TABLE;
+
+        //Run the query and obtain cursor
+        Cursor cursor = database.rawQuery(sql, null);
+
+        //Extract the values while looping over cursor
+        while (cursor.moveToNext()) {
+            EventsModel event = new EventsModel();
+
+            event.setId(cursor.getString(cursor.getColumnIndex(SUBMITTED_EVENT_COLUMN_ID)));
+            event.setVenue(cursor.getString(cursor.getColumnIndex(SUBMITTED_EVENT_COLUMN_VENUE)));
+            event.setDate(new Date(Long.parseLong(cursor.getString(cursor.getColumnIndex(SUBMITTED_EVENT_COLUMN_DATE)))));
+            event.setAvatarId(cursor.getInt(cursor.getColumnIndex(SUBMITTED_EVENT_COLUMN_AVATAR_ID)));
+            event.setImage(cursor.getString(cursor.getColumnIndex(SUBMITTED_EVENT_COLUMN_IMAGE)));
+            event.setTitle(cursor.getString(cursor.getColumnIndex(SUBMITTED_EVENT_COLUMN_TITLE)));
+            event.setDescription(cursor.getString(cursor.getColumnIndex(SUBMITTED_EVENT_COLUMN_DESCRIPTION)));
+            event.setSubmittedBy(cursor.getString(cursor.getColumnIndex(SUBMITTED_EVENT_COLOUMN_SUBMITTED_BY)));
+
+            if (cursor.getInt(cursor.getColumnIndex(SUBMITTED_EVENT_COLOUMN_VERIFIED)) == 0) {
+                event.setVerified(false);
+            } else {
+                event.setVerified(true);
+            }
+
+            //Add event to list
+            eventsList.add(event);
+        }
+        //Close cursor after use
+        cursor.close();
+
+        //Sort event list
+        Collections.sort(eventsList, new Comparator<EventsModel>() {
+            @Override
+            public int compare(EventsModel eventsModel, EventsModel t1) {
+                if (eventsModel.getDate().getTime() > t1.getDate().getTime()) {
+                    return 1;
+                } else if (eventsModel.getDate().getTime() == t1.getDate().getTime()) {
+                    return 0;
+                } else {
+                    return -1;
+                }
+            }
+        });
+
+        return eventsList;
+    }
+
 
     /**
      * Return the Particular event corresponding to the id
@@ -618,6 +732,69 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
 
         for (CommentsModel model : list) {
             insertNewComment(model);
+        }
+    }
+
+    /**
+     * Check if Submitted Event Already Exists in the database
+     *
+     * @return
+     */
+
+    public boolean doesSubmittedEventAlreadyExists(String id) {
+        //If event id is wrong return true
+        if (id == null) {
+            return true;
+        }
+
+        String sql = "SELECT * FROM " + SUBMITTED_EVENTS_TABLE + " WHERE " + SUBMITTED_EVENT_COLUMN_ID + " = '" + id + "'";
+
+        //Execute query
+        Cursor cursor = getReadableDatabase().rawQuery(sql, null);
+
+        if (cursor.getCount() > 0) {
+            //Close cursor
+            cursor.close();
+
+            return true;
+        }
+
+        //Close cursor
+        cursor.close();
+
+        return false;
+    }
+
+    /**
+     * Remove the events from database that are not in the stream
+     */
+    public void removeSpecificSubmittedEventsFromDB(List<String> list) {
+        //Get the data base
+        SQLiteDatabase database = getReadableDatabase();
+
+        //SQL query to get all the event id's in database
+        String eventIdSQL = "SELECT " + SUBMITTED_EVENT_COLUMN_ID + " FROM " + SUBMITTED_EVENTS_TABLE;
+
+        //Empty id list
+        List<String> mDatabaseIDList = new ArrayList<>();
+
+        //Execute query
+        Cursor cursor = database.rawQuery(eventIdSQL, null);
+
+        //Iterate and add to list
+        while (cursor.moveToNext()) {
+            mDatabaseIDList.add(cursor.getString(cursor.getColumnIndex(SUBMITTED_EVENT_COLUMN_ID)));
+        }
+
+        //Close database and cursor
+        cursor.close();
+        database.close();
+
+        //Delete all the events that are not in the network list
+        for (String eventID : mDatabaseIDList) {
+            if (!list.contains(eventID)) {
+                deleteEvent(eventID);
+            }
         }
     }
 }
