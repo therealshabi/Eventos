@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 import android.widget.ViewFlipper;
 
 import com.squareup.picasso.Picasso;
@@ -51,6 +53,7 @@ public class DetailFragment extends Fragment {
     private static final String LOADING_DIALOG_TAG = "loading_dialog_tag";
     public static String thisEventId;
     private static String EVENT_ID;
+    public RequestUtils mRequestUtils;
     private ViewFlipper mRecentComments;
     private LinearLayout mLinkContainer;
     private LinearLayout mContactsContainer;
@@ -71,6 +74,7 @@ public class DetailFragment extends Fragment {
     private List<CommentsModel> mCommentsModelsList;
     private ImageView mEventImageView;
     private RatingBar mRatingBar;
+    private ToggleButton mInterestedButton;
 
     public static DetailFragment getInstance(String id) {
         //Create bundle
@@ -113,6 +117,7 @@ public class DetailFragment extends Fragment {
         mSubmitCommentImageButton = (ImageButton) view.findViewById(R.id.fragment_detail_submit_comment_image_button);
         mEventImageView = (ImageView) view.findViewById(R.id.fragment_detail_event_image_view);
         mRatingBar = (RatingBar) view.findViewById(R.id.fragment_detail_rating_bar);
+        mInterestedButton = (ToggleButton) view.findViewById(R.id.interested_radio_group_no);
 
         //Retrieve id from fragment arguments
         EVENT_ID = getArguments().getString(EVENT_ID_TAG, null);
@@ -132,6 +137,13 @@ public class DetailFragment extends Fragment {
             activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
             activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back);
         }
+
+        mRequestUtils = new RequestUtils() {
+            @Override
+            public void isRequestSuccessful(boolean isSuccessful, String message) {
+                Log.d("Status", message);
+            }
+        };
 
         //Update the UI
         updateUI();
@@ -189,6 +201,17 @@ public class DetailFragment extends Fragment {
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 submitRating((int) rating);
                 SharedPreferencesUtils.setRating(getContext(), thisEventId, (int) rating);
+            }
+        });
+
+        mInterestedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mInterestedButton.isChecked()) {
+                    mRequestUtils.increaseDecreaseParticipationEvent(getContext(), thisEventId, 1);
+                } else {
+                    mRequestUtils.increaseDecreaseParticipationEvent(getContext(), thisEventId, -1);
+                }
             }
         });
 

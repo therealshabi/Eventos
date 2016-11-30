@@ -31,6 +31,7 @@ public abstract class RequestUtils {
     private static final String GET_SUBMITTED_EVENTS_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/submitted-events";
     private static final String SUBMIT_COMMENT_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/events/comment";
     private static final String RATE_EVENT_REQUEST_POST = SERVER_ADDRESS + "/api/events/rating/";
+    private static final String INCREASE_DECREASE_PARTICIPATION_EVENT = SERVER_ADDRESS + "/api/events/interested/";
     //JSON keys for submitted events
     private static final String JSON_EVENT_TITLE = "title";
     private static final String JSON_EVENT_DESCRIPTION = "description";
@@ -180,6 +181,37 @@ public abstract class RequestUtils {
         VolleyQueue.getInstance(context).getRequestQueue().add(request);
     }
 
+    public void increaseDecreaseParticipationEvent(final Context context, String id, int num) {
+        JSONObject object = new JSONObject();
+        try {
+            object.put(StringUtils.JSON_EVENT_INCREASE_DECREASE, num);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, INCREASE_DECREASE_PARTICIPATION_EVENT + id, object, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getString(StringUtils.JSON_STATUS).equals(StringUtils.JSON_SUCCESS)) {
+                        isRequestSuccessful(true, response.getString(JSON_DATA));
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    isRequestSuccessful(false, null);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                isRequestSuccessful(false, null);
+            }
+        });
+
+        VolleyQueue.getInstance(context).getRequestQueue().add(request);
+    }
+
     /**
      * Get all the events submitted by the specified user
      */
@@ -242,18 +274,12 @@ public abstract class RequestUtils {
                     isRequestSuccessful(false, null);
                 }
             }
-        }
-
-                , new Response.ErrorListener()
-
-        {
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 isRequestSuccessful(false, null);
             }
-        }
-
-        );
+        });
 
         //Add to volley queue
         VolleyQueue.getInstance(context).getRequestQueue().add(request);
