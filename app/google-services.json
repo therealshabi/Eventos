@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "381455958544",
+    "firebase_url": "https://eventos-3853c.firebaseio.com",
+    "project_id": "eventos-3853c",
+    "storage_bucket": "eventos-3853c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:381455958544:android:ffe399c64db918fc",
+        "android_client_info": {
+          "package_name": "app.com.thetechnocafe.eventos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "381455958544-ue5h8401df39bdt0j6il2mn6dol4t777.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.com.thetechnocafe.eventos",
+            "certificate_hash": "C6290C7CA1A072169CD7B6E15FB6BDE98CDA0C82"
+          }
+        },
+        {
+          "client_id": "381455958544-kikg3gdbbhqhv303ncr94f6tgl76gaan.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjSFWcCXslD5HlW6MqY1liJfsrbItodvU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "381455958544-kikg3gdbbhqhv303ncr94f6tgl76gaan.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
