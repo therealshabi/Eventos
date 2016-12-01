@@ -44,6 +44,7 @@ public abstract class RequestUtils {
     private static final String JSON_EVENT_VERIFIED = "verified";
     private static final String JSON_EVENT_SUBMIITED_BY = "submitted_by";
     private static final String JSON_EVENT_PEOPLE_INTERESTED = "people_interested";
+    private static final String JSON_OUTSIDE_EVENT = "outside_event";
 
     public EventsDatabaseHelper mEventsDatabaseHelper;
 
@@ -300,6 +301,7 @@ public abstract class RequestUtils {
             event.setSubmittedBy(object.getString(JSON_EVENT_SUBMIITED_BY));
             event.setVerified(object.getBoolean(JSON_EVENT_VERIFIED));
             event.setNumOfPeopleInterested(object.getInt(JSON_EVENT_PEOPLE_INTERESTED));
+            event.setOutsideEvent(object.getBoolean(JSON_OUTSIDE_EVENT));
         } catch (JSONException e) {
             e.printStackTrace();
             return false;

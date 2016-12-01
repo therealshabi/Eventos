@@ -38,6 +38,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
     private static final String EVENT_COLOUMN_SUBMITTED_BY = "submitted_by";
     private static final String EVENT_COLOUMN_VERIFIED = "verified";
     private static final String EVENT_COLOUMN_PEOPLE_INTERESTED = "people_interested";
+    private static final String EVENT_COLOUMN_OUTSIDE_EVENT = "outside_event";
 
     private static final String CONTACTS_TABLE = "event_contacts";
     private static final String CONTACTS_EVENT_ID = "event_id";
@@ -71,6 +72,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
     private static final String SUBMITTED_EVENT_COLOUMN_SUBMITTED_BY = "submitted_by";
     private static final String SUBMITTED_EVENT_COLOUMN_VERIFIED = "verified";
     private static final String SUBMITTED_EVENT_COLOUMN_PEOPLE_INTERESTED = "people_interested";
+    private static final String SUBMITTED_EVENT_COLOUMN_OUTSIDE_EVENT = "outside_event";
 
     public EventsDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
@@ -90,7 +92,8 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
                 EVENT_COLUMN_REQUIREMENTS + " VARCHAR ," +
                 EVENT_COLOUMN_SUBMITTED_BY + " VARCHAR ," +
                 EVENT_COLOUMN_VERIFIED + " INTEGER DEFAULT 0 ," +
-                EVENT_COLOUMN_PEOPLE_INTERESTED + " INTEGER " +
+                EVENT_COLOUMN_PEOPLE_INTERESTED + " INTEGER , " +
+                EVENT_COLOUMN_OUTSIDE_EVENT + " INTEGER DEFAULT 0" +
                 ");";
 
         String favEventsTableSQL = "CREATE TABLE " + FAV_EVENTS_TABLE + " (" +
@@ -127,7 +130,8 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
                 SUBMITTED_EVENT_COLUMN_REQUIREMENTS + " VARCHAR ," +
                 SUBMITTED_EVENT_COLOUMN_SUBMITTED_BY + " VARCHAR ," +
                 SUBMITTED_EVENT_COLOUMN_VERIFIED + " INTEGER DEFAULT 0 ," +
-                SUBMITTED_EVENT_COLOUMN_PEOPLE_INTERESTED + " INTEGER " +
+                SUBMITTED_EVENT_COLOUMN_PEOPLE_INTERESTED + " INTEGER , " +
+                SUBMITTED_EVENT_COLOUMN_OUTSIDE_EVENT + " INTEGER DEFAULT 0" +
                 ");";
 
         //Run the queries to create tables
@@ -163,7 +167,14 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(EVENT_COLUMN_REQUIREMENTS, event.getRequirements());
         contentValues.put(EVENT_COLOUMN_SUBMITTED_BY, event.getSubmittedBy());
         contentValues.put(EVENT_COLOUMN_PEOPLE_INTERESTED, event.getNumOfPeopleInterested());
-        if (event.getVerified() == true) {
+
+        if (event.getOutsideEvent()) {
+            contentValues.put(EVENT_COLOUMN_OUTSIDE_EVENT, 1);
+        } else {
+            contentValues.put(EVENT_COLOUMN_OUTSIDE_EVENT, 0);
+        }
+
+        if (event.getVerified()) {
             contentValues.put(EVENT_COLOUMN_VERIFIED, 1);
         } else {
             contentValues.put(EVENT_COLOUMN_VERIFIED, 0);
@@ -174,8 +185,6 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * Insert New Submitted Events By The User
-     *
-     * @param event
      */
 
     public void insertNewSubmittedEvent(EventsModel event) {
@@ -193,7 +202,14 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(SUBMITTED_EVENT_COLUMN_REQUIREMENTS, event.getRequirements());
         contentValues.put(SUBMITTED_EVENT_COLOUMN_SUBMITTED_BY, event.getSubmittedBy());
         contentValues.put(SUBMITTED_EVENT_COLOUMN_PEOPLE_INTERESTED, event.getNumOfPeopleInterested());
-        if (event.getVerified() == true) {
+
+        if (event.getOutsideEvent()) {
+            contentValues.put(SUBMITTED_EVENT_COLOUMN_OUTSIDE_EVENT, 1);
+        } else {
+            contentValues.put(SUBMITTED_EVENT_COLOUMN_OUTSIDE_EVENT, 0);
+        }
+
+        if (event.getVerified()) {
             contentValues.put(SUBMITTED_EVENT_COLOUMN_VERIFIED, 1);
         } else {
             contentValues.put(SUBMITTED_EVENT_COLOUMN_VERIFIED, 0);
@@ -240,6 +256,12 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
             event.setDescription(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_DESCRIPTION)));
             event.setSubmittedBy(cursor.getString(cursor.getColumnIndex(EVENT_COLOUMN_SUBMITTED_BY)));
             event.setNumOfPeopleInterested(cursor.getInt(cursor.getColumnIndex(EVENT_COLOUMN_PEOPLE_INTERESTED)));
+
+            if (cursor.getInt(cursor.getColumnIndex(EVENT_COLOUMN_OUTSIDE_EVENT)) == 0) {
+                event.setOutsideEvent(false);
+            } else {
+                event.setOutsideEvent(true);
+            }
 
             if (cursor.getInt(cursor.getColumnIndex(EVENT_COLOUMN_VERIFIED)) == 0) {
                 event.setVerified(false);
@@ -301,6 +323,12 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
             event.setSubmittedBy(cursor.getString(cursor.getColumnIndex(SUBMITTED_EVENT_COLOUMN_SUBMITTED_BY)));
             event.setNumOfPeopleInterested(cursor.getInt(cursor.getColumnIndex(SUBMITTED_EVENT_COLOUMN_PEOPLE_INTERESTED)));
 
+            if (cursor.getInt(cursor.getColumnIndex(SUBMITTED_EVENT_COLOUMN_OUTSIDE_EVENT)) == 0) {
+                event.setOutsideEvent(false);
+            } else {
+                event.setOutsideEvent(true);
+            }
+
             if (cursor.getInt(cursor.getColumnIndex(SUBMITTED_EVENT_COLOUMN_VERIFIED)) == 0) {
                 event.setVerified(false);
             } else {
@@ -361,6 +389,13 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
             eventsModel.setDate(new Date(Long.parseLong(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_DATE)))));
             eventsModel.setSubmittedBy(cursor.getString(cursor.getColumnIndex(EVENT_COLOUMN_SUBMITTED_BY)));
             eventsModel.setNumOfPeopleInterested(cursor.getInt(cursor.getColumnIndex(EVENT_COLOUMN_PEOPLE_INTERESTED)));
+
+            if (cursor.getInt(cursor.getColumnIndex(EVENT_COLOUMN_OUTSIDE_EVENT)) == 0) {
+                eventsModel.setOutsideEvent(false);
+            } else {
+                eventsModel.setOutsideEvent(true);
+            }
+
             if (cursor.getInt(cursor.getColumnIndex(EVENT_COLOUMN_VERIFIED)) == 0) {
                 eventsModel.setVerified(false);
             } else {
@@ -554,10 +589,14 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         String linksDeleteQuery = "DELETE FROM " + LINKS_TABLE +
                 " WHERE " + LINKS_EVENT_ID + " = " + "'" + id + "'";
 
+        String favEventDeleteQuery = "DELETE FROM " + FAV_EVENTS_TABLE +
+                " WHERE " + FAV_EVENT_COLUMN_ID + " = " + "'" + id + "'";
+
         //Execute queries
         database.execSQL(eventDeleteQuery);
         database.execSQL(contactDeleteQuery);
         database.execSQL(linksDeleteQuery);
+        database.execSQL(favEventDeleteQuery);
 
         //Close database
         database.close();
@@ -650,6 +689,13 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
             event.setDescription(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_DESCRIPTION)));
             event.setSubmittedBy(cursor.getString(cursor.getColumnIndex(EVENT_COLOUMN_SUBMITTED_BY)));
             event.setNumOfPeopleInterested(cursor.getInt(cursor.getColumnIndex(EVENT_COLOUMN_PEOPLE_INTERESTED)));
+
+            if (cursor.getInt(cursor.getColumnIndex(EVENT_COLOUMN_OUTSIDE_EVENT)) == 0) {
+                event.setOutsideEvent(false);
+            } else {
+                event.setOutsideEvent(true);
+            }
+
             if (cursor.getInt(cursor.getColumnIndex(EVENT_COLOUMN_VERIFIED)) == 0) {
                 event.setVerified(false);
             } else {

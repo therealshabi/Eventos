@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,9 +13,9 @@
             android:id="@+id/fragment_add_track_event_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
             app:title="@string/your_events"
-            app:titleTextColor="@android:color/white"
-            app:layout_scrollFlags="scroll|enterAlways|snap">
+            app:titleTextColor="@android:color/white">
 
         </android.support.v7.widget.Toolbar>
 
@@ -35,13 +34,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/no_events"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
 
         <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/fragment_add_track_event_swipe_refresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/fragment_add_track_event_swipe_refresh">
+            android:layout_height="match_parent">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/fragment_add_track_event_recycler_view"
@@ -53,13 +51,37 @@
 
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/fragment_add_track_event_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_margin="32dp"
         android:clickable="true"
-        android:src="@drawable/ic_new_button"/>
+        android:src="@drawable/ic_new_button"
+        app:menu_colorNormal="@color/colorAccent"
+        app:menu_colorPressed="@color/colorAccent">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/menu1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:src="@drawable/ic_new_button"
+            app:fab_colorNormal="@color/colorAccent"
+            app:fab_colorPressed="@color/colorAccent"
+            app:fab_label="Add College Event" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/menu2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:src="@drawable/ic_new_button"
+            app:fab_colorNormal="@color/colorAccent"
+            app:fab_colorPressed="@color/colorAccent"
+            app:fab_label="Add Outside Event" />
+
+    </com.github.clans.fab.FloatingActionMenu>
 
 </android.support.design.widget.CoordinatorLayout>

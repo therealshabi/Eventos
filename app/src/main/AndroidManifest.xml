@@ -28,6 +28,7 @@
         <activity android:name=".SigninActivity" />
         <activity android:name=".AddTrackEventActivity" />
         <activity android:name=".AddEventActivity" />
+        <activity android:name=".AddOutsideEventActivity" />
         <activity android:name=".TrackEventActivity" />
         <activity android:name=".OutsideEventActivity" />
         <activity android:name=".FavouriteActivity" />

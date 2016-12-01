@@ -80,7 +80,7 @@ public class OutsideEventFragment extends Fragment {
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private CardView mCardView;
+        public CardView mCardView;
         private TextView mTitleText;
         private TextView mDateText;
         private ImageView mImageView;

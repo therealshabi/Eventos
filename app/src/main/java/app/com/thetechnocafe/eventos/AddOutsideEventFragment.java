@@ -1,6 +1,5 @@
 package app.com.thetechnocafe.eventos;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -61,9 +60,11 @@ import app.com.thetechnocafe.eventos.Dialogs.LoadingDialog;
 import app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils;
 
 /**
- * Created by gurleensethi on 20/08/16.
+ * Created by shahbaz on 1/12/16.
  */
-public class AddEventFragment extends Fragment {
+
+public class AddOutsideEventFragment extends Fragment {
+
     private static final String TAG = "AddEventFragment";
     private static final String DATE_PICKER_TAG = "datepicker";
     private static final String TIME_PICKER_TAG = "timepicker";
@@ -98,8 +99,8 @@ public class AddEventFragment extends Fragment {
     private EventsDatabaseHelper mDatabaseHelper;
 
 
-    public static AddEventFragment getInstance() {
-        return new AddEventFragment();
+    public static AddOutsideEventFragment getInstance() {
+        return new AddOutsideEventFragment();
     }
 
     @Override
@@ -169,8 +170,8 @@ public class AddEventFragment extends Fragment {
                     //Show Toast message and finish the activity
                     Toast.makeText(getContext(), getString(R.string.submission_success), Toast.LENGTH_LONG).show();
                     String username = SharedPreferencesUtils.getUsername(getContext());
-                 //   mDatabaseHelper.insertNewUserAddedEvent("",username);
-                    startActivity(new Intent(getActivity(), HomeStreamActivity.class));
+                    //   mDatabaseHelper.insertNewUserAddedEvent("",username);
+                    startActivity(new Intent(getActivity(), OutsideEventActivity.class));
                     getActivity().finish();
                 } else {
                     //Notify user about error
@@ -223,7 +224,7 @@ public class AddEventFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DialogDatePicker dialogDatePicker = DialogDatePicker.getInstance(mCalendar);
-                dialogDatePicker.setTargetFragment(AddEventFragment.this, DATE_PICKER_CODE);
+                dialogDatePicker.setTargetFragment(AddOutsideEventFragment.this, DATE_PICKER_CODE);
                 dialogDatePicker.show(getFragmentManager(), DATE_PICKER_TAG);
             }
         });
@@ -233,7 +234,7 @@ public class AddEventFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DialogTimePicker dialogTimePicker = DialogTimePicker.getInstance(mCalendar);
-                dialogTimePicker.setTargetFragment(AddEventFragment.this, TIME_PICKER_CODE);
+                dialogTimePicker.setTargetFragment(AddOutsideEventFragment.this, TIME_PICKER_CODE);
                 dialogTimePicker.show(getFragmentManager(), TIME_PICKER_TAG);
             }
         });
@@ -248,7 +249,7 @@ public class AddEventFragment extends Fragment {
                     mLoadingDialog.show(getFragmentManager(), "");
 
                     if (mImageToUpload != null) {
-                        new ImageUploadAsyncTask().execute();
+                        new OutsideImageUploadAsyncTask().execute();
                     } else {
                         JSONObject object = getJSONObjectFromFormData();
                         mRequestUtils.submitForumToServer(getContext(), object);
@@ -262,9 +263,9 @@ public class AddEventFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-                    if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) !=
+                    if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE) !=
                             PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
                     }
                 }
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -413,7 +414,7 @@ public class AddEventFragment extends Fragment {
             object.put(StringUtils.JSON_REQUIREMENTS, mRequirementsEditText.getText().toString());
             object.put(StringUtils.SUBMITTED_BY, SharedPreferencesUtils.getUsername(getContext()));
             object.put(StringUtils.JSON_EVENT_DATE, getDateInLong());
-            object.put(StringUtils.JSON_OUTSIDE_EVENT, false);
+            object.put(StringUtils.JSON_OUTSIDE_EVENT, true);
 
             //Get links list
             JSONArray links = getLinksList();
@@ -498,7 +499,7 @@ public class AddEventFragment extends Fragment {
         return calendar.getTimeInMillis();
     }
 
-    class ImageUploadAsyncTask extends AsyncTask<Void, Void, Void> {
+    class OutsideImageUploadAsyncTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
             Map<String, String> config = new HashMap<>();
@@ -533,4 +534,5 @@ public class AddEventFragment extends Fragment {
             mRequestUtils.submitForumToServer(getContext(), object);
         }
     }
+
 }

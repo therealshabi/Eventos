@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -35,7 +34,8 @@ import app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils;
 public class AddTrackEventFragment extends Fragment {
 
     private static final int GRID_SIZE = 2;
-    private FloatingActionButton mAddNewEventActionButton;
+    private com.github.clans.fab.FloatingActionButton mAddNewEventActionButton;
+    private com.github.clans.fab.FloatingActionButton mAddNewOutsideEventActionButton;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RequestUtils mRequestUtils;
@@ -59,7 +59,8 @@ public class AddTrackEventFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_track_event, container, false);
 
-        mAddNewEventActionButton = (FloatingActionButton) view.findViewById(R.id.fragment_add_track_event_fab);
+        mAddNewEventActionButton = (com.github.clans.fab.FloatingActionButton) view.findViewById(R.id.menu1);
+        mAddNewOutsideEventActionButton = (com.github.clans.fab.FloatingActionButton) view.findViewById(R.id.menu2);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_add_track_event_recycler_view);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fragment_add_track_event_swipe_refresh);
 
@@ -68,6 +69,14 @@ public class AddTrackEventFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), AddEventActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        mAddNewOutsideEventActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), AddOutsideEventActivity.class);
                 startActivity(intent);
             }
         });
@@ -150,6 +159,7 @@ public class AddTrackEventFragment extends Fragment {
         TextView mRating;
         TextView mNumOfPeopleAttending;
         CardView mCardView;
+        TextView mOutsideEventText;
 
 
         public EventViewHolder(View view) {
@@ -161,6 +171,7 @@ public class AddTrackEventFragment extends Fragment {
             mRating = (TextView) view.findViewById(R.id.track_event_item_people_rating);
             mNumOfPeopleAttending = (TextView) view.findViewById(R.id.track_event_item_people_attending);
             mCardView = (CardView) view.findViewById(R.id.add_track_event_item_card_view);
+            mOutsideEventText = (TextView) view.findViewById(R.id.outsideText);
         }
 
         public void bindData(final EventsModel event) {
@@ -173,6 +184,12 @@ public class AddTrackEventFragment extends Fragment {
 
             if (event.getVerified() == true) {
                 mVerifiedImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_dot_verified));
+            }
+
+            if (event.getOutsideEvent()) {
+                mOutsideEventText.setVisibility(View.VISIBLE);
+            } else {
+                mOutsideEventText.setVisibility(View.GONE);
             }
 
 

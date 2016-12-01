@@ -17,8 +17,9 @@ public class EventsModel {
     private String image;
     private String requirements;
     private String submittedBy;
-    private Boolean verified;
+    private boolean verified;
     private int numOfPeopleInterested;
+    private boolean outside_event;
 
     public int getAvatarId() {
         return avatar_id;
@@ -100,11 +101,11 @@ public class EventsModel {
         this.submittedBy = submittedBy;
     }
 
-    public Boolean getVerified() {
+    public boolean getVerified() {
         return verified;
     }
 
-    public void setVerified(Boolean verified) {
+    public void setVerified(boolean verified) {
         this.verified = verified;
     }
 
@@ -114,5 +115,13 @@ public class EventsModel {
 
     public void setNumOfPeopleInterested(int numOfPeopleInterested) {
         this.numOfPeopleInterested = numOfPeopleInterested;
+    }
+
+    public boolean getOutsideEvent() {
+        return outside_event;
+    }
+
+    public void setOutsideEvent(boolean outside_event) {
+        this.outside_event = outside_event;
     }
 }

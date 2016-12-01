@@ -44,4 +44,5 @@ public class StringUtils {
     public static final String JSON_USER_ID = "user_id";
     public static final String JSON_RATING = "rating";
     public static final String JSON_EVENT_INCREASE_DECREASE = "increase_decrease";
+    public static final String JSON_OUTSIDE_EVENT = "outside_event";
 }
