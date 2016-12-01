@@ -1,123 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/category_dialog_linear_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:orientation="vertical">
+              android:id="@+id/category_dialog_linear_layout"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:orientation="vertical">
 
-    <LinearLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@color/colorPrimary">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
 
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="sans-serif-thin"
-            android:gravity="center"
-            android:text="AVATAR"
-            android:textColor="@android:color/white"
-            android:textSize="48dp" />
-
-    </LinearLayout>
-
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <GridLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:columnCount="3">
-
-            <ImageView
-                android:id="@+id/anchor_category1"
-                android:layout_width="72dp"
-                android:layout_height="80dp"
-                android:layout_margin="16dp"
-                android:clickable="true"
-                android:foreground="@drawable/ripple"
-                android:src="@drawable/employee" />
-
-
-            <ImageView
-                android:id="@+id/anchor_category2"
-                android:layout_width="72dp"
-                android:layout_height="80dp"
-                android:layout_margin="16dp"
-                android:clickable="true"
-                android:foreground="@drawable/ripple"
-                android:src="@drawable/concert" />
-
-
-            <ImageView
-                android:id="@+id/anchor_category3"
-                android:layout_width="72dp"
-                android:layout_height="80dp"
-                android:layout_margin="16dp"
-                android:clickable="true"
-                android:foreground="@drawable/ripple"
-                android:src="@drawable/anchor" />
-
-            <ImageView
-                android:id="@+id/anchor_category4"
-                android:layout_width="72dp"
-                android:layout_height="80dp"
-                android:layout_margin="16dp"
-                android:clickable="true"
-                android:foreground="@drawable/ripple"
-                android:src="@drawable/customer" />
-
-
-            <ImageView
-                android:id="@+id/anchor_category5"
-                android:layout_width="72dp"
-                android:layout_height="80dp"
-                android:layout_margin="16dp"
-                android:clickable="true"
-                android:foreground="@drawable/ripple"
-                android:src="@drawable/dj" />
-
-            <ImageView
-                android:id="@+id/anchor_category6"
-                android:layout_width="72dp"
-                android:layout_height="80dp"
-                android:layout_margin="16dp"
-                android:clickable="true"
-                android:foreground="@drawable/ripple"
-                android:src="@drawable/calendar" />
-
-            <ImageView
-                android:id="@+id/anchor_category7"
-                android:layout_width="72dp"
-                android:layout_height="80dp"
-                android:layout_margin="16dp"
-                android:clickable="true"
-                android:foreground="@drawable/ripple"
-                android:src="@drawable/sports" />
-
-            <ImageView
-                android:id="@+id/anchor_category8"
-                android:layout_width="72dp"
-                android:layout_height="80dp"
-                android:layout_margin="16dp"
-                android:clickable="true"
-                android:foreground="@drawable/ripple"
-                android:src="@drawable/tracking" />
-
-            <ImageView
-                android:id="@+id/anchor_category9"
-                android:layout_width="72dp"
-                android:layout_height="80dp"
-                android:layout_margin="16dp"
-                android:clickable="true"
-                android:foreground="@drawable/ripple"
-                android:src="@drawable/like" />
-
-        </GridLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

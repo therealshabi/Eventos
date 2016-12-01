@@ -75,6 +75,7 @@ public class DetailFragment extends Fragment {
     private ImageView mEventImageView;
     private RatingBar mRatingBar;
     private ToggleButton mInterestedButton;
+    private ImageView mAvatarImageView;
 
     private boolean state = false;
 
@@ -120,6 +121,7 @@ public class DetailFragment extends Fragment {
         mEventImageView = (ImageView) view.findViewById(R.id.fragment_detail_event_image_view);
         mRatingBar = (RatingBar) view.findViewById(R.id.fragment_detail_rating_bar);
         mInterestedButton = (ToggleButton) view.findViewById(R.id.interested_radio_group_no);
+        mAvatarImageView = (ImageView) view.findViewById(R.id.fragment_detail_image_view);
 
         //Retrieve id from fragment arguments
         EVENT_ID = getArguments().getString(EVENT_ID_TAG, null);
@@ -359,8 +361,10 @@ public class DetailFragment extends Fragment {
         mTimeTextView.setText(DateUtils.convertToTime(mEvent.getDate()));
         mVenueTextView.setText(mEvent.getVenue());
         mRatingBar.setRating((float) SharedPreferencesUtils.getRating(getContext(), thisEventId));
-
         state = SharedPreferencesUtils.getSharedPreferencesToggleState(getContext(), thisEventId);
+        int resourceId = getResources().getIdentifier(mEvent.getAvatarId(), "drawable", getContext().getPackageName());
+        mAvatarImageView.setImageResource(resourceId);
+
         if (state) {
             mInterestedButton.setChecked(true);
         } else {

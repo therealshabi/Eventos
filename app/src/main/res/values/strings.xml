@@ -139,4 +139,5 @@
     <string name="comment_add_fail">Failed to add comment</string>
     <string name="no_comments_found">No Comments Found</string>
     <string name="no_comments">No comments found</string>
+    <string name="shared_avatar">shared_avatar</string>
 </resources>

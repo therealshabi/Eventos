@@ -276,6 +276,7 @@ public class HomeStreamFragment extends Fragment {
         private TextView mDateText;
         private ImageView mImageView;
         private EventsModel mEvent;
+        private ImageView mAnchorImage;
         private int mPosition;
 
         public ViewHolder(View itemView) {
@@ -286,6 +287,7 @@ public class HomeStreamFragment extends Fragment {
             mTitleText = (TextView) itemView.findViewById(R.id.home_stream_recycler_view_item_title_text);
             mDateText = (TextView) itemView.findViewById(R.id.home_stream_recycler_view_item_date_text);
             mImageView = (ImageView) itemView.findViewById(R.id.home_stream_recycler_view_item_image);
+            mAnchorImage = (ImageView) itemView.findViewById(R.id.home_stream_recycler_view_item_anchor_image);
         }
 
         @Override
@@ -300,7 +302,8 @@ public class HomeStreamFragment extends Fragment {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 Pair<View, String> p1 = Pair.create((View) mTitleText, getString(R.string.shared_title));
                 Pair<View, String> p2 = Pair.create((View) mDateText, getString(R.string.shared_date));
-                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), p1, p2);
+                Pair<View, String> p3 = Pair.create((View) mAnchorImage, getString(R.string.shared_avatar));
+                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), p1, p2, p3);
                 startActivity(intent, optionsCompat.toBundle());
             } else {
                 startActivity(intent);
@@ -316,6 +319,9 @@ public class HomeStreamFragment extends Fragment {
                     .load(mEvent.getImage())
                     .resize(0, 800)
                     .into(mImageView);
+
+            int resourceId = getResources().getIdentifier(event.getAvatarId(), "drawable", getContext().getPackageName());
+            mAnchorImage.setImageResource(resourceId);
 
             /*
             To check whether if event is in favourite list then like button should be setLiked else not
