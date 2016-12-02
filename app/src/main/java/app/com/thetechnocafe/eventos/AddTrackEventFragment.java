@@ -115,6 +115,9 @@ public class AddTrackEventFragment extends Fragment {
             }
         };
 
+        mRequestUtils.getSubmittedEvents(getContext(), SharedPreferencesUtils.getUsername(getContext()));
+        setUpAndNotifyRecyclerView();
+
         //Set up on swipe refresh layout
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -167,6 +170,7 @@ public class AddTrackEventFragment extends Fragment {
         TextView mNumOfPeopleAttending;
         CardView mCardView;
         TextView mOutsideEventText;
+        ImageView mCategoryImage;
 
 
         public EventViewHolder(View view) {
@@ -179,6 +183,7 @@ public class AddTrackEventFragment extends Fragment {
             mNumOfPeopleAttending = (TextView) view.findViewById(R.id.track_event_item_people_attending);
             mCardView = (CardView) view.findViewById(R.id.add_track_event_item_card_view);
             mOutsideEventText = (TextView) view.findViewById(R.id.outsideText);
+            mCategoryImage = (ImageView) view.findViewById(R.id.track_event_item_image);
         }
 
         public void bindData(final EventsModel event) {
@@ -189,7 +194,7 @@ public class AddTrackEventFragment extends Fragment {
             mRating.setText("" + 4);
             mNumOfPeopleAttending.setText("" + event.getNumOfPeopleInterested());
 
-            if (event.getVerified() == true) {
+            if (event.getVerified()) {
                 mVerifiedImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_dot_verified));
             }
 
@@ -199,6 +204,8 @@ public class AddTrackEventFragment extends Fragment {
                 mOutsideEventText.setVisibility(View.GONE);
             }
 
+            int resourceId = getResources().getIdentifier(event.getAvatarId(), "drawable", getContext().getPackageName());
+            mCategoryImage.setImageResource(resourceId);
 
         }
 

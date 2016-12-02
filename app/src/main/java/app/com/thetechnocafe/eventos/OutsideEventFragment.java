@@ -2,6 +2,7 @@ package app.com.thetechnocafe.eventos;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -159,6 +160,7 @@ public class OutsideEventFragment extends Fragment {
         private ImageView mImageView;
         private EventsModel mEvent;
         private TextView mTimeText;
+        private ImageView mCategoryImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -168,6 +170,7 @@ public class OutsideEventFragment extends Fragment {
             mDateText = (TextView) itemView.findViewById(R.id.outside_event_recycler_view_item_date_text);
             mImageView = (ImageView) itemView.findViewById(R.id.outside_event_recycler_view_item_image);
             mTimeText = (TextView) itemView.findViewById(R.id.outside_event_recycler_view_item_time_text);
+            mCategoryImage = (ImageView) itemView.findViewById(R.id.outside_event_recycler_view_item_anchor_image);
         }
 
         @Override
@@ -181,7 +184,8 @@ public class OutsideEventFragment extends Fragment {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 Pair<View, String> p1 = Pair.create((View) mTitleText, getString(R.string.shared_title));
                 Pair<View, String> p2 = Pair.create((View) mDateText, getString(R.string.shared_date));
-                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), p1, p2);
+                Pair<View, String> p3 = Pair.create((View) mCategoryImage, getString(R.string.shared_avatar));
+                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), p1, p2, p3);
                 startActivity(intent, optionsCompat.toBundle());
             } else {
                 startActivity(intent);
@@ -198,6 +202,9 @@ public class OutsideEventFragment extends Fragment {
                     .load(mEvent.getImage())
                     .resize(0, 800)
                     .into(mImageView);
+
+            int resourceId = getResources().getIdentifier(event.getAvatarId(), "drawable", getContext().getPackageName());
+            mCategoryImage.setImageResource(resourceId);
         }
     }
 

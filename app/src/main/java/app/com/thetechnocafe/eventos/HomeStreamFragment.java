@@ -50,7 +50,6 @@ public class HomeStreamFragment extends Fragment {
     private static final String EVENT_COLUMN_ID = "id";
     private static final String FAV_EVENTS_TABLE = "FavEvents";
     private static final String SELECTED_RECYCLER_POSITION_TAG = "selectedrecyclerposition";
-    public LikeButton mLikeButton;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -61,6 +60,7 @@ public class HomeStreamFragment extends Fragment {
     private DataSynchronizer mDataSynchronizer;
     private TextView mNavigationHeaderEmailTextView;
     private int mSelectedRecyclerItemPosition = 0;
+    private LikeButton mLikeButton;
 
     public static HomeStreamFragment getInstance() {
         return new HomeStreamFragment();
@@ -263,6 +263,7 @@ public class HomeStreamFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        setUpAndNotifyRecyclerView();
         mEventsList = mDatabaseHelper.getEventsList();
         for (int count = 0; count < mEventsList.size(); count++) {
             if (mEventRecyclerAdapter != null) {
@@ -333,6 +334,7 @@ public class HomeStreamFragment extends Fragment {
             } else {
                 mLikeButton.setLiked(Boolean.FALSE);
             }
+
             mLikeButton.setOnLikeListener(new OnLikeListener() {
                 String id = event.getId();
                 EventsModel favEventModel = mDatabaseHelper.getEvent(id);
@@ -350,6 +352,7 @@ public class HomeStreamFragment extends Fragment {
                 public void unLiked(LikeButton likeButton) {
                     if (mDatabaseHelper.doesFavEventAlreadyExists(id)) {
                         mDatabaseHelper.deleteFavEvent(favEventModel);
+                        mLikeButton.setLiked(Boolean.FALSE);
                         Toast.makeText(getContext(), event.getTitle() + " removed from Favorites", Toast.LENGTH_SHORT).show();
                     }
                 }

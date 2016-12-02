@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +34,7 @@ import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
 import app.com.thetechnocafe.eventos.Models.EventsModel;
 
 import static app.com.thetechnocafe.eventos.HomeStreamFragment.INTENT_EXTRA_EVENT_ID;
+import static java.security.AccessController.getContext;
 
 public class FavouriteActivity extends AppCompatActivity {
 
@@ -157,7 +159,8 @@ public class FavouriteActivity extends AppCompatActivity {
             String daysLeft = "" + Math.abs(Days.daysBetween(date.toLocalDate(), current.toLocalDate()).getDays()) + " days left";
 
             String image = temp.getImage();
-            Favourite fav = new Favourite(id, title, daysLeft, Venue, image, time);
+            String anchorImage = temp.getAvatarId();
+            Favourite fav = new Favourite(id, title, daysLeft, Venue, image, time, anchorImage);
             favouriteList.add(fav);
             i++;
         }
@@ -270,6 +273,8 @@ public class FavouriteActivity extends AppCompatActivity {
             holder.mVenue.setText(favourite.getLocation());
             holder.mTime.setText(favourite.getTime());
             holder.mFavEvent = favourite;
+            int resourceId = getResources().getIdentifier(favourite.getAnchor(), "drawable", getPackageName());
+            holder.mAnchorImage.setImageResource(resourceId);
             Picasso.with(getBaseContext())
                     .load(holder.mFavEvent.getThumbnail())
                     .into(holder.thumbnail);
@@ -282,6 +287,7 @@ public class FavouriteActivity extends AppCompatActivity {
         public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             public TextView mTitle, mDaysLeft, mVenue, mTime;
             public ImageView thumbnail;
+            ImageView mAnchorImage;
             private Favourite mFavEvent;
 
             public MyViewHolder(View view) {
@@ -292,6 +298,7 @@ public class FavouriteActivity extends AppCompatActivity {
                 mVenue = (TextView) view.findViewById(R.id.favourite_recycler_view_item_venue_text);
                 mTime = (TextView) view.findViewById(R.id.favourite_recycler_view_item_time_text);
                 thumbnail = (ImageView) view.findViewById(R.id.favourite_cardView_image);
+                mAnchorImage = (ImageView) view.findViewById(R.id.favourite_recycler_view_item_anchor_image);
             }
 
             @Override
@@ -317,14 +324,16 @@ public class FavouriteActivity extends AppCompatActivity {
         public String location;
         public String time;
         public String thumbnail;
+        public String anchor;
 
-        public Favourite(String id, String title, String daystogo, String location, String thumbnail, String time) {
+        public Favourite(String id, String title, String daystogo, String location, String thumbnail, String time, String anchor) {
             this.id = id;
             this.title = title;
             this.daystogo = daystogo;
             this.location = location;
             this.thumbnail = thumbnail;
             this.time = time;
+            this.anchor = anchor;
         }
 
         public String getId() {
@@ -371,6 +380,14 @@ public class FavouriteActivity extends AppCompatActivity {
 
         {
             this.thumbnail = thumbnail;
+        }
+
+        public String getAnchor() {
+            return anchor;
+        }
+
+        public void setAnchor(String anchor) {
+            this.anchor = anchor;
         }
     }
 

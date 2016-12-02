@@ -54,10 +54,13 @@ import java.util.Map;
 import app.com.thetechnocafe.eventos.DataSync.RequestUtils;
 import app.com.thetechnocafe.eventos.DataSync.StringUtils;
 import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
+import app.com.thetechnocafe.eventos.Dialogs.CategorySelectDialog;
 import app.com.thetechnocafe.eventos.Dialogs.DialogDatePicker;
 import app.com.thetechnocafe.eventos.Dialogs.DialogTimePicker;
 import app.com.thetechnocafe.eventos.Dialogs.LoadingDialog;
 import app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils;
+
+import static app.com.thetechnocafe.eventos.AddEventFragment.DIALOG_IMAGE_URL;
 
 /**
  * Created by shahbaz on 1/12/16.
@@ -72,9 +75,11 @@ public class AddOutsideEventFragment extends Fragment {
     private static final int DATE_PICKER_CODE = 1;
     private static final int TIME_PICKER_CODE = 2;
     private static final int GALLERY_IMAGE_PICK_REQUEST_CODE = 3;
+    private static int DIALOG_FRAGMENT_REQUEST_CODE = 4;
     private static Bitmap mImageToUpload;
     private static String mImageToUploadName;
     private static String mCloudinaryImageURL = "default";
+    private static String AVATAR_DIALOG_TAG = "avatardialog";
     public ImageView mAddCategoryImageButton;
     private TextView mInfoText;
     private ImageButton mAddContactImageButton;
@@ -95,7 +100,7 @@ public class AddOutsideEventFragment extends Fragment {
     private Calendar mCalendar;
     private ImageButton mPhotoUploadImageButton;
     private EventsDatabaseHelper mDatabaseHelper;
-
+    private String mAvatarImageUrl;
 
     public static AddOutsideEventFragment getInstance() {
         return new AddOutsideEventFragment();
@@ -190,14 +195,9 @@ public class AddOutsideEventFragment extends Fragment {
 
     private void setOnClickListeners() {
         mAddCategoryButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                View categoryView = LayoutInflater.from(getContext()).inflate(R.layout.category_dialog, null);
-                builder.setView(categoryView);
-                AlertDialog categoryDialog = builder.create();
-                categoryDialog.show();
+                showCategorySelectionDialog();
             }
         });
 
@@ -272,6 +272,12 @@ public class AddOutsideEventFragment extends Fragment {
         });
     }
 
+    private void showCategorySelectionDialog() {
+        CategorySelectDialog dialog = CategorySelectDialog.getInstance();
+        dialog.setTargetFragment(this, DIALOG_FRAGMENT_REQUEST_CODE);
+        dialog.show(getActivity().getSupportFragmentManager(), AVATAR_DIALOG_TAG);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -343,6 +349,10 @@ public class AddOutsideEventFragment extends Fragment {
                 File file = new File(picturePath);
                 mImageToUploadName = file.getName();
                 mImageEditText.setText(mImageToUploadName);
+            } else if (requestCode == DIALOG_FRAGMENT_REQUEST_CODE && data != null) {
+                mAvatarImageUrl = data.getStringExtra(DIALOG_IMAGE_URL);
+                int resourceId = getResources().getIdentifier(mAvatarImageUrl, "drawable", getContext().getPackageName());
+                mAddCategoryImageButton.setImageResource(resourceId);
             }
         }
     }
@@ -408,7 +418,7 @@ public class AddOutsideEventFragment extends Fragment {
             object.put(StringUtils.JSON_VENUE, mVenueEditText.getText().toString());
 
             object.put(StringUtils.JSON_IMAGE, mImageEditText.getText().toString());
-            object.put(StringUtils.JSON_AVATAR_ID, 0);
+            object.put(StringUtils.JSON_AVATAR_ID, mAvatarImageUrl);
             object.put(StringUtils.JSON_REQUIREMENTS, mRequirementsEditText.getText().toString());
             object.put(StringUtils.SUBMITTED_BY, SharedPreferencesUtils.getUsername(getContext()));
             object.put(StringUtils.JSON_EVENT_DATE, getDateInLong());

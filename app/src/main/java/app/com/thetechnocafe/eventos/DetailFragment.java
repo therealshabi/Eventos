@@ -43,6 +43,8 @@ import app.com.thetechnocafe.eventos.Models.LinksModel;
 import app.com.thetechnocafe.eventos.Utils.DateUtils;
 import app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils;
 
+import static app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils.getFullName;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -420,7 +422,7 @@ public class DetailFragment extends Fragment {
         try {
             object.put(StringUtils.JSON_COMMENT, mCommentEditText.getText().toString());
             object.put(StringUtils.JSON_TIME, new Date().getTime());
-            object.put(StringUtils.JSON_FROM, SharedPreferencesUtils.getFullName(getContext()));
+            object.put(StringUtils.JSON_FROM, getFullName(getContext()));
             object.put(StringUtils.JSON_EVENT_ID, EVENT_ID);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -446,6 +448,7 @@ public class DetailFragment extends Fragment {
      * Submit comment to server
      */
     private void submitComment() {
+
         //Start progress dialog
         final LoadingDialog loadingDialog = LoadingDialog.getInstance(getString(R.string.submitting_comment));
         loadingDialog.show(getFragmentManager(), LOADING_DIALOG_TAG);
@@ -455,6 +458,7 @@ public class DetailFragment extends Fragment {
             public void isRequestSuccessful(boolean isSuccessful, String message) {
                 //Stop the dialog
                 loadingDialog.dismiss();
+                mEventsDatabaseHelper = new EventsDatabaseHelper(getContext());
 
                 //Check for result
                 if (isSuccessful) {

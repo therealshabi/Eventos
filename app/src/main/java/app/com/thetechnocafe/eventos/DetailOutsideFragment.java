@@ -76,6 +76,7 @@ public class DetailOutsideFragment extends Fragment {
     private ImageView mEventImageView;
     private RatingBar mRatingBar;
     private ToggleButton mInterestedButton;
+    private ImageView mAvatarImageView;
 
     private boolean state = false;
 
@@ -121,6 +122,7 @@ public class DetailOutsideFragment extends Fragment {
         mEventImageView = (ImageView) view.findViewById(R.id.fragment_detail_event_image_view);
         mRatingBar = (RatingBar) view.findViewById(R.id.fragment_detail_rating_bar);
         mInterestedButton = (ToggleButton) view.findViewById(R.id.interested_radio_group_no);
+        mAvatarImageView = (ImageView) view.findViewById(R.id.fragment_detail_image_view);
 
         //Retrieve id from fragment arguments
         EVENT_ID = getArguments().getString(EVENT_ID_TAG, null);
@@ -366,6 +368,8 @@ public class DetailOutsideFragment extends Fragment {
         }
         mVenueTextView.setText(mEvent.getVenue());
         mRatingBar.setRating((float) SharedPreferencesUtils.getRating(getContext(), thisEventId));
+        int resourceId = getResources().getIdentifier(mEvent.getAvatarId(), "drawable", getContext().getPackageName());
+        mAvatarImageView.setImageResource(resourceId);
 
         state = SharedPreferencesUtils.getSharedPreferencesToggleState(getContext(), thisEventId);
         if (state) {
@@ -452,6 +456,7 @@ public class DetailOutsideFragment extends Fragment {
             public void isRequestSuccessful(boolean isSuccessful, String message) {
                 //Stop the dialog
                 loadingDialog.dismiss();
+                mEventsDatabaseHelper = new EventsDatabaseHelper(getContext());
 
                 //Check for result
                 if (isSuccessful) {
