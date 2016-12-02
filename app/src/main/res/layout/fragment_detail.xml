@@ -51,7 +51,8 @@
                     android:layout_height="40dp"
                     android:layout_marginBottom="24dp"
                     android:layout_marginRight="24dp"
-                    android:src="@drawable/pc"/>
+                    android:src="@drawable/pc"
+                    android:transitionName="@string/shared_avatar"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"

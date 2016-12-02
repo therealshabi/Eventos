@@ -1,6 +1,7 @@
 package app.com.thetechnocafe.eventos.DataSync;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -188,7 +189,8 @@ public abstract class DataSynchronizer {
             event.setImage(object.getString(JSON_EVENT_IMAGE));
             event.setVenue(object.getString(JSON_EVENT_VENUE));
             event.setId(object.getString(JSON_EVENT_ID));
-            event.setAvatarId(object.getInt(JSON_EVENT_AVATAR_ID));
+            event.setAvatarId(object.getString(JSON_EVENT_AVATAR_ID));
+            Log.d("Data", event.getAvatar_id());
             event.setDate(new Date(object.getLong(StringUtils.JSON_DATE)));
             event.setRequirements(object.getString(JSON_EVENT_REQUIREMENTS));
             event.setSubmittedBy(object.getString(JSON_EVENT_SUBMIITED_BY));

@@ -17,7 +17,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
@@ -55,6 +54,7 @@ import java.util.Map;
 import app.com.thetechnocafe.eventos.DataSync.RequestUtils;
 import app.com.thetechnocafe.eventos.DataSync.StringUtils;
 import app.com.thetechnocafe.eventos.Database.EventsDatabaseHelper;
+import app.com.thetechnocafe.eventos.Dialogs.CategorySelectDialog;
 import app.com.thetechnocafe.eventos.Dialogs.DialogDatePicker;
 import app.com.thetechnocafe.eventos.Dialogs.DialogTimePicker;
 import app.com.thetechnocafe.eventos.Dialogs.LoadingDialog;
@@ -74,6 +74,10 @@ public class AddEventFragment extends Fragment {
     private static Bitmap mImageToUpload;
     private static String mImageToUploadName;
     private static String mCloudinaryImageURL = "default";
+    private static String AVATAR_DIALOG_TAG = "avatardialog";
+    private static int DIALOG_FRAGMENT_REQUEST_CODE = 4;
+    public static final String DIALOG_IMAGE_URL = "dialogimage";
+    private String mAvatarImageUrl;
 
     private TextView mInfoText;
     private ImageButton mAddContactImageButton;
@@ -169,7 +173,7 @@ public class AddEventFragment extends Fragment {
                     //Show Toast message and finish the activity
                     Toast.makeText(getContext(), getString(R.string.submission_success), Toast.LENGTH_LONG).show();
                     String username = SharedPreferencesUtils.getUsername(getContext());
-                 //   mDatabaseHelper.insertNewUserAddedEvent("",username);
+                    //   mDatabaseHelper.insertNewUserAddedEvent("",username);
                     startActivity(new Intent(getActivity(), HomeStreamActivity.class));
                     getActivity().finish();
                 } else {
@@ -191,14 +195,9 @@ public class AddEventFragment extends Fragment {
 
     private void setOnClickListeners() {
         mAddCategoryButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                View categoryView = LayoutInflater.from(getContext()).inflate(R.layout.category_dialog, null);
-                builder.setView(categoryView);
-                AlertDialog categoryDialog = builder.create();
-                categoryDialog.show();
+                showCategorySelectionDialog();
             }
         });
 
@@ -273,6 +272,12 @@ public class AddEventFragment extends Fragment {
         });
     }
 
+    private void showCategorySelectionDialog() {
+        CategorySelectDialog dialog = CategorySelectDialog.getInstance();
+        dialog.setTargetFragment(this, DIALOG_FRAGMENT_REQUEST_CODE);
+        dialog.show(getActivity().getSupportFragmentManager(), AVATAR_DIALOG_TAG);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -344,6 +349,10 @@ public class AddEventFragment extends Fragment {
                 File file = new File(picturePath);
                 mImageToUploadName = file.getName();
                 mImageEditText.setText(mImageToUploadName);
+            } else if (requestCode == DIALOG_FRAGMENT_REQUEST_CODE && data != null) {
+                mAvatarImageUrl = data.getStringExtra(DIALOG_IMAGE_URL);
+                int resourceId = getResources().getIdentifier(mAvatarImageUrl, "drawable", getContext().getPackageName());
+                mAddCategoryImageButton.setImageResource(resourceId);
             }
         }
     }
@@ -407,9 +416,8 @@ public class AddEventFragment extends Fragment {
             object.put(StringUtils.JSON_TITLE, mTitleEditText.getText().toString());
             object.put(StringUtils.JSON_DESCRIPTION, mDescriptionEditText.getText().toString());
             object.put(StringUtils.JSON_VENUE, mVenueEditText.getText().toString());
-
             object.put(StringUtils.JSON_IMAGE, mImageEditText.getText().toString());
-            object.put(StringUtils.JSON_AVATAR_ID, 0);
+            object.put(StringUtils.JSON_AVATAR_ID, mAvatarImageUrl);
             object.put(StringUtils.JSON_REQUIREMENTS, mRequirementsEditText.getText().toString());
             object.put(StringUtils.SUBMITTED_BY, SharedPreferencesUtils.getUsername(getContext()));
             object.put(StringUtils.JSON_EVENT_DATE, getDateInLong());

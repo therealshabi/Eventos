@@ -101,7 +101,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
                 EVENT_COLUMN_DESCRIPTION + " VARCHAR, " +
                 EVENT_COLUMN_DATE + " VARCHAR, " +
                 EVENT_COLUMN_VENUE + " VARCHAR, " +
-                EVENT_COLUMN_AVATAR_ID + " INTEGER, " +
+                EVENT_COLUMN_AVATAR_ID + " VARCHAR, " +
                 EVENT_COLUMN_IMAGE + " VARCHAR, " +
                 EVENT_COLUMN_REQUIREMENTS + " VARCHAR ," +
                 EVENT_COLOUMN_SUBMITTED_BY + " VARCHAR ," +
@@ -154,7 +154,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
                 SUBMITTED_EVENT_COLUMN_DESCRIPTION + " VARCHAR, " +
                 SUBMITTED_EVENT_COLUMN_DATE + " VARCHAR, " +
                 SUBMITTED_EVENT_COLUMN_VENUE + " VARCHAR, " +
-                SUBMITTED_EVENT_COLUMN_AVATAR_ID + " INTEGER, " +
+                SUBMITTED_EVENT_COLUMN_AVATAR_ID + " VARCHAR, " +
                 SUBMITTED_EVENT_COLUMN_IMAGE + " VARCHAR, " +
                 SUBMITTED_EVENT_COLUMN_REQUIREMENTS + " VARCHAR ," +
                 SUBMITTED_EVENT_COLOUMN_SUBMITTED_BY + " VARCHAR ," +
@@ -197,6 +197,8 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(EVENT_COLUMN_REQUIREMENTS, event.getRequirements());
         contentValues.put(EVENT_COLOUMN_SUBMITTED_BY, event.getSubmittedBy());
         contentValues.put(EVENT_COLOUMN_PEOPLE_INTERESTED, event.getNumOfPeopleInterested());
+        contentValues.put(EVENT_COLUMN_AVATAR_ID, event.getAvatar_id());
+        if (event.getVerified() == true) {
 
         if (event.getOutsideEvent()) {
             contentValues.put(EVENT_COLOUMN_OUTSIDE_EVENT, 1);
@@ -268,6 +270,9 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(SUBMITTED_EVENT_COLUMN_REQUIREMENTS, event.getRequirements());
         contentValues.put(SUBMITTED_EVENT_COLOUMN_SUBMITTED_BY, event.getSubmittedBy());
         contentValues.put(SUBMITTED_EVENT_COLOUMN_PEOPLE_INTERESTED, event.getNumOfPeopleInterested());
+        contentValues.put(EVENT_COLUMN_AVATAR_ID, event.getAvatar_id());
+
+        if (event.getVerified() == true) {
 
         if (event.getOutsideEvent()) {
             contentValues.put(SUBMITTED_EVENT_COLOUMN_OUTSIDE_EVENT, 1);
@@ -316,7 +321,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
             event.setId(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_ID)));
             event.setVenue(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_VENUE)));
             event.setDate(new Date(Long.parseLong(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_DATE)))));
-            event.setAvatarId(cursor.getInt(cursor.getColumnIndex(EVENT_COLUMN_AVATAR_ID)));
+            event.setAvatarId(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_AVATAR_ID)));
             event.setImage(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_IMAGE)));
             event.setTitle(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_TITLE)));
             event.setDescription(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_DESCRIPTION)));
@@ -448,7 +453,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
             event.setId(cursor.getString(cursor.getColumnIndex(SUBMITTED_EVENT_COLUMN_ID)));
             event.setVenue(cursor.getString(cursor.getColumnIndex(SUBMITTED_EVENT_COLUMN_VENUE)));
             event.setDate(new Date(Long.parseLong(cursor.getString(cursor.getColumnIndex(SUBMITTED_EVENT_COLUMN_DATE)))));
-            event.setAvatarId(cursor.getInt(cursor.getColumnIndex(SUBMITTED_EVENT_COLUMN_AVATAR_ID)));
+            event.setAvatarId(cursor.getString(cursor.getColumnIndex(SUBMITTED_EVENT_COLUMN_AVATAR_ID)));
             event.setImage(cursor.getString(cursor.getColumnIndex(SUBMITTED_EVENT_COLUMN_IMAGE)));
             event.setTitle(cursor.getString(cursor.getColumnIndex(SUBMITTED_EVENT_COLUMN_TITLE)));
             event.setDescription(cursor.getString(cursor.getColumnIndex(SUBMITTED_EVENT_COLUMN_DESCRIPTION)));
@@ -514,7 +519,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
             eventsModel.setId(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_ID)));
             eventsModel.setTitle(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_TITLE)));
             eventsModel.setDescription(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_DESCRIPTION)));
-            eventsModel.setAvatarId(cursor.getInt(cursor.getColumnIndex(EVENT_COLUMN_AVATAR_ID)));
+            eventsModel.setAvatarId(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_AVATAR_ID)));
             eventsModel.setImage(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_IMAGE)));
             eventsModel.setVenue(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_VENUE)));
             eventsModel.setRequirements(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_REQUIREMENTS)));
@@ -934,7 +939,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
             event.setId(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_ID)));
             event.setVenue(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_VENUE)));
             event.setDate(new Date(Long.parseLong(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_DATE)))));
-            event.setAvatarId(cursor.getInt(cursor.getColumnIndex(EVENT_COLUMN_AVATAR_ID)));
+            event.setAvatarId(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_AVATAR_ID)));
             event.setImage(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_IMAGE)));
             event.setTitle(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_TITLE)));
             event.setDescription(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_DESCRIPTION)));

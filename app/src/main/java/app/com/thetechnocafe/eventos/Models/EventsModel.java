@@ -13,7 +13,7 @@ public class EventsModel {
     private String description;
     private String venue;
     private Date date;
-    private int avatar_id;
+    private String avatar_id;
     private String image;
     private String requirements;
     private String submittedBy;
@@ -21,11 +21,11 @@ public class EventsModel {
     private int numOfPeopleInterested;
     private boolean outside_event;
 
-    public int getAvatarId() {
+    public String getAvatarId() {
         return avatar_id;
     }
 
-    public void setAvatarId(int avatar_id) {
+    public void setAvatarId(String avatar_id) {
         this.avatar_id = avatar_id;
     }
 
@@ -85,11 +85,11 @@ public class EventsModel {
         this.requirements = requirements;
     }
 
-    public int getAvatar_id() {
+    public String getAvatar_id() {
         return avatar_id;
     }
 
-    public void setAvatar_id(int avatar_id) {
+    public void setAvatar_id(String avatar_id) {
         this.avatar_id = avatar_id;
     }
 
