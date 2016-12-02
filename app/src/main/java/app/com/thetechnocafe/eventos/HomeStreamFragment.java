@@ -184,6 +184,7 @@ public class HomeStreamFragment extends Fragment {
                     //Notify user on sync failed
                     if (isAdded()) {
                         Snackbar.make(view, getString(R.string.sync_failed), Snackbar.LENGTH_SHORT).show();
+                        setUpAndNotifyRecyclerView();
                     }
                 }
                 //Stop the Swipe refresh layout

@@ -47,7 +47,8 @@ import app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DetailFragment extends Fragment {
+public class DetailOutsideFragment extends Fragment {
+
 
     private static final String EVENT_ID_TAG = "eventid";
     private static final String LOADING_DIALOG_TAG = "loading_dialog_tag";
@@ -78,7 +79,7 @@ public class DetailFragment extends Fragment {
 
     private boolean state = false;
 
-    public static DetailFragment getInstance(String id) {
+    public static DetailOutsideFragment getInstance(String id) {
         //Create bundle
         Bundle args = new Bundle();
         args.putString(EVENT_ID_TAG, id);
@@ -86,7 +87,7 @@ public class DetailFragment extends Fragment {
         thisEventId = id;
 
         //Set arguments
-        DetailFragment fragment = new DetailFragment();
+        DetailOutsideFragment fragment = new DetailOutsideFragment();
         fragment.setArguments(args);
 
         return fragment;
@@ -124,7 +125,7 @@ public class DetailFragment extends Fragment {
         //Retrieve id from fragment arguments
         EVENT_ID = getArguments().getString(EVENT_ID_TAG, null);
         mEventsDatabaseHelper = new EventsDatabaseHelper(getContext());
-        mEvent = mEventsDatabaseHelper.getEvent(thisEventId);
+        mEvent = mEventsDatabaseHelper.getOutsideEvent(thisEventId);
 
 
         //mRatingBar.setRating(0);
@@ -147,7 +148,7 @@ public class DetailFragment extends Fragment {
             @Override
             public void isRequestSuccessful(boolean isSuccessful, String message) {
                 if (isSuccessful)
-                Log.d("Status", message);
+                    Log.d("Status", message);
                 else {
                     Toast.makeText(getContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
                 }
@@ -232,7 +233,7 @@ public class DetailFragment extends Fragment {
     //Add contacts in the contacts container
     private void addAndSetUpContacts() {
         //Get the contact list
-        final List<ContactsModel> list = mEventsDatabaseHelper.getContactsList(thisEventId);
+        final List<ContactsModel> list = mEventsDatabaseHelper.getContactsList(EVENT_ID);
 
         //If contacts exist, remove the text view that says "No contacts for this event"
         if (list.size() > 0) {
@@ -491,4 +492,5 @@ public class DetailFragment extends Fragment {
         super.onResume();
         updateUI();
     }
+
 }

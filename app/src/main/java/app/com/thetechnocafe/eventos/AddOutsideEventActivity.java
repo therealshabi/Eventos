@@ -42,14 +42,14 @@ public class AddOutsideEventActivity extends AppCompatActivity {
             });
         }
 
-        setContentView(R.layout.activity_add_event);
+        setContentView(R.layout.activity_add_outside_event);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = fragmentManager.findFragmentById(R.id.add_event_fragment_container);
+        Fragment fragment = fragmentManager.findFragmentById(R.id.add_outside_event_fragment_container);
 
         if (fragment == null) {
             fragment = AddOutsideEventFragment.getInstance();
-            fragmentManager.beginTransaction().add(R.id.add_event_fragment_container, fragment).commit();
+            fragmentManager.beginTransaction().add(R.id.add_outside_event_fragment_container, fragment).commit();
         }
     }
 }

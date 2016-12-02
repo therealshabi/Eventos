@@ -18,6 +18,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.clans.fab.FloatingActionMenu;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +37,7 @@ import app.com.thetechnocafe.eventos.Utils.SharedPreferencesUtils;
 public class AddTrackEventFragment extends Fragment {
 
     private static final int GRID_SIZE = 2;
+    FloatingActionMenu mFloatingActionMenu;
     private com.github.clans.fab.FloatingActionButton mAddNewEventActionButton;
     private com.github.clans.fab.FloatingActionButton mAddNewOutsideEventActionButton;
     private RecyclerView mRecyclerView;
@@ -63,6 +67,8 @@ public class AddTrackEventFragment extends Fragment {
         mAddNewOutsideEventActionButton = (com.github.clans.fab.FloatingActionButton) view.findViewById(R.id.menu2);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_add_track_event_recycler_view);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fragment_add_track_event_swipe_refresh);
+        mFloatingActionMenu = (FloatingActionMenu) view.findViewById(R.id.fragment_add_track_event_fab);
+
 
         //Set up FAB
         mAddNewEventActionButton.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +141,7 @@ public class AddTrackEventFragment extends Fragment {
     private void setUpAndNotifyRecyclerView() {
         //if (mEventRecyclerAdapter == null) {
         //Get the events list from database
+        mSubmittedEventsList = new ArrayList<>();
         mSubmittedEventsList = mDatabaseHelper.getSubmittedEventsList();
 
 

@@ -140,4 +140,8 @@
     <string name="no_comments_found">No Comments Found</string>
     <string name="no_comments">No comments found</string>
     <string name="outside_event_toggle">OUTSIDE EVENT</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ADD_NEW_OUTSIDE_EVENT">ADD NEW OUTSIDE EVENT</string>
 </resources>

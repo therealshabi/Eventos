@@ -30,7 +30,7 @@ public abstract class RequestUtils {
     private static final String UPDATE_ACCOUNT_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/user/update";
     private static final String GET_SUBMITTED_EVENTS_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/submitted-events";
     private static final String SUBMIT_COMMENT_REQUEST_ADDRESS = SERVER_ADDRESS + "/api/events/comment";
-    private static final String RATE_EVENT_REQUEST_POST = SERVER_ADDRESS + "/api/events/rating/";
+    private static final String RATE_EVENT_REQUEST_POST = SERVER_ADDRESS + "/api/events/rating";
     private static final String INCREASE_DECREASE_PARTICIPATION_EVENT = SERVER_ADDRESS + "/api/events/interested/";
     //JSON keys for submitted events
     private static final String JSON_EVENT_TITLE = "title";
@@ -340,8 +340,8 @@ public abstract class RequestUtils {
     }
 
     //Submit Rating for a particular Event
-    public void setRateEventRequestPost(Context context, JSONObject object, String id) {
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, RATE_EVENT_REQUEST_POST + id, object, new Response.Listener<JSONObject>() {
+    public void setRateEventRequestPost(Context context, JSONObject object) {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, RATE_EVENT_REQUEST_POST, object, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {

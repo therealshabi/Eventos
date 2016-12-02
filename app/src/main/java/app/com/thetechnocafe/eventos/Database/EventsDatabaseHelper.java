@@ -40,6 +40,20 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
     private static final String EVENT_COLOUMN_PEOPLE_INTERESTED = "people_interested";
     private static final String EVENT_COLOUMN_OUTSIDE_EVENT = "outside_event";
 
+    private static final String OUTSIDE_EVENTS_TABLE = "outside_events";
+    private static final String OUTSIDE_EVENT_COLUMN_ID = "id";
+    private static final String OUTSIDE_EVENT_COLUMN_TITLE = "title";
+    private static final String OUTSIDE_EVENT_COLUMN_DESCRIPTION = "description";
+    private static final String OUTSIDE_EVENT_COLUMN_DATE = "date";
+    private static final String OUTSIDE_EVENT_COLUMN_VENUE = "venue";
+    private static final String OUTSIDE_EVENT_COLUMN_AVATAR_ID = "avatar_id";
+    private static final String OUTSIDE_EVENT_COLUMN_IMAGE = "image";
+    private static final String OUTSIDE_EVENT_COLUMN_REQUIREMENTS = "requirements";
+    private static final String OUTSIDE_EVENT_COLOUMN_SUBMITTED_BY = "submitted_by";
+    private static final String OUTSIDE_EVENT_COLOUMN_VERIFIED = "verified";
+    private static final String OUTSIDE_EVENT_COLOUMN_PEOPLE_INTERESTED = "people_interested";
+    private static final String OUTSIDE_EVENT_COLOUMN_OUTSIDE_EVENT = "outside_event";
+
     private static final String CONTACTS_TABLE = "event_contacts";
     private static final String CONTACTS_EVENT_ID = "event_id";
     private static final String CONTACTS_PHONE_NUMBER = "phone";
@@ -96,6 +110,21 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
                 EVENT_COLOUMN_OUTSIDE_EVENT + " INTEGER DEFAULT 0" +
                 ");";
 
+        String OutsideEventsTableSQL = "CREATE TABLE " + OUTSIDE_EVENTS_TABLE + " (" +
+                OUTSIDE_EVENT_COLUMN_ID + " VARCHAR PRIMARY KEY, " +
+                OUTSIDE_EVENT_COLUMN_TITLE + " VARCHAR, " +
+                OUTSIDE_EVENT_COLUMN_DESCRIPTION + " VARCHAR, " +
+                OUTSIDE_EVENT_COLUMN_DATE + " VARCHAR, " +
+                OUTSIDE_EVENT_COLUMN_VENUE + " VARCHAR, " +
+                OUTSIDE_EVENT_COLUMN_AVATAR_ID + " INTEGER, " +
+                OUTSIDE_EVENT_COLUMN_IMAGE + " VARCHAR, " +
+                OUTSIDE_EVENT_COLUMN_REQUIREMENTS + " VARCHAR ," +
+                OUTSIDE_EVENT_COLOUMN_SUBMITTED_BY + " VARCHAR ," +
+                OUTSIDE_EVENT_COLOUMN_VERIFIED + " INTEGER DEFAULT 0 ," +
+                OUTSIDE_EVENT_COLOUMN_PEOPLE_INTERESTED + " INTEGER , " +
+                OUTSIDE_EVENT_COLOUMN_OUTSIDE_EVENT + " INTEGER DEFAULT 0" +
+                ");";
+
         String favEventsTableSQL = "CREATE TABLE " + FAV_EVENTS_TABLE + " (" +
                 FAV_EVENT_COLUMN_ID + " VARCHAR PRIMARY KEY " +
                 ");";
@@ -141,6 +170,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(favEventsTableSQL);
         db.execSQL(commentsTableSQL);
         db.execSQL(submittedEventsTableSQL);
+        db.execSQL(OutsideEventsTableSQL);
     }
 
     @Override
@@ -181,6 +211,42 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         }
 
         database.insert(EVENTS_TABLE, null, contentValues);
+    }
+
+
+    /**
+     * Insert New Outside events data into Events Table
+     * Take EventModel as input , extracts data from it and inerts into table
+     */
+    public void insertNewOutsideEvent(EventsModel event) {
+        //Get database
+        SQLiteDatabase database = getWritableDatabase();
+
+        //Create content values and add data
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(OUTSIDE_EVENT_COLUMN_ID, event.getId());
+        contentValues.put(OUTSIDE_EVENT_COLUMN_TITLE, event.getTitle());
+        contentValues.put(OUTSIDE_EVENT_COLUMN_DESCRIPTION, event.getDescription());
+        contentValues.put(OUTSIDE_EVENT_COLUMN_VENUE, event.getVenue());
+        contentValues.put(OUTSIDE_EVENT_COLUMN_IMAGE, event.getImage());
+        contentValues.put(OUTSIDE_EVENT_COLUMN_DATE, String.valueOf(event.getDate().getTime()));
+        contentValues.put(OUTSIDE_EVENT_COLUMN_REQUIREMENTS, event.getRequirements());
+        contentValues.put(OUTSIDE_EVENT_COLOUMN_SUBMITTED_BY, event.getSubmittedBy());
+        contentValues.put(OUTSIDE_EVENT_COLOUMN_PEOPLE_INTERESTED, event.getNumOfPeopleInterested());
+
+        if (event.getOutsideEvent()) {
+            contentValues.put(OUTSIDE_EVENT_COLOUMN_OUTSIDE_EVENT, 1);
+        } else {
+            contentValues.put(OUTSIDE_EVENT_COLOUMN_OUTSIDE_EVENT, 0);
+        }
+
+        if (event.getVerified()) {
+            contentValues.put(OUTSIDE_EVENT_COLOUMN_VERIFIED, 1);
+        } else {
+            contentValues.put(OUTSIDE_EVENT_COLOUMN_VERIFIED, 0);
+        }
+
+        database.insert(OUTSIDE_EVENTS_TABLE, null, contentValues);
     }
 
     /**
@@ -264,6 +330,72 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
             }
 
             if (cursor.getInt(cursor.getColumnIndex(EVENT_COLOUMN_VERIFIED)) == 0) {
+                event.setVerified(false);
+            } else {
+                event.setVerified(true);
+            }
+
+            //Add event to list
+            eventsList.add(event);
+        }
+        //Close cursor after use
+        cursor.close();
+
+        //Sort event list
+        Collections.sort(eventsList, new Comparator<EventsModel>() {
+            @Override
+            public int compare(EventsModel eventsModel, EventsModel t1) {
+                if (eventsModel.getDate().getTime() > t1.getDate().getTime()) {
+                    return 1;
+                } else if (eventsModel.getDate().getTime() == t1.getDate().getTime()) {
+                    return 0;
+                } else {
+                    return -1;
+                }
+            }
+        });
+
+        return eventsList;
+    }
+
+    /**
+     * Get a list of outside events stores in the database
+     * Return a List of EventsModel objects
+     */
+    public List<EventsModel> getOutsideEventsList() {
+        //Get Database
+        SQLiteDatabase database = getReadableDatabase();
+
+        //Create new EventsModel list
+        List<EventsModel> eventsList = new ArrayList<>();
+
+        //Set up the query
+        String sql = "SELECT * FROM " + OUTSIDE_EVENTS_TABLE;
+
+        //Run the query and obtain cursor
+        Cursor cursor = database.rawQuery(sql, null);
+
+        //Extract the values while looping over cursor
+        while (cursor.moveToNext()) {
+            EventsModel event = new EventsModel();
+
+            event.setId(cursor.getString(cursor.getColumnIndex(OUTSIDE_EVENT_COLUMN_ID)));
+            event.setVenue(cursor.getString(cursor.getColumnIndex(OUTSIDE_EVENT_COLUMN_VENUE)));
+            event.setDate(new Date(Long.parseLong(cursor.getString(cursor.getColumnIndex(OUTSIDE_EVENT_COLUMN_DATE)))));
+            event.setAvatarId(cursor.getInt(cursor.getColumnIndex(OUTSIDE_EVENT_COLUMN_AVATAR_ID)));
+            event.setImage(cursor.getString(cursor.getColumnIndex(OUTSIDE_EVENT_COLUMN_IMAGE)));
+            event.setTitle(cursor.getString(cursor.getColumnIndex(OUTSIDE_EVENT_COLUMN_TITLE)));
+            event.setDescription(cursor.getString(cursor.getColumnIndex(OUTSIDE_EVENT_COLUMN_DESCRIPTION)));
+            event.setSubmittedBy(cursor.getString(cursor.getColumnIndex(OUTSIDE_EVENT_COLOUMN_SUBMITTED_BY)));
+            event.setNumOfPeopleInterested(cursor.getInt(cursor.getColumnIndex(OUTSIDE_EVENT_COLOUMN_PEOPLE_INTERESTED)));
+
+            if (cursor.getInt(cursor.getColumnIndex(OUTSIDE_EVENT_COLOUMN_OUTSIDE_EVENT)) == 0) {
+                event.setOutsideEvent(false);
+            } else {
+                event.setOutsideEvent(true);
+            }
+
+            if (cursor.getInt(cursor.getColumnIndex(OUTSIDE_EVENT_COLOUMN_VERIFIED)) == 0) {
                 event.setVerified(false);
             } else {
                 event.setVerified(true);
@@ -409,6 +541,56 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         return eventsModel;
     }
 
+    /**
+     * Return the Particular Outside event corresponding to the id
+     */
+    public EventsModel getOutsideEvent(String id) {
+        //Check if event id is null
+        if (id == null) {
+            return null;
+        }
+
+        EventsModel eventsModel = new EventsModel();
+
+        SQLiteDatabase database = getReadableDatabase();
+
+        String sql = "SELECT * FROM " + OUTSIDE_EVENTS_TABLE + " WHERE " + OUTSIDE_EVENT_COLUMN_ID + " = '" + id + "'";
+
+        //Run query
+        Cursor cursor = database.rawQuery(sql, null);
+
+        //Traverse the cursor
+        while (cursor.moveToNext()) {
+            eventsModel.setId(cursor.getString(cursor.getColumnIndex(OUTSIDE_EVENT_COLUMN_ID)));
+            eventsModel.setTitle(cursor.getString(cursor.getColumnIndex(OUTSIDE_EVENT_COLUMN_TITLE)));
+            eventsModel.setDescription(cursor.getString(cursor.getColumnIndex(OUTSIDE_EVENT_COLUMN_DESCRIPTION)));
+            eventsModel.setAvatarId(cursor.getInt(cursor.getColumnIndex(OUTSIDE_EVENT_COLUMN_AVATAR_ID)));
+            eventsModel.setImage(cursor.getString(cursor.getColumnIndex(OUTSIDE_EVENT_COLUMN_IMAGE)));
+            eventsModel.setVenue(cursor.getString(cursor.getColumnIndex(OUTSIDE_EVENT_COLUMN_VENUE)));
+            eventsModel.setRequirements(cursor.getString(cursor.getColumnIndex(OUTSIDE_EVENT_COLUMN_REQUIREMENTS)));
+            eventsModel.setDate(new Date(Long.parseLong(cursor.getString(cursor.getColumnIndex(OUTSIDE_EVENT_COLUMN_DATE)))));
+            eventsModel.setSubmittedBy(cursor.getString(cursor.getColumnIndex(OUTSIDE_EVENT_COLOUMN_SUBMITTED_BY)));
+            eventsModel.setNumOfPeopleInterested(cursor.getInt(cursor.getColumnIndex(OUTSIDE_EVENT_COLOUMN_PEOPLE_INTERESTED)));
+
+            if (cursor.getInt(cursor.getColumnIndex(OUTSIDE_EVENT_COLOUMN_OUTSIDE_EVENT)) == 0) {
+                eventsModel.setOutsideEvent(false);
+            } else {
+                eventsModel.setOutsideEvent(true);
+            }
+
+            if (cursor.getInt(cursor.getColumnIndex(OUTSIDE_EVENT_COLOUMN_VERIFIED)) == 0) {
+                eventsModel.setVerified(false);
+            } else {
+                eventsModel.setVerified(true);
+            }
+        }
+
+        //Close the cursor
+        cursor.close();
+
+        return eventsModel;
+    }
+
     //Check if event is already in database
     public boolean doesEventAlreadyExists(String id) {
         //If event id is wrong return true
@@ -417,6 +599,31 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         }
 
         String sql = "SELECT * FROM " + EVENTS_TABLE + " WHERE " + EVENT_COLUMN_ID + " = '" + id + "'";
+
+        //Execute query
+        Cursor cursor = getReadableDatabase().rawQuery(sql, null);
+
+        if (cursor.getCount() > 0) {
+            //Close cursor
+            cursor.close();
+
+            return true;
+        }
+
+        //Close cursor
+        cursor.close();
+
+        return false;
+    }
+
+    //Check if outside event is already in database
+    public boolean doesOutsideEventAlreadyExists(String id) {
+        //If event id is wrong return true
+        if (id == null) {
+            return true;
+        }
+
+        String sql = "SELECT * FROM " + OUTSIDE_EVENTS_TABLE + " WHERE " + OUTSIDE_EVENT_COLUMN_ID + " = '" + id + "'";
 
         //Execute query
         Cursor cursor = getReadableDatabase().rawQuery(sql, null);
@@ -592,11 +799,19 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         String favEventDeleteQuery = "DELETE FROM " + FAV_EVENTS_TABLE +
                 " WHERE " + FAV_EVENT_COLUMN_ID + " = " + "'" + id + "'";
 
+        String OutsideEventDeleteQuery = "DELETE FROM " + OUTSIDE_EVENTS_TABLE +
+                " WHERE " + OUTSIDE_EVENT_COLUMN_ID + " = " + "'" + id + "'";
+
+        String SubmittedEventDeleteQuery = "DELETE FROM " + SUBMITTED_EVENTS_TABLE +
+                " WHERE " + SUBMITTED_EVENT_COLUMN_ID + " = " + "'" + id + "'";
+
         //Execute queries
         database.execSQL(eventDeleteQuery);
         database.execSQL(contactDeleteQuery);
         database.execSQL(linksDeleteQuery);
         database.execSQL(favEventDeleteQuery);
+        database.execSQL(OutsideEventDeleteQuery);
+        database.execSQL(SubmittedEventDeleteQuery);
 
         //Close database
         database.close();
@@ -615,6 +830,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         String deleteLinksSQL = "DELETE FROM " + LINKS_TABLE;
         String deleteFavEventsSQL = "DELETE FROM " + FAV_EVENTS_TABLE;
         String deleteSubmittedEventsSQL = "DELETE FROM " + SUBMITTED_EVENTS_TABLE;
+        String deleteOutsideEventsSQL = "DELETE FROM " + OUTSIDE_EVENTS_TABLE;
 
         //Execute queries
         database.execSQL(deleteEventsSQL);
@@ -622,6 +838,7 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         database.execSQL(deleteLinksSQL);
         database.execSQL(deleteFavEventsSQL);
         database.execSQL(deleteSubmittedEventsSQL);
+        database.execSQL(deleteOutsideEventsSQL);
 
         //Close database
         database.close();
@@ -646,6 +863,40 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
         //Iterate and add to list
         while (cursor.moveToNext()) {
             mDatabaseIDList.add(cursor.getString(cursor.getColumnIndex(EVENT_COLUMN_ID)));
+        }
+
+        //Close database and cursor
+        cursor.close();
+        database.close();
+
+        //Delete all the events that are not in the network list
+        for (String eventID : mDatabaseIDList) {
+            if (!list.contains(eventID)) {
+                deleteEvent(eventID);
+            }
+        }
+    }
+
+
+    /**
+     * Remove the outside events from database that are not in the stream
+     */
+    public void removeSpecificOutsideEventsFromDB(List<String> list) {
+        //Get the data base
+        SQLiteDatabase database = getReadableDatabase();
+
+        //SQL query to get all the event id's in database
+        String eventIdSQL = "SELECT " + OUTSIDE_EVENT_COLUMN_ID + " FROM " + OUTSIDE_EVENTS_TABLE;
+
+        //Empty id list
+        List<String> mDatabaseIDList = new ArrayList<>();
+
+        //Execute query
+        Cursor cursor = database.rawQuery(eventIdSQL, null);
+
+        //Iterate and add to list
+        while (cursor.moveToNext()) {
+            mDatabaseIDList.add(cursor.getString(cursor.getColumnIndex(OUTSIDE_EVENT_COLUMN_ID)));
         }
 
         //Close database and cursor
@@ -697,6 +948,59 @@ public class EventsDatabaseHelper extends SQLiteOpenHelper {
             }
 
             if (cursor.getInt(cursor.getColumnIndex(EVENT_COLOUMN_VERIFIED)) == 0) {
+                event.setVerified(false);
+            } else {
+                event.setVerified(true);
+            }
+
+
+            if (event.getDate().getTime() > dayStart && event.getDate().getTime() < dayEnd) {
+                eventsList.add(event);
+            }
+        }
+        //Close cursor after use
+        cursor.close();
+
+        return eventsList;
+    }
+
+    /**
+     * Get list of Outside events on a particular day
+     */
+    public List<EventsModel> getOutsideEventsOnADay(long dayStart, long dayEnd) {
+        //Get Database
+        SQLiteDatabase database = getReadableDatabase();
+
+        //Create new EventsModel list
+        List<EventsModel> eventsList = new ArrayList<>();
+
+        //Set up the query
+        String sql = "SELECT * FROM " + OUTSIDE_EVENTS_TABLE;
+
+        //Run the query and obtain cursor
+        Cursor cursor = database.rawQuery(sql, null);
+
+        //Extract the values while looping over cursor
+        while (cursor.moveToNext()) {
+            EventsModel event = new EventsModel();
+
+            event.setId(cursor.getString(cursor.getColumnIndex(OUTSIDE_EVENT_COLUMN_ID)));
+            event.setVenue(cursor.getString(cursor.getColumnIndex(OUTSIDE_EVENT_COLUMN_VENUE)));
+            event.setDate(new Date(Long.parseLong(cursor.getString(cursor.getColumnIndex(OUTSIDE_EVENT_COLUMN_DATE)))));
+            event.setAvatarId(cursor.getInt(cursor.getColumnIndex(OUTSIDE_EVENT_COLUMN_AVATAR_ID)));
+            event.setImage(cursor.getString(cursor.getColumnIndex(OUTSIDE_EVENT_COLUMN_IMAGE)));
+            event.setTitle(cursor.getString(cursor.getColumnIndex(OUTSIDE_EVENT_COLUMN_TITLE)));
+            event.setDescription(cursor.getString(cursor.getColumnIndex(OUTSIDE_EVENT_COLUMN_DESCRIPTION)));
+            event.setSubmittedBy(cursor.getString(cursor.getColumnIndex(OUTSIDE_EVENT_COLOUMN_SUBMITTED_BY)));
+            event.setNumOfPeopleInterested(cursor.getInt(cursor.getColumnIndex(OUTSIDE_EVENT_COLOUMN_PEOPLE_INTERESTED)));
+
+            if (cursor.getInt(cursor.getColumnIndex(OUTSIDE_EVENT_COLOUMN_OUTSIDE_EVENT)) == 0) {
+                event.setOutsideEvent(false);
+            } else {
+                event.setOutsideEvent(true);
+            }
+
+            if (cursor.getInt(cursor.getColumnIndex(OUTSIDE_EVENT_COLOUMN_VERIFIED)) == 0) {
                 event.setVerified(false);
             } else {
                 event.setVerified(true);

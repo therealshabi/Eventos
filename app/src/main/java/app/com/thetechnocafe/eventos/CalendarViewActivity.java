@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -28,6 +29,8 @@ public class CalendarViewActivity extends AppCompatActivity {
     private CalendarRecyclerAdapter mCalendarRecyclerAdapter;
     private EventsDatabaseHelper mDatabaseHelper;
     private List<EventsModel> mEventsList;
+    private List<EventsModel> mOutsideEventsList;
+    private List<EventsModel> mAllEventsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,7 @@ public class CalendarViewActivity extends AppCompatActivity {
         mCalendarRecyclerView = (RecyclerView) findViewById(R.id.calendar_view_recycler_view);
 
         mDatabaseHelper = new EventsDatabaseHelper(getApplicationContext());
+        mAllEventsList = new ArrayList<>();
 
         //Set up toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.fragment_add_track_event_toolbar);
@@ -47,14 +51,15 @@ public class CalendarViewActivity extends AppCompatActivity {
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back);
         }
 
-        setUpOnClickListeners();
         setUpInitialList();
+        setUpOnClickListeners();
     }
 
     private void setUpOnClickListeners() {
         mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                mAllEventsList = new ArrayList<>();
                 Calendar calendar = GregorianCalendar.getInstance();
 
                 //Set start dat time
@@ -67,6 +72,14 @@ public class CalendarViewActivity extends AppCompatActivity {
 
                 //Get list from database
                 mEventsList = mDatabaseHelper.getEventsOnADay(startDayTime, endDayTime);
+                mOutsideEventsList = mDatabaseHelper.getOutsideEventsOnADay(startDayTime, endDayTime);
+                for (int i = 0; i < mEventsList.size(); i++) {
+                    mAllEventsList.add(mEventsList.get(i));
+                }
+
+                for (int i = 0; i < mOutsideEventsList.size(); i++) {
+                    mAllEventsList.add(mOutsideEventsList.get(i));
+                }
 
                 setUpOrRefreshRecyclerView();
             }
@@ -87,8 +100,18 @@ public class CalendarViewActivity extends AppCompatActivity {
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         long endDayTime = calendar.getTimeInMillis();
 
+        mAllEventsList = new ArrayList<>();
         //Get list from database
         mEventsList = mDatabaseHelper.getEventsOnADay(startDayTime, endDayTime);
+        mOutsideEventsList = mDatabaseHelper.getOutsideEventsOnADay(startDayTime, endDayTime);
+
+        for (int i = 0; i < mEventsList.size(); i++) {
+            mAllEventsList.add(mEventsList.get(i));
+        }
+
+        for (int i = 0; i < mOutsideEventsList.size(); i++) {
+            mAllEventsList.add(mOutsideEventsList.get(i));
+        }
 
         setUpOrRefreshRecyclerView();
     }
@@ -101,46 +124,6 @@ public class CalendarViewActivity extends AppCompatActivity {
             mCalendarRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         } else {
             mCalendarRecyclerAdapter.notifyDataSetChanged();
-        }
-    }
-
-    /**
-     * Adapter and View Holder for calendar recycler view
-     */
-    class CalendarRecyclerAdapter extends RecyclerView.Adapter<CalendarRecyclerAdapter.CalendarViewHolder> {
-
-        //View Holder class
-        class CalendarViewHolder extends RecyclerView.ViewHolder {
-            private TextView mTitleTextView;
-            private TextView mTimeTextView;
-
-            CalendarViewHolder(View view) {
-                super(view);
-
-                mTimeTextView = (TextView) view.findViewById(R.id.item_calendar_view_recycler_time_text_view);
-                mTitleTextView = (TextView) view.findViewById(R.id.item_calendar_view_recycler_title_text_view);
-            }
-
-            void bindData(int position) {
-                mTitleTextView.setText(mEventsList.get(position).getTitle());
-                mTimeTextView.setText(DateUtils.convertToTime(mEventsList.get(position).getDate()));
-            }
-        }
-
-        @Override
-        public CalendarViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_calendar_view_recycler, parent, false);
-            return new CalendarViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(CalendarViewHolder holder, int position) {
-            holder.bindData(position);
-        }
-
-        @Override
-        public int getItemCount() {
-            return mEventsList.size();
         }
     }
 
@@ -159,5 +142,45 @@ public class CalendarViewActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         mDatabaseHelper.close();
+    }
+
+    /**
+     * Adapter and View Holder for calendar recycler view
+     */
+    class CalendarRecyclerAdapter extends RecyclerView.Adapter<CalendarRecyclerAdapter.CalendarViewHolder> {
+
+        @Override
+        public CalendarViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.item_calendar_view_recycler, parent, false);
+            return new CalendarViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(CalendarViewHolder holder, int position) {
+            holder.bindData(position);
+        }
+
+        @Override
+        public int getItemCount() {
+            return mAllEventsList.size();
+        }
+
+        //View Holder class
+        class CalendarViewHolder extends RecyclerView.ViewHolder {
+            private TextView mTitleTextView;
+            private TextView mTimeTextView;
+
+            CalendarViewHolder(View view) {
+                super(view);
+
+                mTimeTextView = (TextView) view.findViewById(R.id.item_calendar_view_recycler_time_text_view);
+                mTitleTextView = (TextView) view.findViewById(R.id.item_calendar_view_recycler_title_text_view);
+            }
+
+            void bindData(int position) {
+                mTitleTextView.setText(mAllEventsList.get(position).getTitle());
+                mTimeTextView.setText(DateUtils.convertToTime(mAllEventsList.get(position).getDate()));
+            }
+        }
     }
 }

@@ -287,8 +287,9 @@ public abstract class DataSynchronizer {
 
                                     //Check if events already is in database
                                     //Insert the event into database
-                                    if (!mEventsDatabaseHelper.doesEventAlreadyExists(event.getId())) {
-                                        mEventsDatabaseHelper.insertNewEvent(event);
+                                    if (!mEventsDatabaseHelper.doesOutsideEventAlreadyExists(event.getId())) {
+                                        mEventsDatabaseHelper.insertNewOutsideEvent(event);
+
 
                                         if (event.getSubmittedBy().equals(SharedPreferencesUtils.getUsername(context))) {
                                             if (!mEventsDatabaseHelper.doesSubmittedEventAlreadyExists(event.getId())) {
@@ -327,7 +328,7 @@ public abstract class DataSynchronizer {
                             }
 
                             //Check for redundant events
-                            mEventsDatabaseHelper.removeSpecificEventsFromDB(idList);
+                            mEventsDatabaseHelper.removeSpecificOutsideEventsFromDB(idList);
 
                             //Notify sync successful
                             onDataSynchronized(true);

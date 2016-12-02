@@ -75,7 +75,7 @@ public class AddOutsideEventFragment extends Fragment {
     private static Bitmap mImageToUpload;
     private static String mImageToUploadName;
     private static String mCloudinaryImageURL = "default";
-
+    public ImageView mAddCategoryImageButton;
     private TextView mInfoText;
     private ImageButton mAddContactImageButton;
     private LinearLayout mContactsContainer;
@@ -94,8 +94,6 @@ public class AddOutsideEventFragment extends Fragment {
     private LoadingDialog mLoadingDialog;
     private Calendar mCalendar;
     private ImageButton mPhotoUploadImageButton;
-    private ImageView mAddCategoryImageButton;
-
     private EventsDatabaseHelper mDatabaseHelper;
 
 
@@ -112,24 +110,24 @@ public class AddOutsideEventFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_add_event, container, false);
+        final View view = inflater.inflate(R.layout.fragment_add_outside_event, container, false);
 
-        mInfoText = (TextView) view.findViewById(R.id.fragment_add_event_info);
-        mAddContactImageButton = (ImageButton) view.findViewById(R.id.fragment_add_event_add_contact);
-        mContactsContainer = (LinearLayout) view.findViewById(R.id.fragment_add_event_contacts_container);
-        mAddForumLinkImageButton = (ImageButton) view.findViewById(R.id.fragment_add_event_add_forum_link);
-        mLinkContainer = (LinearLayout) view.findViewById(R.id.fragment_add_event_forum_link_container);
-        mDateText = (TextView) view.findViewById(R.id.fragment_add_event_date);
-        mTimeText = (TextView) view.findViewById(R.id.fragment_add_event_time);
-        mAddCategoryButton = (TextView) view.findViewById(R.id.fragment_add_event_avatar);
-        mSubmitButton = (Button) view.findViewById(R.id.fragment_add_event_submit);
-        mTitleEditText = (EditText) view.findViewById(R.id.fragment_add_event_title);
-        mDescriptionEditText = (EditText) view.findViewById(R.id.fragment_add_event_description);
-        mVenueEditText = (EditText) view.findViewById(R.id.fragment_add_event_venue);
-        mImageEditText = (EditText) view.findViewById(R.id.fragment_add_event_image_link);
-        mRequirementsEditText = (EditText) view.findViewById(R.id.fragment_add_event_requirement);
-        mPhotoUploadImageButton = (ImageButton) view.findViewById(R.id.fragment_add_event_add_image_button);
-        mAddCategoryImageButton = (ImageView) view.findViewById(R.id.fragment_add_event_avatar_image);
+        mInfoText = (TextView) view.findViewById(R.id.o_fragment_add_event_info);
+        mAddContactImageButton = (ImageButton) view.findViewById(R.id.o_fragment_add_event_add_contact);
+        mContactsContainer = (LinearLayout) view.findViewById(R.id.o_fragment_add_event_contacts_container);
+        mAddForumLinkImageButton = (ImageButton) view.findViewById(R.id.o_fragment_add_event_add_forum_link);
+        mLinkContainer = (LinearLayout) view.findViewById(R.id.o_fragment_add_event_forum_link_container);
+        mDateText = (TextView) view.findViewById(R.id.o_fragment_add_event_date);
+        mTimeText = (TextView) view.findViewById(R.id.o_fragment_add_event_time);
+        mAddCategoryButton = (TextView) view.findViewById(R.id.o_fragment_add_event_avatar);
+        mSubmitButton = (Button) view.findViewById(R.id.o_fragment_add_event_submit);
+        mTitleEditText = (EditText) view.findViewById(R.id.o_fragment_add_event_title);
+        mDescriptionEditText = (EditText) view.findViewById(R.id.o_fragment_add_event_description);
+        mVenueEditText = (EditText) view.findViewById(R.id.o_fragment_add_event_venue);
+        mImageEditText = (EditText) view.findViewById(R.id.o_fragment_add_event_image_link);
+        mRequirementsEditText = (EditText) view.findViewById(R.id.o_fragment_add_event_requirement);
+        mPhotoUploadImageButton = (ImageButton) view.findViewById(R.id.o_fragment_add_event_add_image_button);
+        mAddCategoryImageButton = (ImageView) view.findViewById(R.id.o_fragment_add_event_avatar_image);
 
         //Get calendar
         mCalendar = GregorianCalendar.getInstance();
@@ -142,7 +140,7 @@ public class AddOutsideEventFragment extends Fragment {
         setTimeText(mCalendar);
 
         //Set up the toolbar
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.fragment_add_event_toolbar);
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.o_fragment_add_event_toolbar);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(toolbar);
         if (activity.getSupportActionBar() != null) {
